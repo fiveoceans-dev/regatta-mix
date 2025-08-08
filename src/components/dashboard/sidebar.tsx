@@ -31,7 +31,7 @@ const menuItems = [
 ]
 
 export function DashboardSidebar() {
-  const { collapsed } = useSidebar()
+  const { state } = useSidebar()
   const location = useLocation()
   const currentPath = location.pathname
 
@@ -41,20 +41,20 @@ export function DashboardSidebar() {
 
   return (
     <Sidebar
-      className={collapsed ? "w-16" : "w-64"}
-      collapsible
+      className={state === "collapsed" ? "w-16" : "w-64"}
+      collapsible="icon"
     >
       <SidebarContent className="bg-card/50 backdrop-blur-sm border-r border-border/50">
         {/* Logo */}
         <div className="p-4 border-b border-border/50">
           <div className="flex items-center gap-2">
             <Anchor className="h-8 w-8 text-primary" />
-            {!collapsed && <span className="text-xl font-bold">SailingGame</span>}
+            {state !== "collapsed" && <span className="text-xl font-bold">SailingGame</span>}
           </div>
         </div>
 
         <SidebarGroup>
-          <SidebarGroupLabel className={collapsed ? "sr-only" : ""}>
+          <SidebarGroupLabel className={state === "collapsed" ? "sr-only" : ""}>
             Navigation
           </SidebarGroupLabel>
           
@@ -69,7 +69,7 @@ export function DashboardSidebar() {
                       className={getNavCls}
                     >
                       <item.icon className="mr-2 h-5 w-5" />
-                      {!collapsed && <span>{item.title}</span>}
+                      {state !== "collapsed" && <span>{item.title}</span>}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -79,7 +79,7 @@ export function DashboardSidebar() {
         </SidebarGroup>
 
         {/* User Section */}
-        {!collapsed && (
+        {state !== "collapsed" && (
           <div className="mt-auto p-4 border-t border-border/50">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center">

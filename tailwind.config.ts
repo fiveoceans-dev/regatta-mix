@@ -103,12 +103,22 @@ export default {
 						height: '0'
 					}
 				},
-				'glow-spin': {
+				'glow-pulse': {
+					'0%, 100%': {
+						opacity: '0.5',
+						transform: 'scale(1)'
+					},
+					'50%': {
+						opacity: '1',
+						transform: 'scale(1.05)'
+					}
+				},
+				'shimmer': {
 					'0%': {
-						transform: 'rotate(0deg)'
+						backgroundPosition: '-200% 0'
 					},
 					'100%': {
-						transform: 'rotate(360deg)'
+						backgroundPosition: '200% 0'
 					}
 				},
 				'float': {
@@ -141,7 +151,8 @@ export default {
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
-				'glow-spin': 'glow-spin 3s linear infinite',
+				'glow-pulse': 'glow-pulse 2s ease-in-out infinite',
+				'shimmer': 'shimmer 2s linear infinite',
 				'float': 'float 3s ease-in-out infinite',
 				'fade-in-up': 'fade-in-up 0.6s ease-out',
 				'scroll-x': 'scroll-x 30s linear infinite'

@@ -12,11 +12,8 @@ const GlowingButton = React.forwardRef<HTMLButtonElement, GlowingButtonProps>(
   ({ className, variant = "default", size = "default", children, ...props }, ref) => {
     return (
       <div className="relative group">
-        {/* Animated glow border */}
-        <div className="absolute -inset-1 bg-gradient-to-r from-primary via-primary-glow to-primary rounded-lg blur-sm opacity-75 group-hover:opacity-100 animate-glow-spin"></div>
-        
-        {/* Inner border animation */}
-        <div className="absolute -inset-0.5 bg-gradient-to-r from-primary via-primary-glow to-primary rounded-lg opacity-50 animate-glow-spin" style={{ animationDelay: "0.5s" }}></div>
+        {/* Animated glow border with pulse effect */}
+        <div className="absolute -inset-1 bg-primary rounded-lg blur-sm opacity-60 group-hover:opacity-100 animate-glow-pulse"></div>
         
         {/* Main button */}
         <Button
@@ -24,9 +21,9 @@ const GlowingButton = React.forwardRef<HTMLButtonElement, GlowingButtonProps>(
           variant={variant === "play" ? "default" : variant}
           size={size}
           className={cn(
-            "relative bg-background border border-primary/50 hover:border-primary text-foreground font-semibold transition-all duration-300",
+            "relative bg-background border-2 border-primary/60 hover:border-primary text-foreground font-semibold transition-all duration-300",
             "hover:bg-primary/10 hover:shadow-glow",
-            variant === "play" && "bg-primary text-primary-foreground hover:bg-primary/90 text-lg px-8 py-6",
+            variant === "play" && "bg-primary text-primary-foreground hover:bg-primary/90 text-xl px-12 py-8 font-bold tracking-wide",
             className
           )}
           {...props}

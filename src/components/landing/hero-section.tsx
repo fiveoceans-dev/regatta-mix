@@ -116,7 +116,7 @@ export function HeroSection() {
               style={{ animationDelay: "0.4s" }}
             >
               <Play className="mr-2 h-6 w-6" />
-              {showVideo ? "Close Video" : "Play Now"}
+              Play
             </GlowingButton>
             
             <Button

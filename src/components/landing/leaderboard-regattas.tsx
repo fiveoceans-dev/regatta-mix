@@ -89,59 +89,68 @@ export function LeaderboardRegattas() {
                 Top Regattas
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              {regattaData.map((regatta, index) => (
-                <div 
-                  key={index}
-                  className="p-4 border border-border/50 rounded-lg hover:bg-muted/20 transition-all duration-300 hover:shadow-glow/50"
-                >
-                  <div className="flex justify-between items-start mb-3">
-                    <div>
-                      <h3 className="font-semibold text-lg">{regatta.name}</h3>
-                      <Badge 
-                        variant={regatta.difficulty === "Expert" ? "destructive" : 
-                                regatta.difficulty === "Advanced" ? "default" : 
-                                regatta.difficulty === "Intermediate" ? "secondary" : "outline"}
-                        className="text-xs mt-1"
-                      >
-                        {regatta.difficulty}
-                      </Badge>
-                    </div>
-                    <Badge 
-                      variant={regatta.status === "full" ? "destructive" : 
-                              regatta.status === "starting" ? "default" : "secondary"}
-                      className="text-xs"
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow className="border-border/50">
+                    <TableHead className="text-muted-foreground">Regatta</TableHead>
+                    <TableHead className="text-muted-foreground">Players</TableHead>
+                    <TableHead className="text-muted-foreground">Status</TableHead>
+                    <TableHead className="text-muted-foreground">Action</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {regattaData.map((regatta, index) => (
+                    <TableRow 
+                      key={index}
+                      className="border-border/30 hover:bg-muted/30 transition-colors"
                     >
-                      {regatta.status}
-                    </Badge>
-                  </div>
-                  
-                  <div className="flex justify-between items-center">
-                    <div className="text-sm text-muted-foreground">
-                      <span className="text-primary font-medium">{regatta.players}</span>
-                      /{regatta.maxPlayers} sailors
-                    </div>
-                    
-                    <Button 
-                      size="sm"
-                      disabled={regatta.status === "full"}
-                      className={regatta.status === "full" ? "opacity-50" : ""}
-                    >
-                      {regatta.status === "full" ? "Full" : "Join"}
-                    </Button>
-                  </div>
-                  
-                  {/* Progress bar */}
-                  <div className="mt-3">
-                    <div className="w-full bg-muted rounded-full h-2">
-                      <div 
-                        className="bg-primary h-2 rounded-full transition-all duration-300"
-                        style={{ width: `${(regatta.players / regatta.maxPlayers) * 100}%` }}
-                      />
-                    </div>
-                  </div>
-                </div>
-              ))}
+                      <TableCell>
+                        <div>
+                          <div className="font-semibold">{regatta.name}</div>
+                          <Badge 
+                            variant={regatta.difficulty === "Expert" ? "destructive" : 
+                                    regatta.difficulty === "Advanced" ? "default" : 
+                                    regatta.difficulty === "Intermediate" ? "secondary" : "outline"}
+                            className="text-xs mt-1"
+                          >
+                            {regatta.difficulty}
+                          </Badge>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex flex-col gap-1">
+                          <span className="text-primary font-medium">{regatta.players}/{regatta.maxPlayers}</span>
+                          <div className="w-16 bg-muted rounded-full h-1.5">
+                            <div 
+                              className="bg-primary h-1.5 rounded-full transition-all duration-300"
+                              style={{ width: `${(regatta.players / regatta.maxPlayers) * 100}%` }}
+                            />
+                          </div>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <Badge 
+                          variant={regatta.status === "full" ? "destructive" : 
+                                  regatta.status === "starting" ? "default" : "secondary"}
+                          className="text-xs"
+                        >
+                          {regatta.status}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <Button 
+                          size="sm"
+                          disabled={regatta.status === "full"}
+                          className={regatta.status === "full" ? "opacity-50" : ""}
+                        >
+                          {regatta.status === "full" ? "Full" : "Join"}
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </CardContent>
           </Card>
         </div>

@@ -18,33 +18,33 @@ All colors MUST be HSL.
     --popover: 222 47% 7%;
     --popover-foreground: 213 30% 95%;
 
-    /* Cyan/teal primary for sailing theme */
-    --primary: 185 100% 45%;
-    --primary-foreground: 222 47% 5%;
-    --primary-glow: 185 100% 65%;
+    /* Yacht club theme - Yellow accent and dark blue */
+    --primary: 45 100% 70%;
+    --primary-foreground: 220 50% 10%;
+    --primary-glow: 45 100% 85%;
 
-    --secondary: 222 47% 12%;
-    --secondary-foreground: 213 30% 95%;
+    --secondary: 220 50% 12%;
+    --secondary-foreground: 45 20% 95%;
 
-    --muted: 222 47% 10%;
-    --muted-foreground: 213 15% 65%;
+    --muted: 220 50% 8%;
+    --muted-foreground: 220 15% 60%;
 
-    --accent: 185 50% 25%;
-    --accent-foreground: 213 30% 95%;
+    --accent: 220 80% 20%;
+    --accent-foreground: 45 20% 95%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 213 30% 95%;
 
     --border: 222 47% 15%;
     --input: 222 47% 12%;
-    --ring: 185 100% 45%;
+    --ring: 45 100% 70%;
 
     /* Sailing-specific colors */
     --sailing-wind: 200 100% 70%;
-    --sailing-water: 205 100% 35%;
+    --sailing-water: 220 100% 25%;
     --sailing-warning: 45 100% 60%;
     --sailing-danger: 0 84% 60%;
-    --sailing-success: 120 60% 50%;
+    --sailing-success: 45 100% 50%;
 
     /* Gradients */
     --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));

@@ -21,7 +21,7 @@ export function PartnersSection() {
       <div className="container mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            In <span className="text-accent">Collaboration With</span>
+            <span className="text-accent">In Collaboration With</span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             Partnering with the biggest names in sailing and motorsports
@@ -73,7 +73,7 @@ export function PartnersSection() {
               Become a Partner
             </h3>
             <p className="text-primary-foreground/90 mb-6">
-              Join leading brands in the future of digital sailing
+              Join leading brands in the future of cyber sailing
             </p>
             <ContactFormDialog>
               <button className="bg-background text-foreground px-8 py-3 rounded-lg font-semibold hover:bg-background/90 transition-colors">

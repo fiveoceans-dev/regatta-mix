@@ -53,7 +53,7 @@ export function PartnersSection() {
             {[...partners.slice().reverse(), ...partners.slice().reverse()].map((partner, index) => (
               <div 
                 key={`row2-${index}`}
-                className="flex-shrink-0 rounded-lg p-8 hover:bg-muted/20 transition-all duration-300"
+                className="flex-shrink-0 p-8 hover:bg-muted/20 transition-all duration-300"
               >
                 <div className="flex flex-col items-center space-y-4 min-w-[200px]">
                   <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
@@ -67,8 +67,8 @@ export function PartnersSection() {
         </div>
 
         {/* Partnership CTA */}
-        <div className="text-center mt-16">
-          <div className="bg-gradient-primary rounded-lg p-8 max-w-2xl mx-auto">
+        <div className="text-center mt-16 bg-gradient-primary rounded-lg p-8">
+          <div className="max-w-2xl mx-auto">
             <h3 className="text-2xl font-bold text-primary-foreground mb-4">
               Become a Partner
             </h3>

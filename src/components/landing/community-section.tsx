@@ -124,7 +124,7 @@ export function CommunitySection() {
       <div className="container mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            Join <span className="text-primary">Sailing Community</span>
+            <span className="text-primary">Join Sailing Community</span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             Connect with sailors worldwide, share your victories, and stay updated with the latest news

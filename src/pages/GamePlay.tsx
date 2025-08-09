@@ -5,7 +5,7 @@ import { Wind, Compass, Flag, Clock, Users } from "lucide-react"
 
 export default function GamePlay() {
   return (
-    <div className="h-screen w-screen overflow-hidden relative">
+    <div className="h-screen w-screen overflow-hidden relative" style={{ overflow: 'hidden' }}>
       {/* Full Screen Game Scene */}
       <div className="absolute inset-0">
         <SailingScene />
@@ -29,7 +29,7 @@ export default function GamePlay() {
       </div>
 
       {/* Left Side Panels */}
-      <div className="absolute top-14 left-2 w-64 space-y-2 z-10 max-h-[calc(100vh-140px)] overflow-y-auto">
+      <div className="absolute top-14 left-2 w-64 space-y-2 z-10 max-h-[calc(100vh-200px)] overflow-y-auto">
         {/* Signals Panel */}
         <Card className="bg-gray-500/30 backdrop-blur-sm border-border/50">
           <CardContent className="p-3 text-center">
@@ -72,7 +72,7 @@ export default function GamePlay() {
       </div>
 
       {/* Right Side Panels */}
-      <div className="absolute top-14 right-2 w-64 space-y-2 z-10 max-h-[calc(100vh-140px)] overflow-y-auto">
+      <div className="absolute top-14 right-2 w-64 space-y-2 z-10 max-h-[calc(100vh-200px)] overflow-y-auto">
         {/* Instruments Panel */}
         <Card className="bg-gray-500/30 backdrop-blur-sm border-border/50">
           <CardContent className="p-3">
@@ -134,80 +134,90 @@ export default function GamePlay() {
         </Card>
       </div>
 
-      {/* Bottom Control Panels */}
-      <div className="absolute bottom-2 left-2 right-2 flex justify-between items-end z-10">
-        {/* Left Actions Panel */}
-        <div className="w-32">
-          <Card className="bg-gray-500/30 backdrop-blur-sm border-border/50">
-            <CardContent className="p-2">
-              <h3 className="text-xs font-semibold text-primary mb-2 uppercase tracking-wide">
-                Actions
-              </h3>
-              <div className="flex flex-col gap-1">
-                {['Protest', 'Redress', 'Retire'].map((action) => (
-                  <Button 
-                    key={action}
-                    variant="secondary"
-                    size="sm"
-                    className="text-xs w-full h-6"
-                  >
-                    {action}
-                  </Button>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+      {/* Footer with Controls */}
+      <div className="absolute bottom-0 left-0 right-0 z-20">
+        {/* Control Panels */}
+        <div className="flex justify-between items-end px-2 pb-2">
+          {/* Left Actions Panel */}
+          <div className="w-32">
+            <Card className="bg-gray-500/30 backdrop-blur-sm border-border/50">
+              <CardContent className="p-2">
+                <h3 className="text-xs font-semibold text-primary mb-2 uppercase tracking-wide">
+                  Actions
+                </h3>
+                <div className="flex flex-col gap-1">
+                  {['Protest', 'Redress', 'Retire'].map((action) => (
+                    <Button 
+                      key={action}
+                      variant="secondary"
+                      size="sm"
+                      className="text-xs w-full h-6"
+                    >
+                      {action}
+                    </Button>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
 
-        {/* Center Controls Panel */}
-        <div className="w-72">
-          <Card className="bg-gray-500/30 backdrop-blur-sm border-border/50">
-            <CardContent className="p-3">
-              <h3 className="text-sm font-semibold text-primary mb-2 uppercase tracking-wide text-center">
-                Controls
-              </h3>
-              <div className="grid grid-cols-2 gap-2">
-                {['Tack to Port', 'Tack to Starboard', 'Bear Away', 'Head Up'].map((action) => (
-                  <Button 
-                    key={action}
-                    variant="secondary"
-                    size="sm"
-                    className="text-xs h-8"
-                  >
-                    {action}
-                  </Button>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+          {/* Center Controls Panel */}
+          <div className="w-72">
+            <Card className="bg-gray-500/30 backdrop-blur-sm border-border/50">
+              <CardContent className="p-3">
+                <h3 className="text-sm font-semibold text-primary mb-2 uppercase tracking-wide text-center">
+                  Controls
+                </h3>
+                <div className="grid grid-cols-2 gap-2">
+                  {['Tack to Port', 'Tack to Starboard', 'Bear Away', 'Head Up'].map((action) => (
+                    <Button 
+                      key={action}
+                      variant="secondary"
+                      size="sm"
+                      className="text-xs h-8"
+                    >
+                      {action}
+                    </Button>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
 
-        {/* Right View Panel */}
-        <div className="w-32">
-          <Card className="bg-gray-500/30 backdrop-blur-sm border-border/50">
-            <CardContent className="p-2">
-              <h3 className="text-xs font-semibold text-primary mb-2 uppercase tracking-wide">
-                View
-              </h3>
-              <div className="flex flex-col gap-1">
-                {[
-                  { name: 'Course', active: true },
-                  { name: 'Tactical', active: false },
-                  { name: 'Wind Map', active: false },
-                  { name: 'Currents', active: false }
-                ].map((option) => (
-                  <Button 
-                    key={option.name}
-                    variant={option.active ? "default" : "secondary"}
-                    size="sm"
-                    className="text-xs w-full h-6"
-                  >
-                    {option.name}
-                  </Button>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+          {/* Right View Panel */}
+          <div className="w-32">
+            <Card className="bg-gray-500/30 backdrop-blur-sm border-border/50">
+              <CardContent className="p-2">
+                <h3 className="text-xs font-semibold text-primary mb-2 uppercase tracking-wide">
+                  View
+                </h3>
+                <div className="flex flex-col gap-1">
+                  {[
+                    { name: 'Course', active: true },
+                    { name: 'Tactical', active: false },
+                    { name: 'Wind Map', active: false },
+                    { name: 'Currents', active: false }
+                  ].map((option) => (
+                    <Button 
+                      key={option.name}
+                      variant={option.active ? "default" : "secondary"}
+                      size="sm"
+                      className="text-xs w-full h-6"
+                    >
+                      {option.name}
+                    </Button>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+        
+        {/* Copyright Footer */}
+        <div className="bg-black/20 backdrop-blur-sm border-t border-border/30 py-1">
+          <div className="text-center text-xs text-muted-foreground">
+            All Rights Reserved
+          </div>
         </div>
       </div>
     </div>

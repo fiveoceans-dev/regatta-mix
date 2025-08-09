@@ -29,7 +29,7 @@ export default function GamePlay() {
       </div>
 
       {/* Left Side Panels */}
-      <div className="absolute top-14 left-2 w-64 space-y-2 z-10 max-h-[calc(100vh-200px)] overflow-y-auto">
+      <div className="absolute top-14 left-2 w-72 space-y-2 z-10 max-h-[calc(100vh-260px)] overflow-y-auto">
         {/* Signals Panel */}
         <Card className="bg-gray-500/30 backdrop-blur-sm border-border/50">
           <CardContent className="p-3 text-center">
@@ -72,7 +72,7 @@ export default function GamePlay() {
       </div>
 
       {/* Right Side Panels */}
-      <div className="absolute top-14 right-2 w-64 space-y-2 z-10 max-h-[calc(100vh-200px)] overflow-y-auto">
+      <div className="absolute top-14 right-2 w-72 space-y-2 z-10 max-h-[calc(100vh-260px)] overflow-y-auto">
         {/* Instruments Panel */}
         <Card className="bg-gray-500/30 backdrop-blur-sm border-border/50">
           <CardContent className="p-3">
@@ -139,10 +139,10 @@ export default function GamePlay() {
         {/* Control Panels */}
         <div className="flex justify-between items-end px-2 pb-2 pointer-events-auto">
           {/* Left Actions Panel */}
-          <div className="w-28">
-            <Card className="bg-gray-500/30 backdrop-blur-sm border-border/50">
-              <CardContent className="p-2">
-                <h3 className="text-xs font-semibold text-primary mb-1 uppercase tracking-wide">
+          <div className="w-32">
+            <Card className="bg-card/90 backdrop-blur-sm border-border">
+              <CardContent className="p-3">
+                <h3 className="text-sm font-semibold text-primary mb-2 uppercase tracking-wide">
                   Actions
                 </h3>
                 <div className="flex flex-col gap-1">
@@ -151,7 +151,7 @@ export default function GamePlay() {
                       key={action}
                       variant="secondary"
                       size="sm"
-                      className="text-xs w-full h-5"
+                      className="text-xs w-full h-7"
                     >
                       {action}
                     </Button>
@@ -162,33 +162,104 @@ export default function GamePlay() {
           </div>
 
           {/* Center Controls Panel */}
-          <div className="w-64">
-            <Card className="bg-gray-500/30 backdrop-blur-sm border-border/50">
-              <CardContent className="p-2">
-                <h3 className="text-xs font-semibold text-primary mb-1 uppercase tracking-wide text-center">
+          <div className="w-96">
+            <Card className="bg-card/90 backdrop-blur-sm border-border">
+              <CardContent className="p-3">
+                <h3 className="text-sm font-semibold text-primary mb-2 uppercase tracking-wide text-center">
                   Controls
                 </h3>
-                <div className="grid grid-cols-2 gap-1">
-                  {['Tack to Port', 'Tack to Starboard', 'Bear Away', 'Head Up'].map((action) => (
-                    <Button 
-                      key={action}
-                      variant="secondary"
-                      size="sm"
-                      className="text-xs h-6"
-                    >
-                      {action}
-                    </Button>
-                  ))}
+                <div className="flex gap-3">
+                  {/* Left Column - Hoisting Sails */}
+                  <div className="flex flex-col gap-1 min-w-0">
+                    <div className="text-xs text-muted-foreground text-center mb-1">Sails</div>
+                    {['Mainsail', 'Jib', 'Spinnaker'].map((sail) => (
+                      <Button 
+                        key={sail}
+                        variant="secondary"
+                        size="sm"
+                        className="text-xs h-6 px-2"
+                      >
+                        {sail}
+                      </Button>
+                    ))}
+                  </div>
+                  
+                  {/* Vertical Separator */}
+                  <div className="w-px bg-border"></div>
+                  
+                  {/* Center Column - Main Controls */}
+                  <div className="flex-1 min-w-0">
+                    <div className="grid grid-cols-3 gap-1 mb-1">
+                      {['Ready', 'Abort', 'Tack'].map((action) => (
+                        <Button 
+                          key={action}
+                          variant="secondary"
+                          size="sm"
+                          className="text-xs h-6"
+                        >
+                          {action}
+                        </Button>
+                      ))}
+                    </div>
+                    <div className="grid grid-cols-3 gap-1 mb-1">
+                      {['Gybe', 'Port', 'Starboard'].map((action) => (
+                        <Button 
+                          key={action}
+                          variant="secondary"
+                          size="sm"
+                          className="text-xs h-6"
+                        >
+                          {action}
+                        </Button>
+                      ))}
+                    </div>
+                    <div className="grid grid-cols-2 gap-1 mb-1">
+                      {['Tack to Port', 'Tack to Starboard'].map((action) => (
+                        <Button 
+                          key={action}
+                          variant="secondary"
+                          size="sm"
+                          className="text-xs h-6"
+                        >
+                          {action}
+                        </Button>
+                      ))}
+                    </div>
+                    <div className="grid grid-cols-2 gap-1 mb-1">
+                      {['Bear Away', 'Head Up'].map((action) => (
+                        <Button 
+                          key={action}
+                          variant="secondary"
+                          size="sm"
+                          className="text-xs h-6"
+                        >
+                          {action}
+                        </Button>
+                      ))}
+                    </div>
+                    <div className="grid grid-cols-2 gap-1">
+                      {['Trim', 'Ease'].map((action) => (
+                        <Button 
+                          key={action}
+                          variant="secondary"
+                          size="sm"
+                          className="text-xs h-6"
+                        >
+                          {action}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </CardContent>
             </Card>
           </div>
 
           {/* Right View Panel */}
-          <div className="w-28">
-            <Card className="bg-gray-500/30 backdrop-blur-sm border-border/50">
-              <CardContent className="p-2">
-                <h3 className="text-xs font-semibold text-primary mb-1 uppercase tracking-wide">
+          <div className="w-32">
+            <Card className="bg-card/90 backdrop-blur-sm border-border">
+              <CardContent className="p-3">
+                <h3 className="text-sm font-semibold text-primary mb-2 uppercase tracking-wide">
                   View
                 </h3>
                 <div className="flex flex-col gap-1">
@@ -202,7 +273,7 @@ export default function GamePlay() {
                       key={option.name}
                       variant={option.active ? "default" : "secondary"}
                       size="sm"
-                      className="text-xs w-full h-5"
+                      className="text-xs w-full h-7"
                     >
                       {option.name}
                     </Button>

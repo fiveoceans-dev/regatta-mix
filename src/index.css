@@ -30,6 +30,13 @@ All colors MUST be HSL.
     --ring: 224 76% 48%;
     --radius: 0.5rem;
     
+    /* Sailing theme colors */
+    --sailing-wind: 200 100% 70%;
+    --sailing-water: 220 80% 50%;
+    --sailing-warning: 45 93% 58%;
+    --sailing-danger: 0 84% 60%;
+    --sailing-success: 120 60% 50%;
+    
     /* Landing page gradients */
     --gradient-primary: linear-gradient(135deg, hsl(224, 76%, 48%), hsl(45, 93%, 58%));
     --gradient-border: linear-gradient(90deg, 
@@ -42,25 +49,32 @@ All colors MUST be HSL.
 
   .dark {
     --background: 229 84% 5%;
-    --foreground: 0 0% 98%;
-    --card: 229 84% 5%;
-    --card-foreground: 0 0% 98%;
-    --popover: 229 84% 5%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 224 76% 48%;
+    --foreground: 0 0% 95%;
+    --card: 229 70% 8%;
+    --card-foreground: 0 0% 95%;
+    --popover: 229 70% 8%;
+    --popover-foreground: 0 0% 95%;
+    --primary: 224 76% 55%;
     --primary-foreground: 0 0% 98%;
-    --primary-glow: 224 76% 58%;
-    --secondary: 229 70% 10%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 229 70% 10%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 45 93% 58%;
+    --primary-glow: 224 76% 65%;
+    --secondary: 229 60% 15%;
+    --secondary-foreground: 0 0% 95%;
+    --muted: 229 60% 15%;
+    --muted-foreground: 240 5% 70%;
+    --accent: 45 93% 65%;
     --accent-foreground: 229 84% 5%;
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 70% 50%;
     --destructive-foreground: 0 0% 98%;
-    --border: 229 70% 10%;
-    --input: 229 70% 10%;
-    --ring: 224 76% 48%;
+    --border: 229 60% 20%;
+    --input: 229 60% 20%;
+    --ring: 224 76% 55%;
+    
+    /* Sailing theme colors - dark mode */
+    --sailing-wind: 200 100% 75%;
+    --sailing-water: 220 80% 60%;
+    --sailing-warning: 45 93% 65%;
+    --sailing-danger: 0 84% 65%;
+    --sailing-success: 120 60% 60%;
   }
 }
 

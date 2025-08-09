@@ -1,37 +1,34 @@
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
-interface ActionButtonProps {
+interface GameButtonProps {
   children: React.ReactNode
   onClick?: () => void
   className?: string
   disabled?: boolean
   variant?: "default" | "outline" | "destructive" | "secondary" | "ghost" | "link"
-  size?: "default" | "sm" | "lg" | "icon"
-  type?: "button" | "submit" | "reset"
+  icon?: React.ReactNode
 }
 
-export function ActionButton({ 
+export function GameButton({ 
   children, 
   onClick, 
   className,
   disabled = false,
-  variant = "default",
-  size = "default",
-  type = "button"
-}: ActionButtonProps) {
+  variant = "secondary",
+  icon
+}: GameButtonProps) {
   return (
     <Button
-      type={type}
       variant={variant}
-      size={size}
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        "h-9 w-full bg-gradient-to-r from-primary to-accent text-white hover:from-primary-glow hover:to-accent transition-all duration-300",
+        "h-6 px-2 text-xs gap-1 min-w-0 w-auto",
         className
       )}
     >
+      {icon}
       {children}
     </Button>
   )

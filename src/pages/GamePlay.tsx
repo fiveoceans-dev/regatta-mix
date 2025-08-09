@@ -5,7 +5,7 @@ import { RaceControlChat } from "@/components/game/race-control-chat"
 import { InstrumentsPanel } from "@/components/game/instruments-panel"
 import { StandingPanel } from "@/components/game/standing-panel"
 import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
+import { GameButton } from "@/components/ui/game-button"
 import { Flag, Compass, Users, Gauge } from "lucide-react"
 
 export default function GamePlay() {
@@ -88,18 +88,13 @@ export default function GamePlay() {
                   <h3 className="text-sm font-semibold text-primary mb-2 uppercase tracking-wide">
                     Actions
                   </h3>
-                  <div className="flex flex-col gap-1">
-                    {['Protest', 'Redress', 'Retire'].map((action) => (
-                      <Button 
-                        key={action}
-                        variant="secondary"
-                        size="sm"
-                        className="text-xs w-full h-7"
-                      >
-                        {action}
-                      </Button>
-                    ))}
-                  </div>
+                   <div className="flex flex-col gap-1">
+                     {['Protest', 'Redress', 'Retire'].map((action) => (
+                       <GameButton key={action}>
+                         {action}
+                       </GameButton>
+                     ))}
+                   </div>
                 </CardContent>
               </Card>
             </div>
@@ -116,16 +111,11 @@ export default function GamePlay() {
                   {/* Left Column - Hoisting Sails - Hidden on small screens */}
                   <div className="hidden sm:flex flex-col gap-1 min-w-0">
                     <div className="text-xs text-muted-foreground text-center mb-1">Sails</div>
-                    {['Mainsail', 'Jib', 'Spinnaker'].map((sail) => (
-                      <Button 
-                        key={sail}
-                        variant="secondary"
-                        size="sm"
-                        className="text-xs h-6 px-2"
-                      >
-                        {sail}
-                      </Button>
-                    ))}
+                     {['Mainsail', 'Jib', 'Spinnaker'].map((sail) => (
+                       <GameButton key={sail}>
+                         {sail}
+                       </GameButton>
+                     ))}
                   </div>
                   
                   {/* Vertical Separator - Hidden on small screens */}
@@ -134,93 +124,42 @@ export default function GamePlay() {
                   {/* Center Column - Main Controls - Responsive grid */}
                   <div className="flex-1 min-w-0">
                     {/* Top row */}
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-1 mb-1">
-                      <Button 
-                        variant="secondary"
-                        size="sm"
-                        className="text-xs h-6"
-                      >
-                        Ready
-                      </Button>
-                      <Button 
-                        variant="secondary"
-                        size="sm"
-                        className="text-xs h-6"
-                      >
-                        Abort
-                      </Button>
-                      <Button 
-                        variant="secondary"
-                        size="sm"
-                        className="text-xs h-6 hidden sm:block"
-                      >
-                        Tack
-                      </Button>
-                    </div>
+                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-1 mb-1">
+                       <GameButton>Ready</GameButton>
+                       <GameButton>Abort</GameButton>
+                       <GameButton className="hidden sm:block">Tack</GameButton>
+                     </div>
                     {/* Second row */}
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-1 mb-1">
-                      <Button 
-                        variant="secondary"
-                        size="sm"
-                        className="text-xs h-6"
-                      >
-                        Gybe
-                      </Button>
-                      <Button 
-                        variant="secondary"
-                        size="sm"
-                        className="text-xs h-6"
-                      >
-                        Port
-                      </Button>
-                      <Button 
-                        variant="secondary"
-                        size="sm"
-                        className="text-xs h-6 hidden sm:block"
-                      >
-                        Starboard
-                      </Button>
-                    </div>
+                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-1 mb-1">
+                       <GameButton>Gybe</GameButton>
+                       <GameButton>Port</GameButton>
+                       <GameButton className="hidden sm:block">Starboard</GameButton>
+                     </div>
                     {/* Third row */}
-                    <div className="grid grid-cols-2 gap-1 mb-1">
-                      {['Tack to Port', 'Tack to Starboard'].map((action) => (
-                        <Button 
-                          key={action}
-                          variant="secondary"
-                          size="sm"
-                          className="text-xs h-6"
-                        >
-                          <span className="hidden sm:inline">{action}</span>
-                          <span className="sm:hidden">{action.split(' ')[0]} {action.split(' ')[2]}</span>
-                        </Button>
-                      ))}
-                    </div>
+                     <div className="grid grid-cols-2 gap-1 mb-1">
+                       {['Tack to Port', 'Tack to Starboard'].map((action) => (
+                         <GameButton key={action}>
+                           <span className="hidden sm:inline">{action}</span>
+                           <span className="sm:hidden">{action.split(' ')[0]} {action.split(' ')[2]}</span>
+                         </GameButton>
+                       ))}
+                     </div>
                     {/* Fourth row */}
-                    <div className="grid grid-cols-2 gap-1 mb-1">
-                      {['Bear Away', 'Head Up'].map((action) => (
-                        <Button 
-                          key={action}
-                          variant="secondary"
-                          size="sm"
-                          className="text-xs h-6"
-                        >
-                          {action}
-                        </Button>
-                      ))}
-                    </div>
+                     <div className="grid grid-cols-2 gap-1 mb-1">
+                       {['Bear Away', 'Head Up'].map((action) => (
+                         <GameButton key={action}>
+                           {action}
+                         </GameButton>
+                       ))}
+                     </div>
                     {/* Fifth row */}
-                    <div className="grid grid-cols-2 gap-1">
-                      {['Trim', 'Ease'].map((action) => (
-                        <Button 
-                          key={action}
-                          variant="secondary"
-                          size="sm"
-                          className="text-xs h-6"
-                        >
-                          {action}
-                        </Button>
-                      ))}
-                    </div>
+                     <div className="grid grid-cols-2 gap-1">
+                       {['Trim', 'Ease'].map((action) => (
+                         <GameButton key={action}>
+                           {action}
+                         </GameButton>
+                       ))}
+                     </div>
                   </div>
                 </div>
               </CardContent>
@@ -241,16 +180,14 @@ export default function GamePlay() {
                       { name: 'Tactical', active: false },
                       { name: 'Wind Map', active: false },
                       { name: 'Currents', active: false }
-                    ].map((option) => (
-                      <Button 
-                        key={option.name}
-                        variant={option.active ? "default" : "secondary"}
-                        size="sm"
-                        className="text-xs w-full h-7"
-                      >
-                        {option.name}
-                      </Button>
-                    ))}
+                     ].map((option) => (
+                       <GameButton 
+                         key={option.name}
+                         variant={option.active ? "default" : "secondary"}
+                       >
+                         {option.name}
+                       </GameButton>
+                     ))}
                   </div>
                 </CardContent>
               </Card>

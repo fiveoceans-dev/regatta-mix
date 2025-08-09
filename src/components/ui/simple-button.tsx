@@ -28,7 +28,7 @@ export function SimpleButton({
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        "h-9 min-w-[80px] bg-primary text-primary-foreground hover:bg-primary/90 transition-colors",
+        "h-9 w-full bg-primary text-primary-foreground hover:bg-primary/90 transition-colors",
         className
       )}
     >

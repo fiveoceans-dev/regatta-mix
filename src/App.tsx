@@ -8,6 +8,7 @@ import { Navbar } from "@/components/layout/navbar";
 import Landing from "./pages/Landing";
 import DashboardHome from "./pages/dashboard/DashboardHome";
 import Play from "./pages/Play";
+import Marketplace from "./pages/Marketplace";
 import ProtestRoom from "./pages/ProtestRoom";
 import History from "./pages/History";
 import Settings from "./pages/Settings";
@@ -47,6 +48,7 @@ const AppContent = () => {
             
             {/* Other pages */}
             <Route path="/play" element={<Play />} />
+            <Route path="/marketplace" element={<Marketplace />} />
             <Route path="/protestroom" element={<ProtestRoom />} />
             <Route path="/history" element={<History />} />
             <Route path="/settings" element={<Settings />} />

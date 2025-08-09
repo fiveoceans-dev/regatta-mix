@@ -9,6 +9,7 @@ import { useTheme } from "@/components/ui/theme-provider"
 const navigation = [
   { name: "Home", href: "/" },
   { name: "Play", href: "/play" },
+  { name: "Marketplace", href: "/marketplace" },
   { name: "Protest Room", href: "/protestroom" },
   { name: "History", href: "/history" },
   { name: "Settings", href: "/settings" },

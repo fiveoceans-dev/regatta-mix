@@ -3,12 +3,13 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import Home from "./pages/Home";
-import Play from "./pages/Play";
-import ProtestRoom from "./pages/ProtestRoom";
-import History from "./pages/History";
-import Settings from "./pages/Settings";
+import Index from "./pages/Index";
+import Landing from "./pages/Landing";
+import Dashboard from "./pages/Dashboard";
+import DashboardHome from "./pages/dashboard/DashboardHome";
+import PlayPlaceholder from "./pages/PlayPlaceholder";
+import ProtestRoom from "./pages/dashboard/ProtestRoom";
+import History from "./pages/dashboard/History";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -19,17 +20,23 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Navbar />
-        <div className="pt-12">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/play" element={<Play />} />
-            <Route path="/protestroom" element={<ProtestRoom />} />
-            <Route path="/history" element={<History />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </div>
+        <Routes>
+          <Route path="/" element={<Landing />} />
+          <Route path="/play" element={<Dashboard />}>
+            <Route index element={<PlayPlaceholder />} />
+          </Route>
+          <Route path="/dashboard" element={<Dashboard />}>
+            <Route index element={<DashboardHome />} />
+          </Route>
+          <Route path="/protestroom" element={<Dashboard />}>
+            <Route index element={<ProtestRoom />} />
+          </Route>
+          <Route path="/history" element={<Dashboard />}>
+            <Route index element={<History />} />
+          </Route>
+          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

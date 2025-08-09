@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Button } from "@/components/ui/button"
+import { ActionButton } from "@/components/ui/action-button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
@@ -91,9 +91,9 @@ export function ContactFormDialog({ children }: ContactFormDialogProps) {
             />
           </div>
           
-          <Button type="submit" className="w-full">
+          <ActionButton type="submit" className="w-full">
             Send Message
-          </Button>
+          </ActionButton>
         </form>
       </DialogContent>
     </Dialog>

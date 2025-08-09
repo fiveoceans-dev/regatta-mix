@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
+import { SimpleButton } from "@/components/ui/simple-button"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
@@ -256,10 +256,10 @@ export default function Marketplace() {
                       </TableCell>
                       <TableCell>{boat.seller}</TableCell>
                       <TableCell>
-                        <Button size="sm" className="gap-1">
+                        <SimpleButton size="sm" className="gap-1">
                           <ShoppingCart className="h-3 w-3" />
                           Buy
-                        </Button>
+                        </SimpleButton>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -314,14 +314,14 @@ export default function Marketplace() {
                       </TableCell>
                       <TableCell>
                         {member.availability === "Available" ? (
-                          <Button size="sm" className="gap-1">
+                          <SimpleButton size="sm" className="gap-1">
                             <Users className="h-3 w-3" />
                             Hire
-                          </Button>
+                          </SimpleButton>
                         ) : (
-                          <Button size="sm" disabled variant="secondary">
+                          <SimpleButton size="sm" disabled className="bg-secondary">
                             Unavailable
-                          </Button>
+                          </SimpleButton>
                         )}
                       </TableCell>
                     </TableRow>

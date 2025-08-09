@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { SimpleButton } from "@/components/ui/simple-button"
 import { Badge } from "@/components/ui/badge"
 import {
   Table,
@@ -180,9 +181,9 @@ export default function ProtestRoom() {
                       </div>
                     </TableCell>
                     <TableCell>
-                      <Button size="sm" variant="outline">
+                      <SimpleButton size="sm">
                         Edit
-                      </Button>
+                      </SimpleButton>
                     </TableCell>
                   </TableRow>
                 ))}

@@ -14,28 +14,28 @@ export default function GamePlay() {
       {/* Game UI Overlays */}
       
       {/* Top Game Info Bar */}
-      <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-10">
+      <div className="absolute top-2 left-1/2 transform -translate-x-1/2 z-10">
         <Card className="bg-gray-900/80 backdrop-blur-sm border-border/50">
-          <CardContent className="p-3">
-            <div className="flex items-center gap-4 text-sm">
+          <CardContent className="p-2">
+            <div className="flex items-center gap-3 text-sm">
               <div className="text-primary font-bold">Mediterranean Sprint Championship</div>
-              <div className="bg-sailing-success/20 text-sailing-success px-3 py-1 rounded-md font-semibold">
+              <div className="bg-sailing-success/20 text-sailing-success px-2 py-1 rounded-md font-semibold text-xs">
                 5:42 to Start
               </div>
-              <div className="text-muted-foreground">156/200 sailors</div>
+              <div className="text-muted-foreground text-xs">156/200 sailors</div>
             </div>
           </CardContent>
         </Card>
       </div>
 
       {/* Left Side Panels */}
-      <div className="absolute top-20 left-4 w-72 space-y-4 z-10">
+      <div className="absolute top-14 left-2 w-64 space-y-2 z-10 max-h-[calc(100vh-140px)] overflow-y-auto">
         {/* Signals Panel */}
         <Card className="bg-gray-500/30 backdrop-blur-sm border-border/50">
-          <CardContent className="p-4 text-center">
-            <h4 className="text-primary mb-3 text-sm font-semibold">Signals</h4>
-            <div className="w-20 h-20 bg-black border-2 border-primary rounded-lg flex items-center justify-center mx-auto mb-3">
-              <span className="text-3xl text-sailing-warning">⚡</span>
+          <CardContent className="p-3 text-center">
+            <h4 className="text-primary mb-2 text-xs font-semibold">Signals</h4>
+            <div className="w-16 h-16 bg-black border-2 border-primary rounded-lg flex items-center justify-center mx-auto mb-2">
+              <span className="text-2xl text-sailing-warning">⚡</span>
             </div>
             <div className="text-xs text-muted-foreground">Starting Signal</div>
           </CardContent>
@@ -43,49 +43,49 @@ export default function GamePlay() {
 
         {/* Race Control Chat */}
         <Card className="bg-gray-500/30 backdrop-blur-sm border-border/50">
-          <CardContent className="p-4">
-            <h4 className="text-primary mb-3 text-sm font-semibold flex items-center gap-2">
-              <Flag className="h-4 w-4" />
+          <CardContent className="p-3">
+            <h4 className="text-primary mb-2 text-xs font-semibold flex items-center gap-2">
+              <Flag className="h-3 w-3" />
               Race Control
             </h4>
-            <div className="h-24 overflow-y-auto text-xs space-y-1 mb-3">
+            <div className="h-20 overflow-y-auto text-xs space-y-1 mb-2">
               {[
-                { sender: 'Race Control', message: '5 minutes to start sequence', color: 'text-sailing-success' },
-                { sender: 'SailShark', message: 'Good luck everyone!', color: 'text-primary' },
-                { sender: 'TackTitan', message: 'Wind shift coming from the right', color: 'text-sailing-warning' }
+                { sender: 'RC', message: '5 min to start', color: 'text-sailing-success' },
+                { sender: 'SailShark', message: 'Good luck!', color: 'text-primary' },
+                { sender: 'TackTitan', message: 'Wind shift right', color: 'text-sailing-warning' }
               ].map((msg, index) => (
-                <div key={index} className="leading-relaxed">
+                <div key={index} className="leading-tight">
                   <strong className={msg.color}>{msg.sender}:</strong> {msg.message}
                 </div>
               ))}
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-1">
               <input 
                 type="text" 
-                placeholder="Type message..." 
-                className="flex-1 bg-secondary border border-border text-foreground px-2 py-1 rounded text-xs"
+                placeholder="Type..." 
+                className="flex-1 bg-secondary border border-border text-foreground px-2 py-1 rounded text-xs h-6"
               />
-              <Button size="sm" className="text-xs">Send</Button>
+              <Button size="sm" className="text-xs h-6 px-2">Send</Button>
             </div>
           </CardContent>
         </Card>
       </div>
 
       {/* Right Side Panels */}
-      <div className="absolute top-20 right-4 w-72 space-y-4 z-10">
+      <div className="absolute top-14 right-2 w-64 space-y-2 z-10 max-h-[calc(100vh-140px)] overflow-y-auto">
         {/* Instruments Panel */}
         <Card className="bg-gray-500/30 backdrop-blur-sm border-border/50">
-          <CardContent className="p-4">
-            <h4 className="text-primary mb-3 text-sm font-semibold text-center">Instruments</h4>
-            <div className="text-center mb-4">
+          <CardContent className="p-3">
+            <h4 className="text-primary mb-2 text-xs font-semibold text-center">Instruments</h4>
+            <div className="text-center mb-3">
               <div className="text-muted-foreground text-xs mb-1">BOAT SPD</div>
               <div className="flex items-baseline justify-center">
-                <span className="text-3xl font-bold text-primary">10.6</span>
-                <span className="text-sm text-muted-foreground ml-1">kn</span>
+                <span className="text-2xl font-bold text-primary">10.6</span>
+                <span className="text-xs text-muted-foreground ml-1">kn</span>
               </div>
             </div>
             
-            <div className="grid grid-cols-2 gap-4 text-center text-xs">
+            <div className="grid grid-cols-2 gap-2 text-center text-xs">
               <div>
                 <div className="text-muted-foreground">HDG</div>
                 <div className="text-primary font-bold">045°</div>
@@ -108,12 +108,12 @@ export default function GamePlay() {
 
         {/* Standing Panel */}
         <Card className="bg-gray-500/30 backdrop-blur-sm border-border/50">
-          <CardContent className="p-4">
-            <h4 className="text-primary mb-3 text-sm font-semibold flex items-center gap-2">
-              <Users className="h-4 w-4" />
+          <CardContent className="p-3">
+            <h4 className="text-primary mb-2 text-xs font-semibold flex items-center gap-2">
+              <Users className="h-3 w-3" />
               Standing
             </h4>
-            <div className="space-y-2 text-xs">
+            <div className="space-y-1 text-xs">
               {[
                 { rank: 1, name: 'WindMaster (You)', distance: '2.1nm', current: true },
                 { rank: 2, name: 'SailShark', distance: '2.2nm', current: false },
@@ -122,8 +122,8 @@ export default function GamePlay() {
                 { rank: 5, name: 'SpeedDemon', distance: '2.5nm', current: false }
               ].map((sailor) => (
                 <div key={sailor.rank} className="flex justify-between items-center py-1 border-b border-border/30 last:border-0">
-                  <span className="text-muted-foreground font-bold w-4">{sailor.rank}</span>
-                  <span className={`flex-1 text-xs ml-2 ${sailor.current ? 'text-sailing-success font-bold' : 'text-foreground'}`}>
+                  <span className="text-muted-foreground font-bold w-3">{sailor.rank}</span>
+                  <span className={`flex-1 text-xs ml-2 truncate ${sailor.current ? 'text-sailing-success font-bold' : 'text-foreground'}`}>
                     {sailor.name}
                   </span>
                   <span className="text-xs">{sailor.distance}</span>
@@ -135,11 +135,11 @@ export default function GamePlay() {
       </div>
 
       {/* Bottom Control Panels */}
-      <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end z-10">
+      <div className="absolute bottom-2 left-2 right-2 flex justify-between items-end z-10">
         {/* Left Actions Panel */}
-        <div className="w-40">
+        <div className="w-32">
           <Card className="bg-gray-500/30 backdrop-blur-sm border-border/50">
-            <CardContent className="p-3">
+            <CardContent className="p-2">
               <h3 className="text-xs font-semibold text-primary mb-2 uppercase tracking-wide">
                 Actions
               </h3>
@@ -149,7 +149,7 @@ export default function GamePlay() {
                     key={action}
                     variant="secondary"
                     size="sm"
-                    className="text-xs w-full h-8"
+                    className="text-xs w-full h-6"
                   >
                     {action}
                   </Button>
@@ -160,10 +160,10 @@ export default function GamePlay() {
         </div>
 
         {/* Center Controls Panel */}
-        <div className="w-80">
+        <div className="w-72">
           <Card className="bg-gray-500/30 backdrop-blur-sm border-border/50">
-            <CardContent className="p-4">
-              <h3 className="text-sm font-semibold text-primary mb-3 uppercase tracking-wide text-center">
+            <CardContent className="p-3">
+              <h3 className="text-sm font-semibold text-primary mb-2 uppercase tracking-wide text-center">
                 Controls
               </h3>
               <div className="grid grid-cols-2 gap-2">
@@ -172,7 +172,7 @@ export default function GamePlay() {
                     key={action}
                     variant="secondary"
                     size="sm"
-                    className="text-xs"
+                    className="text-xs h-8"
                   >
                     {action}
                   </Button>
@@ -183,9 +183,9 @@ export default function GamePlay() {
         </div>
 
         {/* Right View Panel */}
-        <div className="w-40">
+        <div className="w-32">
           <Card className="bg-gray-500/30 backdrop-blur-sm border-border/50">
-            <CardContent className="p-3">
+            <CardContent className="p-2">
               <h3 className="text-xs font-semibold text-primary mb-2 uppercase tracking-wide">
                 View
               </h3>
@@ -200,7 +200,7 @@ export default function GamePlay() {
                     key={option.name}
                     variant={option.active ? "default" : "secondary"}
                     size="sm"
-                    className="text-xs w-full h-8"
+                    className="text-xs w-full h-6"
                   >
                     {option.name}
                   </Button>

@@ -50,7 +50,7 @@ const AppContent = () => {
             <Route path="/play" element={<Play />} />
             <Route path="/marketplace" element={<Marketplace />} />
             <Route path="/protestroom" element={<ProtestRoom />} />
-            <Route path="/history" element={<Account />} />
+            <Route path="/Account" element={<Account />} />
             <Route path="/settings" element={<Settings />} />
             
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

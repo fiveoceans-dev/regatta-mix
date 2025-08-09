@@ -2,7 +2,6 @@ import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
   Table,
   TableBody,
@@ -17,32 +16,42 @@ const mockProtests = [
   {
     id: 1,
     title: "Rule 11 - Windward boat failed to keep clear",
-    race: "America's Cup Q1",
+    regatta: "America's Cup Q1",
+    class: "AC75",
     reporter: "Sailor_Mike",
     status: "Under Review",
-    time: "2h ago",
     incident: "Turn 3, Mark 2",
     responses: 5
   },
   {
     id: 2,
     title: "Illegal mark rounding at Gate 1",
-    race: "Mediterranean Series",
+    regatta: "Mediterranean Series",
+    class: "TP52",
     reporter: "WindHunter",
     status: "Resolved",
-    time: "4h ago",
     incident: "Gate 1",
     responses: 12
   },
   {
     id: 3,
     title: "Collision during start sequence",
-    race: "Coastal Championship",
+    regatta: "Coastal Championship",
+    class: "J70",
     reporter: "SeaWolf",
     status: "Pending",
-    time: "6h ago",
     incident: "Start Line",
     responses: 3
+  },
+  {
+    id: 4,
+    title: "Rule 18 - Mark room violation",
+    regatta: "Laser World Championship",
+    class: "Laser",
+    reporter: "Sailor_Mike",
+    status: "Under Review",
+    incident: "Mark 4",
+    responses: 7
   }
 ]
 
@@ -50,7 +59,6 @@ const myProtests = mockProtests.filter(p => p.reporter === "Sailor_Mike")
 const allProtests = mockProtests
 
 export default function ProtestRoom() {
-  const [activeTab, setActiveTab] = useState("all")
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -115,129 +123,118 @@ export default function ProtestRoom() {
             <User className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">3</div>
+            <div className="text-2xl font-bold">{myProtests.length}</div>
             <p className="text-xs text-muted-foreground">Filed by you</p>
           </CardContent>
         </Card>
       </div>
 
-      {/* Protests Table */}
+      {/* My Protests Section */}
+      {myProtests.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle>My Protests</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Protest</TableHead>
+                  <TableHead>Regatta</TableHead>
+                  <TableHead>Class</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Incident</TableHead>
+                  <TableHead>Responses</TableHead>
+                  <TableHead>Action</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {myProtests.map((protest) => (
+                  <TableRow key={protest.id}>
+                    <TableCell className="font-medium max-w-xs">
+                      <div className="truncate">{protest.title}</div>
+                    </TableCell>
+                    <TableCell>{protest.regatta}</TableCell>
+                    <TableCell>{protest.class}</TableCell>
+                    <TableCell>
+                      <Badge variant={getStatusColor(protest.status)}>
+                        {protest.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>{protest.incident}</TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-1">
+                        <MessageSquare className="h-4 w-4" />
+                        {protest.responses}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <Button size="sm" variant="outline">
+                        Edit
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* All Protests Section */}
       <Card>
         <CardHeader>
-          <CardTitle>Protests</CardTitle>
+          <CardTitle>All Protests</CardTitle>
         </CardHeader>
         <CardContent>
-          <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList>
-              <TabsTrigger value="all">All Protests</TabsTrigger>
-              <TabsTrigger value="my">My Protests</TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="all" className="mt-6">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Protest</TableHead>
-                    <TableHead>Race</TableHead>
-                    <TableHead>Reporter</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Incident</TableHead>
-                    <TableHead>Time</TableHead>
-                    <TableHead>Responses</TableHead>
-                    <TableHead>Action</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {allProtests.map((protest) => (
-                    <TableRow key={protest.id}>
-                      <TableCell className="font-medium max-w-xs">
-                        <div className="truncate">{protest.title}</div>
-                      </TableCell>
-                      <TableCell>{protest.race}</TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-1">
-                          <User className="h-4 w-4" />
-                          {protest.reporter}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant={getStatusColor(protest.status)}>
-                          {protest.status}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>{protest.incident}</TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-1">
-                          <Clock className="h-4 w-4" />
-                          {protest.time}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-1">
-                          <MessageSquare className="h-4 w-4" />
-                          {protest.responses}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <Button size="sm" variant="outline">
-                          View
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TabsContent>
-            
-            <TabsContent value="my" className="mt-6">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Protest</TableHead>
-                    <TableHead>Race</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Incident</TableHead>
-                    <TableHead>Time</TableHead>
-                    <TableHead>Responses</TableHead>
-                    <TableHead>Action</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {myProtests.map((protest) => (
-                    <TableRow key={protest.id}>
-                      <TableCell className="font-medium max-w-xs">
-                        <div className="truncate">{protest.title}</div>
-                      </TableCell>
-                      <TableCell>{protest.race}</TableCell>
-                      <TableCell>
-                        <Badge variant={getStatusColor(protest.status)}>
-                          {protest.status}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>{protest.incident}</TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-1">
-                          <Clock className="h-4 w-4" />
-                          {protest.time}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-1">
-                          <MessageSquare className="h-4 w-4" />
-                          {protest.responses}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <Button size="sm" variant="outline">
-                          Edit
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TabsContent>
-          </Tabs>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Protest</TableHead>
+                <TableHead>Regatta</TableHead>
+                <TableHead>Class</TableHead>
+                <TableHead>Reporter</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Incident</TableHead>
+                <TableHead>Responses</TableHead>
+                <TableHead>Action</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {allProtests.map((protest) => (
+                <TableRow key={protest.id}>
+                  <TableCell className="font-medium max-w-xs">
+                    <div className="truncate">{protest.title}</div>
+                  </TableCell>
+                  <TableCell>{protest.regatta}</TableCell>
+                  <TableCell>{protest.class}</TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-1">
+                      <User className="h-4 w-4" />
+                      {protest.reporter}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant={getStatusColor(protest.status)}>
+                      {protest.status}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>{protest.incident}</TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-1">
+                      <MessageSquare className="h-4 w-4" />
+                      {protest.responses}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <Button size="sm" variant="outline">
+                      View
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </CardContent>
       </Card>
     </div>

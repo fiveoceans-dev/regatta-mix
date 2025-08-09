@@ -8,12 +8,14 @@ import { Footer } from "@/components/landing/footer"
 export default function Landing() {
   return (
     <div className="min-h-screen bg-background">
-      <HeroSection />
-      <LeaderboardRegattas />
-      <UpdatedFeaturesSection />
-      <CommunitySection />
-      <PartnersSection />
-      <Footer />
+      <div className="font-serif-renaissance">
+        <HeroSection />
+        <LeaderboardRegattas />
+        <UpdatedFeaturesSection />
+        <CommunitySection />
+        <PartnersSection />
+        <Footer />
+      </div>
     </div>
   )
 }

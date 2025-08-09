@@ -9,17 +9,17 @@ import { Skeleton } from "@/components/ui/skeleton"
 const heroImages = [
   {
     id: 1,
-    url: "https://images.unsplash.com/photo-1566053530509-1b4b1cc6c09d?w=1920&h=800&fit=crop",
+    url: "https://placehold.co/1920x800/blue/white?text=Hero",
     alt: "Sailing catamarans racing at sunset"
   },
   {
     id: 2,
-    url: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1920&h=800&fit=crop",
+    url: "https://placehold.co/1920x800/blue/white?text=Hero",
     alt: "SailGP racing boats"
   },
   {
     id: 3,
-    url: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1920&h=800&fit=crop",
+    url: "https://placehold.co/1920x800/blue/white?text=Hero",
     alt: "Yacht racing in open ocean"
   }
 ]

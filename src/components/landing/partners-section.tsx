@@ -19,7 +19,7 @@ export function PartnersSection() {
       <div className="container mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            Trusted by <span className="text-primary">World Leaders</span>
+            In <span className="text-accent">Collaboration With</span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             Partnering with the biggest names in sailing and motorsports

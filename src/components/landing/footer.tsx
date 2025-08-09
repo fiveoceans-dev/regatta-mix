@@ -138,7 +138,7 @@ export function Footer() {
         {/* Newsletter Signup */}
         <div className="mt-16 pt-8 border-t border-border/50">
           <div className="max-w-2xl mx-auto text-center space-y-6">
-            <h3 className="text-2xl font-bold">Stay Updated</h3>
+            <h3 className="text-2xl font-bold">Weekly Newsletter</h3>
             <p className="text-muted-foreground">
               Get the latest news, race schedules, and exclusive content delivered to your inbox
             </p>

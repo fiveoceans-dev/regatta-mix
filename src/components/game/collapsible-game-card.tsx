@@ -16,7 +16,7 @@ export function CollapsibleGameCard({
   icon, 
   children, 
   position,
-  defaultOpen = false 
+  defaultOpen = true 
 }: CollapsibleGameCardProps) {
   const [isExpanded, setIsExpanded] = useState(defaultOpen)
 
@@ -25,7 +25,7 @@ export function CollapsibleGameCard({
   }
 
   return (
-    <Card className="bg-card/90 backdrop-blur-sm border-border transition-all duration-300 rounded-none">
+    <Card className="bg-transparent backdrop-blur-sm border-border transition-all duration-300 rounded-none">
       <CardContent className="p-0">
         {/* Always visible header with icon and title */}
         <Button

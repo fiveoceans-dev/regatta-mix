@@ -19,7 +19,7 @@ export default function GamePlay() {
       
       {/* Top Game Info Bar */}
       <div className="absolute top-2 left-1/2 transform -translate-x-1/2 z-10">
-        <Card className="bg-card/90 backdrop-blur-sm border-border">
+        <Card className="bg-card/90 backdrop-blur-sm border-border rounded-none">
           <CardContent className="p-2">
             <div className="flex items-center gap-3 text-sm">
               <div className="text-primary font-bold hidden sm:block">Mediterranean Sprint Championship</div>
@@ -78,7 +78,7 @@ export default function GamePlay() {
           {/* Left Actions Panel - Hidden on small screens */}
           <div className="w-0 sm:w-32 transition-all">
             <div className="hidden sm:block">
-              <Card className="bg-card/90 backdrop-blur-sm border-border">
+              <Card className="bg-card/90 backdrop-blur-sm border-border rounded-none">
                 <CardContent className="p-3">
                   <h3 className="text-sm font-semibold text-primary mb-2 uppercase tracking-wide">
                     Actions
@@ -97,7 +97,7 @@ export default function GamePlay() {
 
           {/* Center Controls Panel - Always visible, responsive width */}
           <div className="w-full sm:w-96 max-w-2xl mx-2">
-            <Card className="bg-card/90 backdrop-blur-sm border-border">
+            <Card className="bg-card/90 backdrop-blur-sm border-border rounded-none">
               <CardContent className="p-2 sm:p-3">
                 <h3 className="text-xs sm:text-sm font-semibold text-primary mb-2 uppercase tracking-wide text-center">
                   Controls
@@ -164,7 +164,7 @@ export default function GamePlay() {
           {/* Right View Panel - Hidden on small screens */}
           <div className="w-0 sm:w-32 transition-all">
             <div className="hidden sm:block">
-              <Card className="bg-card/90 backdrop-blur-sm border-border">
+              <Card className="bg-card/90 backdrop-blur-sm border-border rounded-none">
                 <CardContent className="p-3">
                   <h3 className="text-sm font-semibold text-primary mb-2 uppercase tracking-wide">
                     View

@@ -108,3 +108,19 @@ All colors MUST be HSL.
   background-size: 200px 100%;
   animation: skeleton-shine 1.5s infinite;
 }
+
+/* Smooth Pulse Animation for Oval Button */
+@keyframes smooth-pulse {
+  0%, 100% {
+    opacity: 0.75;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.02);
+  }
+}
+
+.animate-smooth-pulse {
+  animation: smooth-pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}

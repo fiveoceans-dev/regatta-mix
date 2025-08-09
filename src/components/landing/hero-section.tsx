@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { Button } from "@/components/ui/button"
-import { LandingButton } from "@/components/ui/landing-button"
+import { OvalButton } from "@/components/ui/oval-button"
 import { AuthDialog } from "@/components/ui/auth-dialog"
 import { ChevronLeft, ChevronRight, Play } from "lucide-react"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -122,21 +122,21 @@ export function HeroSection() {
           
           <div className="flex justify-center items-center">
             {isLoggedIn ? (
-              <LandingButton 
+              <OvalButton 
                 onClick={handlePlayClick}
                 className="animate-fade-in-up"
               >
                 <Play className="mr-2 h-5 w-5" />
                 Play Now
-              </LandingButton>
+              </OvalButton>
             ) : (
               <AuthDialog onSuccess={handleLoginSuccess}>
-                <LandingButton 
+                <OvalButton 
                   className="animate-fade-in-up"
                 >
                   <Play className="mr-2 h-5 w-5" />
                   Start Racing
-                </LandingButton>
+                </OvalButton>
               </AuthDialog>
             )}
           </div>

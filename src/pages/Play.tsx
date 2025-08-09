@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
+import { SimpleButton } from "@/components/ui/simple-button"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
@@ -168,9 +168,9 @@ export default function Play() {
                   <CardTitle className="flex items-center gap-2 text-primary">
                     Quick Match
                   </CardTitle>
-                  <Button size="lg">
-                    Register
-                  </Button>
+                  <SimpleButton size="lg">
+                    Join
+                  </SimpleButton>
                 </div>
               </div>
             </CardHeader>
@@ -264,13 +264,13 @@ export default function Play() {
                         <TableCell className="font-medium">{regatta.prizePool} pts</TableCell>
                         <TableCell>
                           {regatta.players >= regatta.maxPlayers ? (
-                            <Button size="sm" disabled variant="secondary">
+                            <SimpleButton size="sm" disabled variant="secondary">
                               Closed
-                            </Button>
+                            </SimpleButton>
                           ) : (
-                            <Button size="sm">
+                            <SimpleButton size="sm">
                               Join
-                            </Button>
+                            </SimpleButton>
                           )}
                         </TableCell>
                       </TableRow>

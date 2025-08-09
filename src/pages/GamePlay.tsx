@@ -1,31 +1,21 @@
 import { SailingScene } from "@/components/game/sailing-scene"
-import { SidebarProvider } from "@/components/ui/sidebar"
-import { DashboardSidebar } from "@/components/dashboard/sidebar"
-import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Wind, Compass, Flag, Clock, Users } from "lucide-react"
 
 export default function GamePlay() {
   return (
-    <SidebarProvider>
-      <div className="min-h-screen w-full bg-background">
-        <DashboardHeader />
-        
-        <div className="flex w-full">
-          <DashboardSidebar />
-          
-          <main className="flex-1 h-[calc(100vh-4rem)] overflow-hidden relative">
-            {/* Full Screen Game Scene */}
-            <div className="absolute inset-0">
-              <SailingScene />
-            </div>
+    <div className="min-h-screen w-full h-screen overflow-hidden relative">
+      {/* Full Screen Game Scene */}
+      <div className="absolute inset-0">
+        <SailingScene />
+      </div>
 
       {/* Game UI Overlays */}
       
       {/* Top Game Info Bar */}
-      <div className="absolute top-4 left-4 right-4 flex justify-between items-center z-10">
-        <Card className="bg-black/80 backdrop-blur-sm border-border/50">
+      <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-10">
+        <Card className="bg-gray-900/80 backdrop-blur-sm border-border/50">
           <CardContent className="p-3">
             <div className="flex items-center gap-4 text-sm">
               <div className="text-primary font-bold">Mediterranean Sprint Championship</div>
@@ -36,18 +26,14 @@ export default function GamePlay() {
             </div>
           </CardContent>
         </Card>
-        
-        <div className="flex gap-2">
-          <Button variant="secondary" size="sm">Menu</Button>
-          <Button variant="secondary" size="sm">Settings</Button>
-        </div>
       </div>
 
-      {/* Right Side Panels */}
-      <div className="absolute top-20 right-4 w-80 space-y-4 z-10">
-        {/* Signal Flag Panel */}
-        <Card className="bg-black/90 backdrop-blur-sm border-border/50">
+      {/* Left Side Panels */}
+      <div className="absolute top-20 left-4 w-80 space-y-4 z-10">
+        {/* Signals Panel */}
+        <Card className="bg-gray-500/30 backdrop-blur-sm border-border/50">
           <CardContent className="p-6 text-center">
+            <h4 className="text-primary mb-3 text-sm font-semibold">Signals</h4>
             <div className="w-24 h-24 bg-black border-2 border-primary rounded-lg flex items-center justify-center mx-auto mb-3">
               <span className="text-4xl text-sailing-warning">⚡</span>
             </div>
@@ -55,9 +41,10 @@ export default function GamePlay() {
           </CardContent>
         </Card>
 
-        {/* B&G Style Instruments */}
-        <Card className="bg-black/90 backdrop-blur-sm border-border/50">
+        {/* Instruments Panel */}
+        <Card className="bg-gray-500/30 backdrop-blur-sm border-border/50">
           <CardContent className="p-6">
+            <h4 className="text-primary mb-3 text-sm font-semibold text-center">Instruments</h4>
             <div className="text-center mb-4">
               <div className="text-muted-foreground text-xs mb-1">BOAT SPD</div>
               <div className="flex items-baseline justify-center">
@@ -87,12 +74,12 @@ export default function GamePlay() {
           </CardContent>
         </Card>
 
-        {/* Live Standings */}
-        <Card className="bg-black/90 backdrop-blur-sm border-border/50">
+        {/* Standing Panel */}
+        <Card className="bg-gray-500/30 backdrop-blur-sm border-border/50">
           <CardContent className="p-4">
             <h4 className="text-primary mb-3 text-sm font-semibold flex items-center gap-2">
               <Users className="h-4 w-4" />
-              Live Standings
+              Standing
             </h4>
             <div className="space-y-2 text-xs">
               {[
@@ -115,28 +102,35 @@ export default function GamePlay() {
         </Card>
       </div>
 
-      {/* Wind Indicator */}
-      <div className="absolute top-20 left-4 z-10">
-        <Card className="bg-black/90 backdrop-blur-sm border-border/50">
+      {/* Left Actions Panel */}
+      <div className="absolute bottom-4 left-4 w-48 z-10">
+        <Card className="bg-gray-500/30 backdrop-blur-sm border-border/50">
           <CardContent className="p-4">
-            <div className="w-16 h-16 bg-secondary rounded-full relative mx-auto mb-3 flex items-center justify-center">
-              <Wind className="h-8 w-8 text-primary transform rotate-45" />
-            </div>
-            <div className="text-center text-primary text-xs">
-              <div className="font-bold">12.5 kts</div>
-              <div>045° True</div>
+            <h3 className="text-sm font-semibold text-primary mb-3 uppercase tracking-wide">
+              Actions
+            </h3>
+            <div className="flex flex-col gap-2">
+              {['Protest', 'Redress', 'Retire'].map((action) => (
+                <Button 
+                  key={action}
+                  variant="secondary"
+                  size="sm"
+                  className="text-xs w-full"
+                >
+                  {action}
+                </Button>
+              ))}
             </div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Bottom Control Panels */}
-      <div className="absolute bottom-4 left-4 right-4 flex gap-4 z-10">
-        {/* Sailing Controls */}
-        <Card className="flex-1 bg-black/90 backdrop-blur-sm border-border/50">
+      {/* Center Controls Panel */}
+      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-96 z-10">
+        <Card className="bg-gray-500/30 backdrop-blur-sm border-border/50">
           <CardContent className="p-4">
-            <h3 className="text-sm font-semibold text-primary mb-3 uppercase tracking-wide">
-              Sailing Controls
+            <h3 className="text-sm font-semibold text-primary mb-3 uppercase tracking-wide text-center">
+              Controls
             </h3>
             <div className="grid grid-cols-2 gap-2">
               {['Tack to Port', 'Tack to Starboard', 'Bear Away', 'Head Up'].map((action) => (
@@ -152,35 +146,16 @@ export default function GamePlay() {
             </div>
           </CardContent>
         </Card>
+      </div>
 
-        {/* Race Actions */}
-        <Card className="flex-1 bg-black/90 backdrop-blur-sm border-border/50">
+      {/* Right View Panel */}
+      <div className="absolute bottom-4 right-4 w-48 z-10">
+        <Card className="bg-gray-500/30 backdrop-blur-sm border-border/50">
           <CardContent className="p-4">
             <h3 className="text-sm font-semibold text-primary mb-3 uppercase tracking-wide">
-              Race Actions
+              View
             </h3>
-            <div className="grid grid-cols-3 gap-2">
-              {['Protest', 'Redress', 'Retire'].map((action) => (
-                <Button 
-                  key={action}
-                  variant="secondary"
-                  size="sm"
-                  className="text-xs"
-                >
-                  {action}
-                </Button>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* View Options */}
-        <Card className="flex-1 bg-black/90 backdrop-blur-sm border-border/50">
-          <CardContent className="p-4">
-            <h3 className="text-sm font-semibold text-primary mb-3 uppercase tracking-wide">
-              View Options
-            </h3>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="flex flex-col gap-2">
               {[
                 { name: 'Course', active: true },
                 { name: 'Tactical', active: false },
@@ -191,7 +166,7 @@ export default function GamePlay() {
                   key={option.name}
                   variant={option.active ? "default" : "secondary"}
                   size="sm"
-                  className="text-xs"
+                  className="text-xs w-full"
                 >
                   {option.name}
                 </Button>
@@ -202,8 +177,8 @@ export default function GamePlay() {
       </div>
 
       {/* Race Control Chat */}
-      <div className="absolute bottom-4 right-4 w-80 z-10">
-        <Card className="bg-black/90 backdrop-blur-sm border-border/50">
+      <div className="absolute top-20 right-4 w-80 z-10">
+        <Card className="bg-gray-500/30 backdrop-blur-sm border-border/50">
           <CardContent className="p-4">
             <h4 className="text-primary mb-3 text-sm font-semibold flex items-center gap-2">
               <Flag className="h-4 w-4" />
@@ -231,9 +206,6 @@ export default function GamePlay() {
           </CardContent>
         </Card>
       </div>
-          </main>
-        </div>
-      </div>
-    </SidebarProvider>
+    </div>
   )
 }

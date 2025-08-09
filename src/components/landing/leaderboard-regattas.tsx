@@ -17,11 +17,11 @@ const leaderboardData = [
 ]
 
 const regattaData = [
-  { name: "America's Cup Qualifier", players: 156, maxPlayers: 200, status: "open", difficulty: "Expert" },
-  { name: "Mediterranean Sprint", players: 89, maxPlayers: 150, status: "open", difficulty: "Advanced" },
-  { name: "Pacific Championship", players: 134, maxPlayers: 180, status: "starting", difficulty: "Expert" },
-  { name: "Baltic Sea Cup", players: 67, maxPlayers: 120, status: "open", difficulty: "Beginner" },
-  { name: "Caribbean Cruise", players: 200, maxPlayers: 200, status: "full", difficulty: "Intermediate" }
+  { name: "America's Cup Qualifier", players: 156, maxPlayers: 200, class: "TP52" },
+  { name: "Mediterranean Sprint", players: 89, maxPlayers: 150, class: "J70" },
+  { name: "Pacific Championship", players: 134, maxPlayers: 180, class: "Laser" },
+  { name: "Baltic Sea Cup", players: 67, maxPlayers: 120, class: "J24" },
+  { name: "Caribbean Cruise", players: 200, maxPlayers: 200, class: "TP52" }
 ]
 
 export function LeaderboardRegattas() {
@@ -34,7 +34,7 @@ export function LeaderboardRegattas() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-2xl">
                 <Trophy className="h-6 w-6 text-primary" />
-                Season 2024 Leaderboard
+                Leaderboard 2025-Q4
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -94,9 +94,9 @@ export function LeaderboardRegattas() {
                 <TableHeader>
                   <TableRow className="border-border/50">
                     <TableHead className="text-muted-foreground">Regatta</TableHead>
+                    <TableHead className="text-muted-foreground">Class</TableHead>
                     <TableHead className="text-muted-foreground">Players</TableHead>
-                    <TableHead className="text-muted-foreground">Status</TableHead>
-                    <TableHead className="text-muted-foreground">Action</TableHead>
+                    <TableHead className="text-muted-foreground">Register</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -106,45 +106,23 @@ export function LeaderboardRegattas() {
                       className="border-border/30 hover:bg-muted/30 transition-colors"
                     >
                       <TableCell>
-                        <div>
-                          <div className="font-semibold">{regatta.name}</div>
-                          <Badge 
-                            variant={regatta.difficulty === "Expert" ? "destructive" : 
-                                    regatta.difficulty === "Advanced" ? "default" : 
-                                    regatta.difficulty === "Intermediate" ? "secondary" : "outline"}
-                            className="text-xs mt-1"
-                          >
-                            {regatta.difficulty}
-                          </Badge>
-                        </div>
+                        <div className="font-semibold">{regatta.name}</div>
                       </TableCell>
                       <TableCell>
-                        <div className="flex flex-col gap-1">
-                          <span className="text-primary font-medium">{regatta.players}/{regatta.maxPlayers}</span>
-                          <div className="w-16 bg-muted rounded-full h-1.5">
-                            <div 
-                              className="bg-primary h-1.5 rounded-full transition-all duration-300"
-                              style={{ width: `${(regatta.players / regatta.maxPlayers) * 100}%` }}
-                            />
-                          </div>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <Badge 
-                          variant={regatta.status === "full" ? "destructive" : 
-                                  regatta.status === "starting" ? "default" : "secondary"}
-                          className="text-xs"
-                        >
-                          {regatta.status}
+                        <Badge variant="outline" className="text-xs">
+                          {regatta.class}
                         </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <span className="text-primary font-medium">{regatta.players}/{regatta.maxPlayers}</span>
                       </TableCell>
                       <TableCell>
                         <Button 
                           size="sm"
-                          disabled={regatta.status === "full"}
-                          className={regatta.status === "full" ? "opacity-50" : ""}
+                          disabled={regatta.players >= regatta.maxPlayers}
+                          variant={regatta.players >= regatta.maxPlayers ? "secondary" : "default"}
                         >
-                          {regatta.status === "full" ? "Full" : "Join"}
+                          {regatta.players >= regatta.maxPlayers ? "Closed" : "Join"}
                         </Button>
                       </TableCell>
                     </TableRow>

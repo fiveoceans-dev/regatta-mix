@@ -84,17 +84,17 @@ export function HeroSection() {
       {/* Navigation arrows */}
       <Button
         variant="ghost"
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-10 text-white hover:bg-white/20 w-12 h-16 rounded-lg"
+        className="absolute left-4 top-1/2 -translate-y-1/2 z-10 text-white hover:bg-white/20 w-16 h-20 rounded-lg border border-white/30"
         onClick={prevSlide}
       >
-        <ChevronLeft className="h-8 w-8" />
+        <ChevronLeft className="h-10 w-10" />
       </Button>
       <Button
         variant="ghost"
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-10 text-white hover:bg-white/20 w-12 h-16 rounded-lg"
+        className="absolute right-4 top-1/2 -translate-y-1/2 z-10 text-white hover:bg-white/20 w-16 h-20 rounded-lg border border-white/30"
         onClick={nextSlide}
       >
-        <ChevronRight className="h-8 w-8" />
+        <ChevronRight className="h-10 w-10" />
       </Button>
 
       {/* Slide indicators */}

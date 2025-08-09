@@ -83,7 +83,7 @@ export default function ProtestRoom() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Active Protests</CardTitle>
@@ -119,6 +119,17 @@ export default function ProtestRoom() {
         
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Karma</CardTitle>
+            <User className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">1,247</div>
+            <p className="text-xs text-muted-foreground">Community reputation</p>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">My Protests</CardTitle>
             <User className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
@@ -128,6 +139,56 @@ export default function ProtestRoom() {
           </CardContent>
         </Card>
       </div>
+
+      {/* All Protests Section */}
+      <Card>
+        <CardHeader>
+          <CardTitle>All Protests</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Protest</TableHead>
+                <TableHead>Regatta</TableHead>
+                <TableHead>Class</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Incident</TableHead>
+                <TableHead>Responses</TableHead>
+                <TableHead>Action</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {allProtests.map((protest) => (
+                <TableRow key={protest.id}>
+                  <TableCell className="font-medium max-w-xs">
+                    <div className="truncate">{protest.title}</div>
+                  </TableCell>
+                  <TableCell>{protest.regatta}</TableCell>
+                  <TableCell>{protest.class}</TableCell>
+                  <TableCell>
+                    <Badge variant={getStatusColor(protest.status)}>
+                      {protest.status}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>{protest.incident}</TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-1">
+                      <MessageSquare className="h-4 w-4" />
+                      {protest.responses}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <Button size="sm" variant="outline">
+                      View
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
 
       {/* My Protests Section */}
       {myProtests.length > 0 && (
@@ -180,63 +241,6 @@ export default function ProtestRoom() {
           </CardContent>
         </Card>
       )}
-
-      {/* All Protests Section */}
-      <Card>
-        <CardHeader>
-          <CardTitle>All Protests</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Protest</TableHead>
-                <TableHead>Regatta</TableHead>
-                <TableHead>Class</TableHead>
-                <TableHead>Reporter</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Incident</TableHead>
-                <TableHead>Responses</TableHead>
-                <TableHead>Action</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {allProtests.map((protest) => (
-                <TableRow key={protest.id}>
-                  <TableCell className="font-medium max-w-xs">
-                    <div className="truncate">{protest.title}</div>
-                  </TableCell>
-                  <TableCell>{protest.regatta}</TableCell>
-                  <TableCell>{protest.class}</TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-1">
-                      <User className="h-4 w-4" />
-                      {protest.reporter}
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant={getStatusColor(protest.status)}>
-                      {protest.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>{protest.incident}</TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-1">
-                      <MessageSquare className="h-4 w-4" />
-                      {protest.responses}
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <Button size="sm" variant="outline">
-                      View
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
     </div>
   )
 }

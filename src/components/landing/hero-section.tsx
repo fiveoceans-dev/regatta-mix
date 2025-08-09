@@ -84,14 +84,14 @@ export function HeroSection() {
       {/* Navigation arrows */}
       <Button
         variant="ghost"
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-50 text-white hover:bg-white/20 w-20 h-24 rounded-lg border border-white/30 bg-black/20 backdrop-blur-sm"
+        className="absolute left-4 top-1/2 -translate-y-1/2 z-50 text-white hover:bg-white/20 w-20 h-24"
         onClick={prevSlide}
       >
         <ChevronLeft className="h-12 w-12" />
       </Button>
       <Button
         variant="ghost"
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-50 text-white hover:bg-white/20 w-20 h-24 rounded-lg border border-white/30 bg-black/20 backdrop-blur-sm"
+        className="absolute right-4 top-1/2 -translate-y-1/2 z-50 text-white hover:bg-white/20 w-20 h-24"
         onClick={nextSlide}
       >
         <ChevronRight className="h-12 w-12" />

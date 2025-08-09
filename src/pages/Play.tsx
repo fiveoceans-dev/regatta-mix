@@ -11,69 +11,104 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { 
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination"
 import { Trophy, Users, Clock, MapPin, Play as PlayIcon, Wind, Waves, Calendar } from "lucide-react"
 import { SailingScene } from "@/components/game/sailing-scene"
 
-const mockRegattas = [
-  {
-    id: 1,
-    name: "America's Cup Qualifier",
-    class: "AC75",
-    players: 24,
-    maxPlayers: 32,
-    startTime: "14:30",
-    location: "Bermuda",
-    prizePool: "50,000",
-    courseType: "Windward/Leeward"
-  },
-  {
-    id: 2,
-    name: "Mediterranean Series",
-    class: "TP52",
-    players: 18,
-    maxPlayers: 20,
-    startTime: "15:00",
-    location: "Monaco",
-    prizePool: "25,000",
-    courseType: "Around the Island"
-  },
-  {
-    id: 3,
-    name: "Coastal Championship",
-    class: "J70",
-    players: 32,
-    maxPlayers: 32,
-    startTime: "16:30",
-    location: "San Francisco",
-    prizePool: "15,000",
-    courseType: "Coastal"
-  },
-  {
-    id: 4,
-    name: "Laser World Championship",
-    class: "Laser",
-    players: 45,
-    maxPlayers: 50,
-    startTime: "17:00",
-    location: "Auckland",
-    prizePool: "75,000",
-    courseType: "Olympic Triangle"
-  },
-  {
-    id: 5,
-    name: "J24 Classic",
-    class: "J24",
-    players: 16,
-    maxPlayers: 24,
-    startTime: "18:00",
-    location: "Newport",
-    prizePool: "12,000",
-    courseType: "Pursuit Race"
+// Generate 100 regattas for pagination demo
+const generateRegattas = () => {
+  const baseRegattas = [
+    {
+      id: 1,
+      name: "America's Cup Qualifier",
+      class: "AC75",
+      players: 24,
+      maxPlayers: 32,
+      date: "2024-08-15",
+      startTime: "2 days, 14 hours, 30 min",
+      location: "Bermuda, BM",
+      prizePool: "50,000",
+      courseType: "Windward/Leeward"
+    },
+    {
+      id: 2,
+      name: "Mediterranean Series",
+      class: "TP52",
+      players: 18,
+      maxPlayers: 20,
+      date: "2024-08-16",
+      startTime: "3 days, 15 hours, 0 min",
+      location: "Monaco, MC",
+      prizePool: "25,000",
+      courseType: "Around the Island"
+    },
+    {
+      id: 3,
+      name: "Coastal Championship",
+      class: "J70",
+      players: 32,
+      maxPlayers: 32,
+      date: "2024-08-17",
+      startTime: "4 days, 16 hours, 30 min",
+      location: "San Francisco, US",
+      prizePool: "15,000",
+      courseType: "Coastal"
+    },
+    {
+      id: 4,
+      name: "Laser World Championship",
+      class: "Laser",
+      players: 45,
+      maxPlayers: 50,
+      date: "2024-08-18",
+      startTime: "5 days, 17 hours, 0 min",
+      location: "Auckland, NZ",
+      prizePool: "75,000",
+      courseType: "Olympic Triangle"
+    },
+    {
+      id: 5,
+      name: "J24 Classic",
+      class: "J24",
+      players: 16,
+      maxPlayers: 24,
+      date: "2024-08-19",
+      startTime: "6 days, 18 hours, 0 min",
+      location: "Newport, US",
+      prizePool: "12,000",
+      courseType: "Pursuit Race"
+    }
+  ]
+  
+  // Generate 100 regattas by repeating and modifying the base ones
+  const allRegattas = []
+  for (let i = 0; i < 100; i++) {
+    const baseRegatta = baseRegattas[i % baseRegattas.length]
+    allRegattas.push({
+      ...baseRegatta,
+      id: i + 1,
+      name: `${baseRegatta.name} ${Math.floor(i / 5) + 1}`,
+      players: Math.floor(Math.random() * baseRegatta.maxPlayers),
+    })
   }
-]
+  return allRegattas
+}
+
+const mockRegattas = generateRegattas()
 
 export default function Play() {
   const [countdown, setCountdown] = useState("2:30:45")
+  const [currentPage, setCurrentPage] = useState(1)
+  const [activeTab, setActiveTab] = useState("all")
+  const itemsPerPage = 10
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -92,6 +127,29 @@ export default function Play() {
     return () => clearInterval(timer)
   }, [])
 
+  const getRegattas = () => {
+    switch (activeTab) {
+      case "my":
+        return mockRegattas.slice(0, 15) // Mock "my regattas"
+      case "top":
+        return mockRegattas.slice(0, 20) // Mock "top regattas"
+      default:
+        return mockRegattas
+    }
+  }
+
+  const currentRegattas = getRegattas()
+  const totalPages = Math.ceil(currentRegattas.length / itemsPerPage)
+  const paginatedRegattas = currentRegattas.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  )
+
+  const handleTabChange = (value: string) => {
+    setActiveTab(value)
+    setCurrentPage(1)
+  }
+
   return (
     <div className="relative h-screen overflow-hidden pt-16">
       {/* Game Background */}
@@ -106,21 +164,25 @@ export default function Play() {
           <Card className="bg-background/80 backdrop-blur-md border-border/50">
             <CardHeader>
               <div className="flex items-center justify-between">
-                <CardTitle className="flex items-center gap-2 text-primary">
-                  <PlayIcon className="h-5 w-5" />
-                  Quick Match
-                </CardTitle>
-                <Button size="lg">
-                  <Calendar className="h-4 w-4 mr-2" />
-                  Register
-                </Button>
+                <div className="flex items-center gap-4">
+                  <CardTitle className="flex items-center gap-2 text-primary">
+                    Quick Match
+                  </CardTitle>
+                  <Button size="lg">
+                    Register
+                  </Button>
+                </div>
               </div>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
                 <div className="space-y-2">
                   <div className="text-sm text-muted-foreground">Start In</div>
                   <div className="text-lg font-bold">{countdown}</div>
+                </div>
+                <div className="space-y-2">
+                  <div className="text-sm text-muted-foreground">Location</div>
+                  <div className="text-lg font-bold">Monaco, MC</div>
                 </div>
                 <div className="space-y-2">
                   <div className="text-sm text-muted-foreground">Course Type</div>
@@ -151,7 +213,7 @@ export default function Play() {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle>All Regattas</CardTitle>
-                <Tabs defaultValue="all" className="w-auto">
+                <Tabs value={activeTab} onValueChange={handleTabChange} className="w-auto">
                   <TabsList className="bg-background/50">
                     <TabsTrigger value="all">All Regattas</TabsTrigger>
                     <TabsTrigger value="my">My Regattas</TabsTrigger>
@@ -161,141 +223,101 @@ export default function Play() {
               </div>
             </CardHeader>
             <CardContent>
-              <Tabs defaultValue="all" className="w-full">
-                <TabsContent value="all" className="space-y-4">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Regatta</TableHead>
-                        <TableHead>Class</TableHead>
-                        <TableHead>Players</TableHead>
-                        <TableHead>Start Time</TableHead>
-                        <TableHead>Location</TableHead>
-                        <TableHead>Prize Pool</TableHead>
-                        <TableHead>Register</TableHead>
+              <div className="space-y-4">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Regatta</TableHead>
+                      <TableHead>Class</TableHead>
+                      <TableHead>Players</TableHead>
+                      <TableHead>Date</TableHead>
+                      <TableHead>Start In</TableHead>
+                      <TableHead>Location</TableHead>
+                      <TableHead>Prize Pool</TableHead>
+                      <TableHead>Register</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {paginatedRegattas.map((regatta) => (
+                      <TableRow key={regatta.id}>
+                        <TableCell className="font-medium">{regatta.name}</TableCell>
+                        <TableCell>{regatta.class}</TableCell>
+                        <TableCell>{regatta.players}/{regatta.maxPlayers}</TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-1">
+                            <Calendar className="h-4 w-4" />
+                            {regatta.date}
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-1">
+                            <Clock className="h-4 w-4" />
+                            {regatta.startTime}
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-1">
+                            <MapPin className="h-4 w-4" />
+                            {regatta.location}
+                          </div>
+                        </TableCell>
+                        <TableCell className="font-medium">{regatta.prizePool} pts</TableCell>
+                        <TableCell>
+                          {regatta.players >= regatta.maxPlayers ? (
+                            <Button size="sm" disabled variant="secondary">
+                              Closed
+                            </Button>
+                          ) : (
+                            <Button size="sm">
+                              Join
+                            </Button>
+                          )}
+                        </TableCell>
                       </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {mockRegattas.map((regatta) => (
-                        <TableRow key={regatta.id}>
-                          <TableCell className="font-medium">{regatta.name}</TableCell>
-                          <TableCell>{regatta.class}</TableCell>
-                          <TableCell>{regatta.players}/{regatta.maxPlayers}</TableCell>
-                          <TableCell>
-                            <div className="flex items-center gap-1">
-                              <Clock className="h-4 w-4" />
-                              {regatta.startTime}
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <div className="flex items-center gap-1">
-                              <MapPin className="h-4 w-4" />
-                              {regatta.location}
-                            </div>
-                          </TableCell>
-                          <TableCell className="font-medium">{regatta.prizePool} pts</TableCell>
-                          <TableCell>
-                            {regatta.players >= regatta.maxPlayers ? (
-                              <Button size="sm" disabled variant="secondary">
-                                Closed
-                              </Button>
-                            ) : (
-                              <Button size="sm" className="gap-1">
-                                <PlayIcon className="h-3 w-3" />
-                                Join
-                              </Button>
-                            )}
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TabsContent>
+                    ))}
+                  </TableBody>
+                </Table>
                 
-                <TabsContent value="my" className="space-y-4">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Regatta</TableHead>
-                        <TableHead>Class</TableHead>
-                        <TableHead>Players</TableHead>
-                        <TableHead>Start Time</TableHead>
-                        <TableHead>Location</TableHead>
-                        <TableHead>Prize Pool</TableHead>
-                        <TableHead>Register</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {mockRegattas.slice(0, 2).map((regatta) => (
-                        <TableRow key={regatta.id}>
-                          <TableCell className="font-medium">{regatta.name}</TableCell>
-                          <TableCell>{regatta.class}</TableCell>
-                          <TableCell>{regatta.players}/{regatta.maxPlayers}</TableCell>
-                          <TableCell>
-                            <div className="flex items-center gap-1">
-                              <Clock className="h-4 w-4" />
-                              {regatta.startTime}
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <div className="flex items-center gap-1">
-                              <MapPin className="h-4 w-4" />
-                              {regatta.location}
-                            </div>
-                          </TableCell>
-                          <TableCell className="font-medium">{regatta.prizePool} pts</TableCell>
-                          <TableCell>
-                            <Badge variant="default">Registered</Badge>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TabsContent>
-                
-                <TabsContent value="top" className="space-y-4">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Rank</TableHead>
-                        <TableHead>Regatta</TableHead>
-                        <TableHead>Class</TableHead>
-                        <TableHead>Prize Pool</TableHead>
-                        <TableHead>Players</TableHead>
-                        <TableHead>Register</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {mockRegattas.slice(0, 3).map((regatta, index) => (
-                        <TableRow key={regatta.id}>
-                          <TableCell>
-                            <div className="flex items-center gap-1">
-                              <Trophy className="h-4 w-4 text-accent" />
-                              #{index + 1}
-                            </div>
-                          </TableCell>
-                          <TableCell className="font-medium">{regatta.name}</TableCell>
-                          <TableCell>{regatta.class}</TableCell>
-                          <TableCell className="font-medium text-accent">{regatta.prizePool} pts</TableCell>
-                          <TableCell>{regatta.players}/{regatta.maxPlayers}</TableCell>
-                          <TableCell>
-                            {regatta.players >= regatta.maxPlayers ? (
-                              <Button size="sm" disabled variant="secondary">
-                                Closed
-                              </Button>
-                            ) : (
-                              <Button size="sm" className="gap-1">
-                                <PlayIcon className="h-3 w-3" />
-                                Join
-                              </Button>
-                            )}
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TabsContent>
-              </Tabs>
+                {totalPages > 1 && (
+                  <Pagination>
+                    <PaginationContent>
+                      <PaginationItem>
+                        <PaginationPrevious 
+                          onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                          className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                        />
+                      </PaginationItem>
+                      
+                      {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                        const page = i + 1
+                        if (totalPages <= 5) {
+                          return (
+                            <PaginationItem key={page}>
+                              <PaginationLink
+                                onClick={() => setCurrentPage(page)}
+                                isActive={currentPage === page}
+                                className="cursor-pointer"
+                              >
+                                {page}
+                              </PaginationLink>
+                            </PaginationItem>
+                          )
+                        }
+                        return null
+                      })}
+                      
+                      {totalPages > 5 && <PaginationEllipsis />}
+                      
+                      <PaginationItem>
+                        <PaginationNext 
+                          onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+                          className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                        />
+                      </PaginationItem>
+                    </PaginationContent>
+                  </Pagination>
+                )}
+              </div>
             </CardContent>
           </Card>
         </div>

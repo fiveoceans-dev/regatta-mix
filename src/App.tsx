@@ -7,7 +7,7 @@ import Index from "./pages/Index";
 import Landing from "./pages/Landing";
 import Dashboard from "./pages/Dashboard";
 import DashboardHome from "./pages/dashboard/DashboardHome";
-import GamePlay from "./pages/GamePlay";
+import PlayPlaceholder from "./pages/PlayPlaceholder";
 import ProtestRoom from "./pages/dashboard/ProtestRoom";
 import History from "./pages/dashboard/History";
 import NotFound from "./pages/NotFound";
@@ -22,7 +22,9 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Landing />} />
-          <Route path="/play" element={<GamePlay />} />
+          <Route path="/play" element={<Dashboard />}>
+            <Route index element={<PlayPlaceholder />} />
+          </Route>
           <Route path="/dashboard" element={<Dashboard />}>
             <Route index element={<DashboardHome />} />
           </Route>

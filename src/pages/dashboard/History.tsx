@@ -1,4 +1,4 @@
-import { PageSkeleton, TableSkeleton, CardGridSkeleton } from "@/components/ui/page-skeleton"
+import { PageSkeleton, TableSkeleton, CardGridSkeleton, LeaderboardSkeleton } from "@/components/ui/page-skeleton"
 
 export default function History() {
   return (
@@ -11,17 +11,17 @@ export default function History() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="space-y-6">
           <h2 className="text-xl font-semibold">Recent Races</h2>
-          <TableSkeleton />
+          <TableSkeleton rows={10} />
         </div>
         
         <div className="space-y-6">
           <h2 className="text-xl font-semibold">Performance Stats</h2>
-          <CardGridSkeleton />
+          <CardGridSkeleton cards={6} />
         </div>
         
         <div className="space-y-6">
           <h2 className="text-xl font-semibold">Season Progress</h2>
-          <TableSkeleton />
+          <LeaderboardSkeleton />
         </div>
       </div>
 

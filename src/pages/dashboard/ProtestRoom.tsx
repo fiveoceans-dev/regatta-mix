@@ -1,4 +1,4 @@
-import { PageSkeleton, TableSkeleton, CardGridSkeleton } from "@/components/ui/page-skeleton"
+import { TableSkeleton, CardGridSkeleton, LeaderboardSkeleton } from "@/components/ui/page-skeleton"
 
 export default function ProtestRoom() {
   return (
@@ -11,18 +11,23 @@ export default function ProtestRoom() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="space-y-6">
           <h2 className="text-xl font-semibold">Active Protests</h2>
-          <TableSkeleton />
+          <TableSkeleton rows={6} />
         </div>
         
         <div className="space-y-6">
           <h2 className="text-xl font-semibold">Recent Decisions</h2>
-          <TableSkeleton />
+          <TableSkeleton rows={6} />
         </div>
       </div>
 
       <div className="space-y-6">
-        <h2 className="text-xl font-semibold">Filing a New Protest</h2>
-        <CardGridSkeleton />
+        <h2 className="text-xl font-semibold">Protest Process</h2>
+        <CardGridSkeleton cards={3} />
+      </div>
+
+      <div className="space-y-6">
+        <h2 className="text-xl font-semibold">Protest Statistics</h2>
+        <LeaderboardSkeleton />
       </div>
     </div>
   )

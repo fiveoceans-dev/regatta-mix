@@ -11,23 +11,14 @@ import {
   SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar"
-import { 
-  Home, 
-  Play, 
-  Scale, 
-  Clock, 
-  BookOpen, 
-  Settings,
-  Anchor
-} from "lucide-react"
 
 const menuItems = [
-  { title: "Home", url: "/dashboard", icon: Home },
-  { title: "Play", url: "/play", icon: Play },
-  { title: "Protest Room", url: "/protestroom", icon: Scale },
-  { title: "History", url: "/history", icon: Clock },
-  { title: "Resources", url: "/dashboard/resources", icon: BookOpen },
-  { title: "Settings", url: "/dashboard/settings", icon: Settings },
+  { title: "Home", url: "/dashboard" },
+  { title: "Play", url: "/play" },
+  { title: "Protest Room", url: "/protestroom" },
+  { title: "History", url: "/history" },
+  { title: "Resources", url: "/dashboard/resources" },
+  { title: "Settings", url: "/dashboard/settings" },
 ]
 
 export function DashboardSidebar() {
@@ -48,7 +39,9 @@ export function DashboardSidebar() {
         {/* Logo */}
         <div className="p-4 border-b border-border/50">
           <div className="flex items-center gap-2">
-            <Anchor className="h-8 w-8 text-primary" />
+            <div className="h-8 w-8 bg-primary/20 rounded-lg flex items-center justify-center">
+              <span className="text-primary font-bold text-sm">SG</span>
+            </div>
             {state !== "collapsed" && <span className="text-xl font-bold">SailingGame</span>}
           </div>
         </div>
@@ -68,7 +61,6 @@ export function DashboardSidebar() {
                       end 
                       className={getNavCls}
                     >
-                      <item.icon className="mr-2 h-5 w-5" />
                       {state !== "collapsed" && <span>{item.title}</span>}
                     </NavLink>
                   </SidebarMenuButton>

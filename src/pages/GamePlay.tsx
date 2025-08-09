@@ -6,7 +6,6 @@ import { InstrumentsPanel } from "@/components/game/instruments-panel"
 import { StandingPanel } from "@/components/game/standing-panel"
 import { Card, CardContent } from "@/components/ui/card"
 import { GameButton } from "@/components/ui/game-button"
-import { Flag, Compass, Users, Gauge } from "lucide-react"
 
 export default function GamePlay() {
   return (
@@ -39,7 +38,6 @@ export default function GamePlay() {
         {/* Signals Panel */}
         <CollapsibleGameCard
           title="Signals"
-          icon={<Flag className="h-4 w-4 text-primary" />}
           position="left"
         >
           <GameSignalsPanel />
@@ -48,7 +46,6 @@ export default function GamePlay() {
         {/* Race Control Chat */}
         <CollapsibleGameCard
           title="Race Control"
-          icon={<Flag className="h-4 w-4 text-primary" />}
           position="left"
         >
           <RaceControlChat />
@@ -60,7 +57,6 @@ export default function GamePlay() {
         {/* Instruments Panel */}
         <CollapsibleGameCard
           title="Instruments"
-          icon={<Gauge className="h-4 w-4 text-primary" />}
           position="right"
         >
           <InstrumentsPanel />
@@ -69,7 +65,6 @@ export default function GamePlay() {
         {/* Standing Panel */}
         <CollapsibleGameCard
           title="Standing"
-          icon={<Users className="h-4 w-4 text-primary" />}
           position="right"
         >
           <StandingPanel />

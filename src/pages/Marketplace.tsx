@@ -18,7 +18,6 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination"
-import { Sailboat, Users, Star, ShoppingCart, Coins, Settings, User } from "lucide-react"
 import { useState } from "react"
 
 const mockBoats = [
@@ -294,9 +293,8 @@ export default function Marketplace() {
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium">Available Boats</CardTitle>
-            <Sailboat className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{mockBoats.length}</div>
@@ -305,9 +303,8 @@ export default function Marketplace() {
         </Card>
         
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium">Crew Members</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{mockCrew.filter(c => c.availability === "Available").length}</div>
@@ -316,9 +313,8 @@ export default function Marketplace() {
         </Card>
         
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium">Your Credits</CardTitle>
-            <Coins className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">487,500</div>
@@ -327,9 +323,8 @@ export default function Marketplace() {
         </Card>
         
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium">Total Purchases</CardTitle>
-            <ShoppingCart className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">12</div>
@@ -340,12 +335,10 @@ export default function Marketplace() {
 
       <Tabs defaultValue="my-team" className="space-y-6">
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="my-team" className="gap-2">
-            <User className="h-4 w-4" />
+          <TabsTrigger value="my-team">
             My Team
           </TabsTrigger>
-          <TabsTrigger value="marketplace" className="gap-2">
-            <ShoppingCart className="h-4 w-4" />
+          <TabsTrigger value="marketplace">
             Marketplace
           </TabsTrigger>
         </TabsList>
@@ -355,10 +348,7 @@ export default function Marketplace() {
           {/* Crew Section */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Users className="h-5 w-5" />
-                My Crew
-              </CardTitle>
+              <CardTitle>My Crew</CardTitle>
             </CardHeader>
             <CardContent>
               <Table>
@@ -377,12 +367,7 @@ export default function Marketplace() {
                     <TableRow key={member.id}>
                       <TableCell className="font-medium">{member.name}</TableCell>
                       <TableCell>{member.role}</TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-1">
-                          <Star className="h-4 w-4 text-yellow-500 fill-current" />
-                          {member.rating}
-                        </div>
-                      </TableCell>
+                      <TableCell>{member.rating}</TableCell>
                       <TableCell>{member.experience}</TableCell>
                       <TableCell>
                         <Badge variant={getStatusColor(member.status)}>
@@ -390,8 +375,7 @@ export default function Marketplace() {
                         </Badge>
                       </TableCell>
                       <TableCell>
-                        <SimpleButton size="sm" className="gap-1">
-                          <Settings className="h-3 w-3" />
+                        <SimpleButton size="sm">
                           Manage
                         </SimpleButton>
                       </TableCell>
@@ -405,10 +389,7 @@ export default function Marketplace() {
           {/* Boats Section */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Sailboat className="h-5 w-5" />
-                My Boats
-              </CardTitle>
+              <CardTitle>My Boats</CardTitle>
             </CardHeader>
             <CardContent>
               <Table>
@@ -439,8 +420,7 @@ export default function Marketplace() {
                         </Badge>
                       </TableCell>
                       <TableCell>
-                        <SimpleButton size="sm" className="gap-1">
-                          <Settings className="h-3 w-3" />
+                        <SimpleButton size="sm">
                           Manage
                         </SimpleButton>
                       </TableCell>
@@ -454,10 +434,7 @@ export default function Marketplace() {
           {/* Parts Section */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Settings className="h-5 w-5" />
-                My Parts
-              </CardTitle>
+              <CardTitle>My Parts</CardTitle>
             </CardHeader>
             <CardContent>
               <Table>
@@ -488,8 +465,7 @@ export default function Marketplace() {
                         </Badge>
                       </TableCell>
                       <TableCell>
-                        <SimpleButton size="sm" className="gap-1">
-                          <Settings className="h-3 w-3" />
+                        <SimpleButton size="sm">
                           Manage
                         </SimpleButton>
                       </TableCell>
@@ -505,16 +481,13 @@ export default function Marketplace() {
         <TabsContent value="marketplace" className="space-y-6">
           <Tabs defaultValue="boats" className="space-y-6">
             <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="boats" className="gap-2">
-                <Sailboat className="h-4 w-4" />
+              <TabsTrigger value="boats">
                 Boats
               </TabsTrigger>
-              <TabsTrigger value="crew" className="gap-2">
-                <Users className="h-4 w-4" />
+              <TabsTrigger value="crew">
                 Crew
               </TabsTrigger>
-              <TabsTrigger value="parts" className="gap-2">
-                <Settings className="h-4 w-4" />
+              <TabsTrigger value="parts">
                 Parts
               </TabsTrigger>
             </TabsList>
@@ -544,18 +517,12 @@ export default function Marketplace() {
                         <TableRow key={boat.id}>
                           <TableCell className="font-medium">{boat.name}</TableCell>
                           <TableCell>{boat.class}</TableCell>
-                          <TableCell className="font-medium">
-                            <div className="flex items-center gap-1">
-                              <Coins className="h-4 w-4 text-accent" />
-                              {boat.price.toLocaleString()}
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <div className="flex items-center gap-1">
-                              <Star className="h-4 w-4 text-yellow-500 fill-current" />
-                              {boat.rating}
-                            </div>
-                          </TableCell>
+                           <TableCell className="font-medium">
+                             {boat.price.toLocaleString()}
+                           </TableCell>
+                           <TableCell>
+                             {boat.rating}
+                           </TableCell>
                           <TableCell>{boat.speed}</TableCell>
                           <TableCell>{boat.handling}</TableCell>
                           <TableCell>
@@ -564,12 +531,11 @@ export default function Marketplace() {
                             </Badge>
                           </TableCell>
                           <TableCell>{boat.seller}</TableCell>
-                          <TableCell>
-                            <SimpleButton size="sm" className="gap-1">
-                              <ShoppingCart className="h-3 w-3" />
-                              Buy
-                            </SimpleButton>
-                          </TableCell>
+                           <TableCell>
+                             <SimpleButton size="sm">
+                               Buy
+                             </SimpleButton>
+                           </TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
@@ -638,18 +604,12 @@ export default function Marketplace() {
                         <TableRow key={member.id}>
                           <TableCell className="font-medium">{member.name}</TableCell>
                           <TableCell>{member.role}</TableCell>
-                          <TableCell className="font-medium">
-                            <div className="flex items-center gap-1">
-                              <Coins className="h-4 w-4 text-accent" />
-                              {member.price.toLocaleString()}
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <div className="flex items-center gap-1">
-                              <Star className="h-4 w-4 text-yellow-500 fill-current" />
-                              {member.rating}
-                            </div>
-                          </TableCell>
+                           <TableCell className="font-medium">
+                             {member.price.toLocaleString()}
+                           </TableCell>
+                           <TableCell>
+                             {member.rating}
+                           </TableCell>
                           <TableCell>{member.experience}</TableCell>
                           <TableCell>{member.specialty}</TableCell>
                           <TableCell>
@@ -657,18 +617,17 @@ export default function Marketplace() {
                               {member.availability}
                             </Badge>
                           </TableCell>
-                          <TableCell>
-                            {member.availability === "Available" ? (
-                              <SimpleButton size="sm" className="gap-1">
-                                <Users className="h-3 w-3" />
-                                Hire
-                              </SimpleButton>
-                            ) : (
-                              <SimpleButton size="sm" disabled className="bg-secondary">
-                                Unavailable
-                              </SimpleButton>
-                            )}
-                          </TableCell>
+                           <TableCell>
+                             {member.availability === "Available" ? (
+                               <SimpleButton size="sm">
+                                 Hire
+                               </SimpleButton>
+                             ) : (
+                               <SimpleButton size="sm" disabled className="bg-secondary">
+                                 Unavailable
+                               </SimpleButton>
+                             )}
+                           </TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
@@ -738,18 +697,12 @@ export default function Marketplace() {
                         <TableRow key={part.id}>
                           <TableCell className="font-medium">{part.name}</TableCell>
                           <TableCell>{part.category}</TableCell>
-                          <TableCell className="font-medium">
-                            <div className="flex items-center gap-1">
-                              <Coins className="h-4 w-4 text-accent" />
-                              {part.price.toLocaleString()}
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <div className="flex items-center gap-1">
-                              <Star className="h-4 w-4 text-yellow-500 fill-current" />
-                              {part.rating}
-                            </div>
-                          </TableCell>
+                           <TableCell className="font-medium">
+                             {part.price.toLocaleString()}
+                           </TableCell>
+                           <TableCell>
+                             {part.rating}
+                           </TableCell>
                           <TableCell>{part.performance}</TableCell>
                           <TableCell>{part.weight}</TableCell>
                           <TableCell>
@@ -758,12 +711,11 @@ export default function Marketplace() {
                             </Badge>
                           </TableCell>
                           <TableCell>{part.seller}</TableCell>
-                          <TableCell>
-                            <SimpleButton size="sm" className="gap-1">
-                              <ShoppingCart className="h-3 w-3" />
-                              Buy
-                            </SimpleButton>
-                          </TableCell>
+                           <TableCell>
+                             <SimpleButton size="sm">
+                               Buy
+                             </SimpleButton>
+                           </TableCell>
                         </TableRow>
                       ))}
                     </TableBody>

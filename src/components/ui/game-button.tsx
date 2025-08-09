@@ -24,11 +24,10 @@ export function GameButton({
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        "h-6 px-2 text-xs gap-1 min-w-0 w-auto",
+        "h-6 px-2 text-xs gap-1 min-w-0 w-auto font-medium",
         className
       )}
     >
-      {icon}
       {children}
     </Button>
   )

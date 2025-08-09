@@ -2,79 +2,67 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Sailing Game Design System - Dark Theme Inspired by F1.com and SailGP.com
+/* Modern Minimal Design System
+Clean, simple, focused design with subtle shadows and clean lines.
 All colors MUST be HSL.
 */
 
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
+    --foreground: 220 10% 15%;
     --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
+    --card-foreground: 220 10% 15%;
     --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 224 76% 48%; /* Royal Blue */
+    --popover-foreground: 220 10% 15%;
+    --primary: 220 25% 25%; /* Clean Dark Blue */
     --primary-foreground: 0 0% 98%;
-    --primary-glow: 224 76% 58%;
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222.2 84% 4.9%;
-    --muted: 210 40% 96%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 45 93% 58%; /* Golden Yellow */
-    --accent-foreground: 222.2 84% 4.9%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 224 76% 48%;
-    --radius: 0.5rem;
+    --primary-glow: 220 25% 35%;
+    --secondary: 220 5% 96%;
+    --secondary-foreground: 220 25% 25%;
+    --muted: 220 5% 96%;
+    --muted-foreground: 220 10% 50%;
+    --accent: 220 5% 92%; /* Subtle Gray */
+    --accent-foreground: 220 25% 25%;
+    --destructive: 0 75% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 220 10% 90%;
+    --input: 220 10% 94%;
+    --ring: 220 25% 25%;
+    --radius: 8px;
     
-    /* Sailing theme colors */
-    --sailing-wind: 200 100% 70%;
-    --sailing-water: 220 80% 50%;
-    --sailing-warning: 45 93% 58%;
-    --sailing-danger: 0 84% 60%;
-    --sailing-success: 120 60% 50%;
-    
-    /* Landing page gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(224, 76%, 48%), hsl(45, 93%, 58%));
-    --gradient-border: linear-gradient(90deg, 
-      hsl(280, 100%, 70%) 0%, 
-      hsl(120, 100%, 50%) 33%, 
-      hsl(340, 100%, 40%) 66%, 
-      hsl(280, 100%, 70%) 100%);
-    --gradient-hero: linear-gradient(180deg, hsl(var(--background)), hsl(var(--muted)));
+    /* Clean shadows */
+    --shadow-sm: 0 1px 2px 0 hsl(220 25% 25% / 0.05);
+    --shadow-md: 0 4px 6px -1px hsl(220 25% 25% / 0.1), 0 2px 4px -1px hsl(220 25% 25% / 0.06);
+    --shadow-lg: 0 10px 15px -3px hsl(220 25% 25% / 0.1), 0 4px 6px -2px hsl(220 25% 25% / 0.05);
   }
 
   .dark {
-    --background: 229 84% 5%;
-    --foreground: 0 0% 95%;
-    --card: 229 70% 8%;
-    --card-foreground: 0 0% 95%;
-    --popover: 229 70% 8%;
-    --popover-foreground: 0 0% 95%;
-    --primary: 224 76% 55%;
-    --primary-foreground: 0 0% 98%;
-    --primary-glow: 224 76% 65%;
-    --secondary: 229 60% 15%;
-    --secondary-foreground: 0 0% 95%;
-    --muted: 229 60% 15%;
-    --muted-foreground: 240 5% 70%;
-    --accent: 45 93% 65%;
-    --accent-foreground: 229 84% 5%;
-    --destructive: 0 70% 50%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 229 60% 20%;
-    --input: 229 60% 20%;
-    --ring: 224 76% 55%;
+    --background: 220 25% 8%;
+    --foreground: 220 5% 90%;
+    --card: 220 25% 10%;
+    --card-foreground: 220 5% 90%;
+    --popover: 220 25% 10%;
+    --popover-foreground: 220 5% 90%;
+    --primary: 220 15% 75%;
+    --primary-foreground: 220 25% 8%;
+    --primary-glow: 220 15% 85%;
+    --secondary: 220 25% 12%;
+    --secondary-foreground: 220 5% 90%;
+    --muted: 220 25% 12%;
+    --muted-foreground: 220 5% 60%;
+    --accent: 220 25% 15%;
+    --accent-foreground: 220 5% 90%;
+    --destructive: 0 75% 65%;
+    --destructive-foreground: 220 25% 8%;
+    --border: 220 25% 18%;
+    --input: 220 25% 15%;
+    --ring: 220 15% 75%;
     
-    /* Sailing theme colors - dark mode */
-    --sailing-wind: 200 100% 75%;
-    --sailing-water: 220 80% 60%;
-    --sailing-warning: 45 93% 65%;
-    --sailing-danger: 0 84% 65%;
-    --sailing-success: 120 60% 60%;
+    /* Clean shadows - dark mode */
+    --shadow-sm: 0 1px 2px 0 hsl(220 25% 0% / 0.1);
+    --shadow-md: 0 4px 6px -1px hsl(220 25% 0% / 0.2), 0 2px 4px -1px hsl(220 25% 0% / 0.1);
+    --shadow-lg: 0 10px 15px -3px hsl(220 25% 0% / 0.2), 0 4px 6px -2px hsl(220 25% 0% / 0.1);
   }
 }
 

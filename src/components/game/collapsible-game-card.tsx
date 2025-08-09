@@ -5,7 +5,7 @@ import { ChevronUp, ChevronDown } from "lucide-react"
 
 interface CollapsibleGameCardProps {
   title: string
-  icon: React.ReactNode
+  icon?: React.ReactNode
   children: React.ReactNode
   position: "left" | "right"
   defaultOpen?: boolean

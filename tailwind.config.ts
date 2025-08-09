@@ -78,8 +78,8 @@ export default {
 			},
 			backgroundImage: {
 				'gradient-primary': 'var(--gradient-primary)',
-				'gradient-hero': 'var(--gradient-hero)',
-				'gradient-water': 'var(--gradient-water)'
+				'gradient-border': 'var(--gradient-border)',
+				'gradient-hero': 'var(--gradient-hero)'
 			},
 			boxShadow: {
 				'sailing': 'var(--shadow-sailing)',

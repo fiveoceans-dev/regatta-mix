@@ -52,7 +52,7 @@ export default function History() {
   }
 
   return (
-    <div className="container py-8 space-y-8">
+    <div className="container py-8 space-y-8 pt-20">
       <div className="space-y-2">
         <h1 className="text-3xl font-bold text-foreground">Race History</h1>
         <p className="text-muted-foreground">View your racing performance, statistics, and race replays</p>

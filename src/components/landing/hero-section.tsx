@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
 import { Button } from "@/components/ui/button"
-import { GlowingButton } from "@/components/ui/glowing-button"
+import { LandingButton } from "@/components/ui/landing-button"
+import { AuthDialog } from "@/components/ui/auth-dialog"
 import { ChevronLeft, ChevronRight, Play } from "lucide-react"
 import { Skeleton } from "@/components/ui/skeleton"
 
@@ -23,9 +25,10 @@ const heroImages = [
 ]
 
 export function HeroSection() {
+  const navigate = useNavigate()
   const [currentSlide, setCurrentSlide] = useState(0)
   const [imagesLoaded, setImagesLoaded] = useState(false)
-  const [showVideo, setShowVideo] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState(false) // TODO: Replace with actual auth state
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -41,7 +44,18 @@ export function HeroSection() {
   const prevSlide = () => {
     setCurrentSlide((prev) => (prev - 1 + heroImages.length) % heroImages.length)
   }
+  
+  const handlePlayClick = () => {
+    if (isLoggedIn) {
+      navigate('/play')
+    }
+    // If not logged in, the AuthDialog will handle login/register
+  }
 
+  const handleLoginSuccess = () => {
+    setIsLoggedIn(true)
+    navigate('/play')
+  }
   return (
     <section className="relative h-screen w-full overflow-hidden bg-gradient-hero">
       {/* Hero Carousel */}
@@ -101,59 +115,36 @@ export function HeroSection() {
       {/* Hero Content */}
       <div className="absolute inset-0 flex items-center justify-center z-10">
         <div className="text-center text-white max-w-4xl px-4">
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 animate-fade-in-up">
-            Top Online Sailing Game
+          <h1 className="text-5xl md:text-7xl font-serif-renaissance font-bold mb-6 animate-fade-in-up">
+            Cyber Sailing
           </h1>
-          <p className="text-xl md:text-2xl mb-12 text-white/90 animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
-            Practice your sailing strategy online
+          <p className="text-xl md:text-2xl mb-12 text-white/90 animate-fade-in-up font-serif-body" style={{ animationDelay: "0.2s" }}>
+            Master the art of virtual sailing racing
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-            <GlowingButton
-              variant="play"
-              onClick={() => setShowVideo(!showVideo)}
-              className="animate-fade-in-up"
-              style={{ animationDelay: "0.4s" }}
-            >
-              <Play className="mr-2 h-6 w-6" />
-              Play
-            </GlowingButton>
-            
-            <Button
-              variant="outline"
-              size="lg"
-              className="border-white text-white hover:bg-white hover:text-black text-lg px-8 py-6 animate-fade-in-up"
-              style={{ animationDelay: "0.6s" }}
-            >
-              Watch Trailer
-            </Button>
+          <div className="flex justify-center items-center">
+            {isLoggedIn ? (
+              <LandingButton 
+                onClick={handlePlayClick}
+                className="animate-fade-in-up"
+              >
+                <Play className="mr-2 h-5 w-5" />
+                Play Now
+              </LandingButton>
+            ) : (
+              <AuthDialog onSuccess={handleLoginSuccess}>
+                <LandingButton 
+                  className="animate-fade-in-up"
+                >
+                  <Play className="mr-2 h-5 w-5" />
+                  Start Racing
+                </LandingButton>
+              </AuthDialog>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Video Modal/Overlay */}
-      {showVideo && (
-        <div className="absolute inset-0 bg-black/80 flex items-center justify-center z-20">
-          <div className="relative w-full max-w-4xl mx-4">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute -top-12 right-0 text-white hover:bg-white/20"
-              onClick={() => setShowVideo(false)}
-            >
-              ×
-            </Button>
-            <div className="aspect-video bg-black rounded-lg overflow-hidden">
-              <iframe
-                src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-                className="w-full h-full"
-                allowFullScreen
-                title="Sailing Game Trailer"
-              />
-            </div>
-          </div>
-        </div>
-      )}
     </section>
   )
 }

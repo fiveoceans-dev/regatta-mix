@@ -22,62 +22,28 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          {/* Landing page without navbar */}
-          <Route path="/" element={<Landing />} />
-          
-          {/* Game page without navbar */}
-          <Route path="/game" element={<GamePlay />} />
-          
-          {/* All other pages with navbar and sidebar */}
-          <Route path="/dashboard" element={
-            <div className="min-h-screen bg-background">
-              <Navbar />
-              <Dashboard />
-            </div>
-          }>
-            <Route index element={<DashboardHome />} />
-          </Route>
-          
-          <Route path="/play" element={
-            <div className="min-h-screen bg-background">
-              <Navbar />
-              <div className="container py-0">
-                <Play />
-              </div>
-            </div>
-          } />
-          
-          <Route path="/protestroom" element={
-            <div className="min-h-screen bg-background">
-              <Navbar />
-              <div className="container py-0">
-                <ProtestRoom />
-              </div>
-            </div>
-          } />
-          
-          <Route path="/history" element={
-            <div className="min-h-screen bg-background">
-              <Navbar />
-              <div className="container py-0">
-                <History />
-              </div>
-            </div>
-          } />
-          
-          <Route path="/settings" element={
-            <div className="min-h-screen bg-background">
-              <Navbar />
-              <div className="container py-0">
-                <Settings />
-              </div>
-            </div>
-          } />
-          
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <div className="min-h-screen bg-background">
+          <Navbar />
+          <Routes>
+            {/* Landing page */}
+            <Route path="/" element={<Landing />} />
+            
+            {/* Game page */}
+            <Route path="/game" element={<GamePlay />} />
+            
+            {/* Dashboard */}
+            <Route path="/dashboard" element={<DashboardHome />} />
+            
+            {/* Other pages */}
+            <Route path="/play" element={<Play />} />
+            <Route path="/protestroom" element={<ProtestRoom />} />
+            <Route path="/history" element={<History />} />
+            <Route path="/settings" element={<Settings />} />
+            
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </div>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

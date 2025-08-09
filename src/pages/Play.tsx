@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -47,7 +48,7 @@ const mockRegattas = [
 
 export default function Play() {
   return (
-    <div className="container py-8 space-y-8">
+    <div className="container py-8 space-y-8 pt-20">
       <div className="space-y-2">
         <h1 className="text-3xl font-bold text-foreground">Play</h1>
         <p className="text-muted-foreground">Join available regattas and compete with sailors worldwide</p>

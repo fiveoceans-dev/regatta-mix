@@ -10,7 +10,7 @@ import { User, Sailboat, Settings as SettingsIcon, Volume2, Monitor, Globe } fro
 
 export default function Settings() {
   return (
-    <div className="container py-8 space-y-8">
+    <div className="container py-8 space-y-8 pt-20">
       <div className="space-y-2">
         <h1 className="text-3xl font-bold text-foreground">Settings</h1>
         <p className="text-muted-foreground">Manage your profile, boat configuration, and game preferences</p>

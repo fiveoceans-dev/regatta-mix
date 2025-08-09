@@ -8,6 +8,8 @@ import Landing from "./pages/Landing";
 import Dashboard from "./pages/Dashboard";
 import DashboardHome from "./pages/dashboard/DashboardHome";
 import GamePlay from "./pages/GamePlay";
+import ProtestRoom from "./pages/dashboard/ProtestRoom";
+import History from "./pages/dashboard/History";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -23,6 +25,12 @@ const App = () => (
           <Route path="/play" element={<GamePlay />} />
           <Route path="/dashboard" element={<Dashboard />}>
             <Route index element={<DashboardHome />} />
+          </Route>
+          <Route path="/protestroom" element={<Dashboard />}>
+            <Route index element={<ProtestRoom />} />
+          </Route>
+          <Route path="/history" element={<Dashboard />}>
+            <Route index element={<History />} />
           </Route>
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

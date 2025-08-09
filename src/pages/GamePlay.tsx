@@ -1,15 +1,25 @@
 import { SailingScene } from "@/components/game/sailing-scene"
+import { SidebarProvider } from "@/components/ui/sidebar"
+import { DashboardSidebar } from "@/components/dashboard/sidebar"
+import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Wind, Compass, Flag, Clock, Users } from "lucide-react"
 
 export default function GamePlay() {
   return (
-    <div className="min-h-screen bg-background text-foreground relative overflow-hidden">
-      {/* Full Screen Game Scene */}
-      <div className="absolute inset-0">
-        <SailingScene />
-      </div>
+    <SidebarProvider>
+      <div className="min-h-screen w-full bg-background">
+        <DashboardHeader />
+        
+        <div className="flex w-full">
+          <DashboardSidebar />
+          
+          <main className="flex-1 h-[calc(100vh-4rem)] overflow-hidden relative">
+            {/* Full Screen Game Scene */}
+            <div className="absolute inset-0">
+              <SailingScene />
+            </div>
 
       {/* Game UI Overlays */}
       
@@ -221,6 +231,9 @@ export default function GamePlay() {
           </CardContent>
         </Card>
       </div>
-    </div>
+          </main>
+        </div>
+      </div>
+    </SidebarProvider>
   )
 }

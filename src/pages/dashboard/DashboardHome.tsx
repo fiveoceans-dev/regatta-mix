@@ -36,10 +36,6 @@ export default function DashboardHome() {
           <p className="text-muted-foreground">Ready to dominate the seas today?</p>
         </div>
         
-        <GlowingButton variant="play" className="animate-pulse">
-          <Play className="mr-2 h-5 w-5" />
-          Start Racing
-        </GlowingButton>
       </div>
 
       {/* Stats Grid */}

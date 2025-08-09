@@ -15,7 +15,7 @@ import {
   Home, 
   Play, 
   Scale, 
-  History, 
+  Clock, 
   BookOpen, 
   Settings,
   Anchor
@@ -23,9 +23,9 @@ import {
 
 const menuItems = [
   { title: "Home", url: "/dashboard", icon: Home },
-  { title: "Play", url: "/dashboard/play", icon: Play },
-  { title: "Protest Room", url: "/dashboard/protest", icon: Scale },
-  { title: "History", url: "/dashboard/history", icon: History },
+  { title: "Play", url: "/play", icon: Play },
+  { title: "Protest Room", url: "/protestroom", icon: Scale },
+  { title: "History", url: "/history", icon: Clock },
   { title: "Resources", url: "/dashboard/resources", icon: BookOpen },
   { title: "Settings", url: "/dashboard/settings", icon: Settings },
 ]

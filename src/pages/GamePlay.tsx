@@ -5,7 +5,7 @@ import { Wind, Compass, Flag, Clock, Users } from "lucide-react"
 
 export default function GamePlay() {
   return (
-    <div className="h-screen w-screen overflow-hidden relative" style={{ overflow: 'hidden' }}>
+    <div className="h-screen w-screen overflow-hidden relative flex flex-col" style={{ overflow: 'hidden' }}>
       {/* Full Screen Game Scene */}
       <div className="absolute inset-0">
         <SailingScene />
@@ -134,15 +134,15 @@ export default function GamePlay() {
         </Card>
       </div>
 
-      {/* Footer with Controls */}
-      <div className="absolute bottom-0 left-0 right-0 z-20">
+      {/* Footer with Controls - Fixed to bottom of viewport */}
+      <div className="fixed bottom-0 left-0 right-0 z-20 pointer-events-none">
         {/* Control Panels */}
-        <div className="flex justify-between items-end px-2 pb-2">
+        <div className="flex justify-between items-end px-2 pb-2 pointer-events-auto">
           {/* Left Actions Panel */}
-          <div className="w-32">
+          <div className="w-28">
             <Card className="bg-gray-500/30 backdrop-blur-sm border-border/50">
               <CardContent className="p-2">
-                <h3 className="text-xs font-semibold text-primary mb-2 uppercase tracking-wide">
+                <h3 className="text-xs font-semibold text-primary mb-1 uppercase tracking-wide">
                   Actions
                 </h3>
                 <div className="flex flex-col gap-1">
@@ -151,7 +151,7 @@ export default function GamePlay() {
                       key={action}
                       variant="secondary"
                       size="sm"
-                      className="text-xs w-full h-6"
+                      className="text-xs w-full h-5"
                     >
                       {action}
                     </Button>
@@ -162,19 +162,19 @@ export default function GamePlay() {
           </div>
 
           {/* Center Controls Panel */}
-          <div className="w-72">
+          <div className="w-64">
             <Card className="bg-gray-500/30 backdrop-blur-sm border-border/50">
-              <CardContent className="p-3">
-                <h3 className="text-sm font-semibold text-primary mb-2 uppercase tracking-wide text-center">
+              <CardContent className="p-2">
+                <h3 className="text-xs font-semibold text-primary mb-1 uppercase tracking-wide text-center">
                   Controls
                 </h3>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-2 gap-1">
                   {['Tack to Port', 'Tack to Starboard', 'Bear Away', 'Head Up'].map((action) => (
                     <Button 
                       key={action}
                       variant="secondary"
                       size="sm"
-                      className="text-xs h-8"
+                      className="text-xs h-6"
                     >
                       {action}
                     </Button>
@@ -185,10 +185,10 @@ export default function GamePlay() {
           </div>
 
           {/* Right View Panel */}
-          <div className="w-32">
+          <div className="w-28">
             <Card className="bg-gray-500/30 backdrop-blur-sm border-border/50">
               <CardContent className="p-2">
-                <h3 className="text-xs font-semibold text-primary mb-2 uppercase tracking-wide">
+                <h3 className="text-xs font-semibold text-primary mb-1 uppercase tracking-wide">
                   View
                 </h3>
                 <div className="flex flex-col gap-1">
@@ -202,7 +202,7 @@ export default function GamePlay() {
                       key={option.name}
                       variant={option.active ? "default" : "secondary"}
                       size="sm"
-                      className="text-xs w-full h-6"
+                      className="text-xs w-full h-5"
                     >
                       {option.name}
                     </Button>
@@ -214,7 +214,7 @@ export default function GamePlay() {
         </div>
         
         {/* Copyright Footer */}
-        <div className="bg-black/20 backdrop-blur-sm border-t border-border/30 py-1">
+        <div className="bg-black/20 backdrop-blur-sm border-t border-border/30 py-1 pointer-events-auto">
           <div className="text-center text-xs text-muted-foreground">
             All Rights Reserved
           </div>

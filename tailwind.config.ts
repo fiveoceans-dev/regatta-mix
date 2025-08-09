@@ -87,9 +87,9 @@ export default {
 				'card-sailing': 'var(--shadow-card)'
 			},
 			borderRadius: {
-				lg: 'var(--radius)',
-				md: 'calc(var(--radius) - 2px)',
-				sm: 'calc(var(--radius) - 4px)'
+				lg: '50px',
+				md: '50px',
+				sm: '50px'
 			},
 			keyframes: {
 				'accordion-down': {

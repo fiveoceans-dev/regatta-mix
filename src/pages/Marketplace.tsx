@@ -250,27 +250,31 @@ export default function Marketplace() {
   
   const getConditionColor = (condition: string) => {
     switch (condition) {
-      case "New": return "default"
-      case "Refurbished": return "secondary"
-      case "Used": return "outline"
-      default: return "outline"
+      case "New": return "text-secondary"
+      case "Good": return "text-primary"
+      case "Fair": return "text-muted-foreground"
+      case "Excellent": return "text-secondary"
+      case "Refurbished": return "text-primary"
+      case "Used": return "text-muted-foreground"
+      default: return "text-muted-foreground"
     }
   }
 
   const getAvailabilityColor = (availability: string) => {
     switch (availability) {
-      case "Available": return "default"
-      case "Busy": return "destructive"
-      default: return "outline"
+      case "Available": return "text-secondary"
+      case "Busy": return "text-destructive"
+      default: return "text-muted-foreground"
     }
   }
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "Active": return "default"
-      case "Racing Ready": return "default"
-      case "Installed": return "default"
-      default: return "outline"
+      case "Active": return "text-secondary"
+      case "Racing Ready": return "text-secondary"
+      case "Installed": return "text-secondary"
+      case "Available": return "text-primary"
+      default: return "text-muted-foreground"
     }
   }
 
@@ -370,9 +374,9 @@ export default function Marketplace() {
                       <TableCell>{member.rating}</TableCell>
                       <TableCell>{member.experience}</TableCell>
                       <TableCell>
-                        <Badge variant={getStatusColor(member.status)}>
+                        <span className={`font-medium ${getStatusColor(member.status)}`}>
                           {member.status}
-                        </Badge>
+                        </span>
                       </TableCell>
                       <TableCell>
                         <SimpleButton size="sm">
@@ -409,15 +413,15 @@ export default function Marketplace() {
                       <TableCell className="font-medium">{boat.name}</TableCell>
                       <TableCell>{boat.class}</TableCell>
                       <TableCell>
-                        <Badge variant={getConditionColor(boat.condition)}>
+                        <span className={`font-medium ${getConditionColor(boat.condition)}`}>
                           {boat.condition}
-                        </Badge>
+                        </span>
                       </TableCell>
                       <TableCell>{boat.performance}</TableCell>
                       <TableCell>
-                        <Badge variant={getStatusColor(boat.status)}>
+                        <span className={`font-medium ${getStatusColor(boat.status)}`}>
                           {boat.status}
-                        </Badge>
+                        </span>
                       </TableCell>
                       <TableCell>
                         <SimpleButton size="sm">
@@ -454,15 +458,15 @@ export default function Marketplace() {
                       <TableCell className="font-medium">{part.name}</TableCell>
                       <TableCell>{part.category}</TableCell>
                       <TableCell>
-                        <Badge variant={getConditionColor(part.condition)}>
+                        <span className={`font-medium ${getConditionColor(part.condition)}`}>
                           {part.condition}
-                        </Badge>
+                        </span>
                       </TableCell>
                       <TableCell>{part.performance}</TableCell>
                       <TableCell>
-                        <Badge variant={getStatusColor(part.status)}>
+                        <span className={`font-medium ${getStatusColor(part.status)}`}>
                           {part.status}
-                        </Badge>
+                        </span>
                       </TableCell>
                       <TableCell>
                         <SimpleButton size="sm">
@@ -526,9 +530,9 @@ export default function Marketplace() {
                           <TableCell>{boat.speed}</TableCell>
                           <TableCell>{boat.handling}</TableCell>
                           <TableCell>
-                            <Badge variant={getConditionColor(boat.condition)}>
+                            <span className={`font-medium ${getConditionColor(boat.condition)}`}>
                               {boat.condition}
-                            </Badge>
+                            </span>
                           </TableCell>
                           <TableCell>{boat.seller}</TableCell>
                            <TableCell>
@@ -613,9 +617,9 @@ export default function Marketplace() {
                           <TableCell>{member.experience}</TableCell>
                           <TableCell>{member.specialty}</TableCell>
                           <TableCell>
-                            <Badge variant={getAvailabilityColor(member.availability)}>
+                            <span className={`font-medium ${getAvailabilityColor(member.availability)}`}>
                               {member.availability}
-                            </Badge>
+                            </span>
                           </TableCell>
                            <TableCell>
                              {member.availability === "Available" ? (
@@ -706,9 +710,9 @@ export default function Marketplace() {
                           <TableCell>{part.performance}</TableCell>
                           <TableCell>{part.weight}</TableCell>
                           <TableCell>
-                            <Badge variant={getConditionColor(part.condition)}>
+                            <span className={`font-medium ${getConditionColor(part.condition)}`}>
                               {part.condition}
-                            </Badge>
+                            </span>
                           </TableCell>
                           <TableCell>{part.seller}</TableCell>
                            <TableCell>

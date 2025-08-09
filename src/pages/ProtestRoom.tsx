@@ -63,10 +63,10 @@ export default function ProtestRoom() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "Under Review": return "default"
-      case "Resolved": return "secondary"
-      case "Pending": return "destructive"
-      default: return "outline"
+      case "Under Review": return "text-primary"
+      case "Resolved": return "text-secondary"
+      case "Pending": return "text-destructive"
+      default: return "text-muted-foreground"
     }
   }
 
@@ -169,9 +169,9 @@ export default function ProtestRoom() {
                     <TableCell>{protest.regatta}</TableCell>
                     <TableCell>{protest.class}</TableCell>
                     <TableCell>
-                      <Badge variant={getStatusColor(protest.status)}>
+                      <span className={`font-medium ${getStatusColor(protest.status)}`}>
                         {protest.status}
-                      </Badge>
+                      </span>
                     </TableCell>
                     <TableCell>{protest.incident}</TableCell>
                     <TableCell>
@@ -220,9 +220,9 @@ export default function ProtestRoom() {
                   <TableCell>{protest.regatta}</TableCell>
                   <TableCell>{protest.class}</TableCell>
                   <TableCell>
-                    <Badge variant={getStatusColor(protest.status)}>
+                    <span className={`font-medium ${getStatusColor(protest.status)}`}>
                       {protest.status}
-                    </Badge>
+                    </span>
                   </TableCell>
                   <TableCell>{protest.incident}</TableCell>
                   <TableCell>

@@ -10,7 +10,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { Sailboat, Users, Star, ShoppingCart, Coins } from "lucide-react"
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination"
+import { Sailboat, Users, Star, ShoppingCart, Coins, Settings, User } from "lucide-react"
+import { useState } from "react"
 
 const mockBoats = [
   {
@@ -126,7 +135,120 @@ const mockCrew = [
   }
 ]
 
+const mockParts = [
+  {
+    id: 1,
+    name: "Carbon Fiber Mainsail",
+    category: "Sails",
+    price: 15000,
+    rating: 4.9,
+    performance: 95,
+    durability: 88,
+    weight: "Light",
+    compatibility: "AC75, TP52",
+    seller: "North Sails",
+    condition: "New"
+  },
+  {
+    id: 2,
+    name: "Titanium Winch Set",
+    category: "Hardware",
+    price: 8500,
+    rating: 4.7,
+    performance: 92,
+    durability: 95,
+    weight: "Medium",
+    compatibility: "All Classes",
+    seller: "Harken Racing",
+    condition: "New"
+  },
+  {
+    id: 3,
+    name: "GPS Navigation System",
+    category: "Electronics",
+    price: 3200,
+    rating: 4.8,
+    performance: 90,
+    durability: 85,
+    weight: "Light",
+    compatibility: "Universal",
+    seller: "B&G Marine",
+    condition: "Used"
+  },
+  {
+    id: 4,
+    name: "Carbon Boom",
+    category: "Rigging",
+    price: 12000,
+    rating: 4.6,
+    performance: 88,
+    durability: 92,
+    weight: "Light",
+    compatibility: "J70, Laser",
+    seller: "Selden Mast",
+    condition: "Refurbished"
+  }
+]
+
+// Mock user's team data
+const myTeam = {
+  boats: [
+    {
+      id: 1,
+      name: "My Wind Dancer J70",
+      class: "J70",
+      condition: "New",
+      performance: 85,
+      status: "Racing Ready"
+    }
+  ],
+  crew: [
+    {
+      id: 1,
+      name: "Captain Sarah Mitchell",
+      role: "Skipper",
+      rating: 4.9,
+      experience: "15 years",
+      status: "Active"
+    },
+    {
+      id: 2,
+      name: "Jake Rodriguez",
+      role: "Tactician",
+      rating: 4.7,
+      experience: "8 years",
+      status: "Active"
+    }
+  ],
+  parts: [
+    {
+      id: 1,
+      name: "Carbon Fiber Mainsail",
+      category: "Sails",
+      condition: "New",
+      performance: 95,
+      status: "Installed"
+    },
+    {
+      id: 2,
+      name: "GPS Navigation System",
+      category: "Electronics",
+      condition: "Used",
+      performance: 90,
+      status: "Installed"
+    }
+  ]
+}
+
 export default function Marketplace() {
+  const [currentPage, setCurrentPage] = useState({
+    boats: 1,
+    crew: 1,
+    parts: 1
+  })
+  
+  const itemsPerPage = 10
+  
   const getConditionColor = (condition: string) => {
     switch (condition) {
       case "New": return "default"
@@ -142,6 +264,24 @@ export default function Marketplace() {
       case "Busy": return "destructive"
       default: return "outline"
     }
+  }
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "Active": return "default"
+      case "Racing Ready": return "default"
+      case "Installed": return "default"
+      default: return "outline"
+    }
+  }
+
+  const paginateData = (data: any[], page: number) => {
+    const startIndex = (page - 1) * itemsPerPage
+    return data.slice(startIndex, startIndex + itemsPerPage)
+  }
+
+  const getTotalPages = (dataLength: number) => {
+    return Math.ceil(dataLength / itemsPerPage)
   }
 
   return (
@@ -198,67 +338,159 @@ export default function Marketplace() {
         </Card>
       </div>
 
-      <Tabs defaultValue="boats" className="space-y-6">
+      <Tabs defaultValue="my-team" className="space-y-6">
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="boats" className="gap-2">
-            <Sailboat className="h-4 w-4" />
-            Boats
+          <TabsTrigger value="my-team" className="gap-2">
+            <User className="h-4 w-4" />
+            My Team
           </TabsTrigger>
-          <TabsTrigger value="crew" className="gap-2">
-            <Users className="h-4 w-4" />
-            Crew
+          <TabsTrigger value="marketplace" className="gap-2">
+            <ShoppingCart className="h-4 w-4" />
+            Marketplace
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="boats" className="space-y-6">
+        {/* My Team Tab */}
+        <TabsContent value="my-team" className="space-y-6">
+          {/* Crew Section */}
           <Card>
             <CardHeader>
-              <CardTitle>Available Boats</CardTitle>
+              <CardTitle className="flex items-center gap-2">
+                <Users className="h-5 w-5" />
+                My Crew
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Boat</TableHead>
-                    <TableHead>Class</TableHead>
-                    <TableHead>Price</TableHead>
+                    <TableHead>Name</TableHead>
+                    <TableHead>Role</TableHead>
                     <TableHead>Rating</TableHead>
-                    <TableHead>Speed</TableHead>
-                    <TableHead>Handling</TableHead>
-                    <TableHead>Condition</TableHead>
-                    <TableHead>Seller</TableHead>
+                    <TableHead>Experience</TableHead>
+                    <TableHead>Status</TableHead>
                     <TableHead>Action</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {mockBoats.map((boat) => (
-                    <TableRow key={boat.id}>
-                      <TableCell className="font-medium">{boat.name}</TableCell>
-                      <TableCell>{boat.class}</TableCell>
-                      <TableCell className="font-medium">
-                        <div className="flex items-center gap-1">
-                          <Coins className="h-4 w-4 text-accent" />
-                          {boat.price.toLocaleString()}
-                        </div>
-                      </TableCell>
+                  {myTeam.crew.map((member) => (
+                    <TableRow key={member.id}>
+                      <TableCell className="font-medium">{member.name}</TableCell>
+                      <TableCell>{member.role}</TableCell>
                       <TableCell>
                         <div className="flex items-center gap-1">
                           <Star className="h-4 w-4 text-yellow-500 fill-current" />
-                          {boat.rating}
+                          {member.rating}
                         </div>
                       </TableCell>
-                      <TableCell>{boat.speed}</TableCell>
-                      <TableCell>{boat.handling}</TableCell>
+                      <TableCell>{member.experience}</TableCell>
+                      <TableCell>
+                        <Badge variant={getStatusColor(member.status)}>
+                          {member.status}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <SimpleButton size="sm" className="gap-1">
+                          <Settings className="h-3 w-3" />
+                          Manage
+                        </SimpleButton>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+
+          {/* Boats Section */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Sailboat className="h-5 w-5" />
+                My Boats
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Name</TableHead>
+                    <TableHead>Class</TableHead>
+                    <TableHead>Condition</TableHead>
+                    <TableHead>Performance</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Action</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {myTeam.boats.map((boat) => (
+                    <TableRow key={boat.id}>
+                      <TableCell className="font-medium">{boat.name}</TableCell>
+                      <TableCell>{boat.class}</TableCell>
                       <TableCell>
                         <Badge variant={getConditionColor(boat.condition)}>
                           {boat.condition}
                         </Badge>
                       </TableCell>
-                      <TableCell>{boat.seller}</TableCell>
+                      <TableCell>{boat.performance}</TableCell>
+                      <TableCell>
+                        <Badge variant={getStatusColor(boat.status)}>
+                          {boat.status}
+                        </Badge>
+                      </TableCell>
                       <TableCell>
                         <SimpleButton size="sm" className="gap-1">
-                          <ShoppingCart className="h-3 w-3" />
-                          Buy
+                          <Settings className="h-3 w-3" />
+                          Manage
+                        </SimpleButton>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+
+          {/* Parts Section */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Settings className="h-5 w-5" />
+                My Parts
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Name</TableHead>
+                    <TableHead>Category</TableHead>
+                    <TableHead>Condition</TableHead>
+                    <TableHead>Performance</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Action</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {myTeam.parts.map((part) => (
+                    <TableRow key={part.id}>
+                      <TableCell className="font-medium">{part.name}</TableCell>
+                      <TableCell>{part.category}</TableCell>
+                      <TableCell>
+                        <Badge variant={getConditionColor(part.condition)}>
+                          {part.condition}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>{part.performance}</TableCell>
+                      <TableCell>
+                        <Badge variant={getStatusColor(part.status)}>
+                          {part.status}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <SimpleButton size="sm" className="gap-1">
+                          <Settings className="h-3 w-3" />
+                          Manage
                         </SimpleButton>
                       </TableCell>
                     </TableRow>
@@ -269,67 +501,313 @@ export default function Marketplace() {
           </Card>
         </TabsContent>
 
-        <TabsContent value="crew" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Available Crew</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Role</TableHead>
-                    <TableHead>Price</TableHead>
-                    <TableHead>Rating</TableHead>
-                    <TableHead>Experience</TableHead>
-                    <TableHead>Specialty</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Action</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {mockCrew.map((member) => (
-                    <TableRow key={member.id}>
-                      <TableCell className="font-medium">{member.name}</TableCell>
-                      <TableCell>{member.role}</TableCell>
-                      <TableCell className="font-medium">
-                        <div className="flex items-center gap-1">
-                          <Coins className="h-4 w-4 text-accent" />
-                          {member.price.toLocaleString()}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-1">
-                          <Star className="h-4 w-4 text-yellow-500 fill-current" />
-                          {member.rating}
-                        </div>
-                      </TableCell>
-                      <TableCell>{member.experience}</TableCell>
-                      <TableCell>{member.specialty}</TableCell>
-                      <TableCell>
-                        <Badge variant={getAvailabilityColor(member.availability)}>
-                          {member.availability}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        {member.availability === "Available" ? (
-                          <SimpleButton size="sm" className="gap-1">
-                            <Users className="h-3 w-3" />
-                            Hire
-                          </SimpleButton>
-                        ) : (
-                          <SimpleButton size="sm" disabled className="bg-secondary">
-                            Unavailable
-                          </SimpleButton>
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
+        {/* Marketplace Tab */}
+        <TabsContent value="marketplace" className="space-y-6">
+          <Tabs defaultValue="boats" className="space-y-6">
+            <TabsList className="grid w-full grid-cols-3">
+              <TabsTrigger value="boats" className="gap-2">
+                <Sailboat className="h-4 w-4" />
+                Boats
+              </TabsTrigger>
+              <TabsTrigger value="crew" className="gap-2">
+                <Users className="h-4 w-4" />
+                Crew
+              </TabsTrigger>
+              <TabsTrigger value="parts" className="gap-2">
+                <Settings className="h-4 w-4" />
+                Parts
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="boats" className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Available Boats</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Boat</TableHead>
+                        <TableHead>Class</TableHead>
+                        <TableHead>Price</TableHead>
+                        <TableHead>Rating</TableHead>
+                        <TableHead>Speed</TableHead>
+                        <TableHead>Handling</TableHead>
+                        <TableHead>Condition</TableHead>
+                        <TableHead>Seller</TableHead>
+                        <TableHead>Action</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {paginateData(mockBoats, currentPage.boats).map((boat) => (
+                        <TableRow key={boat.id}>
+                          <TableCell className="font-medium">{boat.name}</TableCell>
+                          <TableCell>{boat.class}</TableCell>
+                          <TableCell className="font-medium">
+                            <div className="flex items-center gap-1">
+                              <Coins className="h-4 w-4 text-accent" />
+                              {boat.price.toLocaleString()}
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex items-center gap-1">
+                              <Star className="h-4 w-4 text-yellow-500 fill-current" />
+                              {boat.rating}
+                            </div>
+                          </TableCell>
+                          <TableCell>{boat.speed}</TableCell>
+                          <TableCell>{boat.handling}</TableCell>
+                          <TableCell>
+                            <Badge variant={getConditionColor(boat.condition)}>
+                              {boat.condition}
+                            </Badge>
+                          </TableCell>
+                          <TableCell>{boat.seller}</TableCell>
+                          <TableCell>
+                            <SimpleButton size="sm" className="gap-1">
+                              <ShoppingCart className="h-3 w-3" />
+                              Buy
+                            </SimpleButton>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                  
+                  {getTotalPages(mockBoats.length) > 1 && (
+                    <Pagination>
+                      <PaginationContent>
+                        <PaginationItem>
+                          <PaginationPrevious 
+                            onClick={() => setCurrentPage(prev => ({
+                              ...prev,
+                              boats: Math.max(1, prev.boats - 1)
+                            }))}
+                            className={currentPage.boats === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                          />
+                        </PaginationItem>
+                        {[...Array(getTotalPages(mockBoats.length))].map((_, i) => (
+                          <PaginationItem key={i}>
+                            <PaginationLink
+                              onClick={() => setCurrentPage(prev => ({ ...prev, boats: i + 1 }))}
+                              isActive={currentPage.boats === i + 1}
+                              className="cursor-pointer"
+                            >
+                              {i + 1}
+                            </PaginationLink>
+                          </PaginationItem>
+                        ))}
+                        <PaginationItem>
+                          <PaginationNext 
+                            onClick={() => setCurrentPage(prev => ({
+                              ...prev,
+                              boats: Math.min(getTotalPages(mockBoats.length), prev.boats + 1)
+                            }))}
+                            className={currentPage.boats === getTotalPages(mockBoats.length) ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                          />
+                        </PaginationItem>
+                      </PaginationContent>
+                    </Pagination>
+                  )}
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="crew" className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Available Crew</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Name</TableHead>
+                        <TableHead>Role</TableHead>
+                        <TableHead>Price</TableHead>
+                        <TableHead>Rating</TableHead>
+                        <TableHead>Experience</TableHead>
+                        <TableHead>Specialty</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Action</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {paginateData(mockCrew, currentPage.crew).map((member) => (
+                        <TableRow key={member.id}>
+                          <TableCell className="font-medium">{member.name}</TableCell>
+                          <TableCell>{member.role}</TableCell>
+                          <TableCell className="font-medium">
+                            <div className="flex items-center gap-1">
+                              <Coins className="h-4 w-4 text-accent" />
+                              {member.price.toLocaleString()}
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex items-center gap-1">
+                              <Star className="h-4 w-4 text-yellow-500 fill-current" />
+                              {member.rating}
+                            </div>
+                          </TableCell>
+                          <TableCell>{member.experience}</TableCell>
+                          <TableCell>{member.specialty}</TableCell>
+                          <TableCell>
+                            <Badge variant={getAvailabilityColor(member.availability)}>
+                              {member.availability}
+                            </Badge>
+                          </TableCell>
+                          <TableCell>
+                            {member.availability === "Available" ? (
+                              <SimpleButton size="sm" className="gap-1">
+                                <Users className="h-3 w-3" />
+                                Hire
+                              </SimpleButton>
+                            ) : (
+                              <SimpleButton size="sm" disabled className="bg-secondary">
+                                Unavailable
+                              </SimpleButton>
+                            )}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                  
+                  {getTotalPages(mockCrew.length) > 1 && (
+                    <Pagination>
+                      <PaginationContent>
+                        <PaginationItem>
+                          <PaginationPrevious 
+                            onClick={() => setCurrentPage(prev => ({
+                              ...prev,
+                              crew: Math.max(1, prev.crew - 1)
+                            }))}
+                            className={currentPage.crew === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                          />
+                        </PaginationItem>
+                        {[...Array(getTotalPages(mockCrew.length))].map((_, i) => (
+                          <PaginationItem key={i}>
+                            <PaginationLink
+                              onClick={() => setCurrentPage(prev => ({ ...prev, crew: i + 1 }))}
+                              isActive={currentPage.crew === i + 1}
+                              className="cursor-pointer"
+                            >
+                              {i + 1}
+                            </PaginationLink>
+                          </PaginationItem>
+                        ))}
+                        <PaginationItem>
+                          <PaginationNext 
+                            onClick={() => setCurrentPage(prev => ({
+                              ...prev,
+                              crew: Math.min(getTotalPages(mockCrew.length), prev.crew + 1)
+                            }))}
+                            className={currentPage.crew === getTotalPages(mockCrew.length) ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                          />
+                        </PaginationItem>
+                      </PaginationContent>
+                    </Pagination>
+                  )}
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="parts" className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Available Parts</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Part</TableHead>
+                        <TableHead>Category</TableHead>
+                        <TableHead>Price</TableHead>
+                        <TableHead>Rating</TableHead>
+                        <TableHead>Performance</TableHead>
+                        <TableHead>Weight</TableHead>
+                        <TableHead>Condition</TableHead>
+                        <TableHead>Seller</TableHead>
+                        <TableHead>Action</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {paginateData(mockParts, currentPage.parts).map((part) => (
+                        <TableRow key={part.id}>
+                          <TableCell className="font-medium">{part.name}</TableCell>
+                          <TableCell>{part.category}</TableCell>
+                          <TableCell className="font-medium">
+                            <div className="flex items-center gap-1">
+                              <Coins className="h-4 w-4 text-accent" />
+                              {part.price.toLocaleString()}
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex items-center gap-1">
+                              <Star className="h-4 w-4 text-yellow-500 fill-current" />
+                              {part.rating}
+                            </div>
+                          </TableCell>
+                          <TableCell>{part.performance}</TableCell>
+                          <TableCell>{part.weight}</TableCell>
+                          <TableCell>
+                            <Badge variant={getConditionColor(part.condition)}>
+                              {part.condition}
+                            </Badge>
+                          </TableCell>
+                          <TableCell>{part.seller}</TableCell>
+                          <TableCell>
+                            <SimpleButton size="sm" className="gap-1">
+                              <ShoppingCart className="h-3 w-3" />
+                              Buy
+                            </SimpleButton>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                  
+                  {getTotalPages(mockParts.length) > 1 && (
+                    <Pagination>
+                      <PaginationContent>
+                        <PaginationItem>
+                          <PaginationPrevious 
+                            onClick={() => setCurrentPage(prev => ({
+                              ...prev,
+                              parts: Math.max(1, prev.parts - 1)
+                            }))}
+                            className={currentPage.parts === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                          />
+                        </PaginationItem>
+                        {[...Array(getTotalPages(mockParts.length))].map((_, i) => (
+                          <PaginationItem key={i}>
+                            <PaginationLink
+                              onClick={() => setCurrentPage(prev => ({ ...prev, parts: i + 1 }))}
+                              isActive={currentPage.parts === i + 1}
+                              className="cursor-pointer"
+                            >
+                              {i + 1}
+                            </PaginationLink>
+                          </PaginationItem>
+                        ))}
+                        <PaginationItem>
+                          <PaginationNext 
+                            onClick={() => setCurrentPage(prev => ({
+                              ...prev,
+                              parts: Math.min(getTotalPages(mockParts.length), prev.parts + 1)
+                            }))}
+                            className={currentPage.parts === getTotalPages(mockParts.length) ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                          />
+                        </PaginationItem>
+                      </PaginationContent>
+                    </Pagination>
+                  )}
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
         </TabsContent>
       </Tabs>
     </div>

@@ -11,7 +11,7 @@ const navigation = [
   { name: "Play", href: "/play" },
   { name: "Marketplace", href: "/marketplace" },
   { name: "Protest Room", href: "/protestroom" },
-  { name: "History", href: "/history" },
+  { name: "Account", href: "/Account" },
   { name: "Settings", href: "/settings" },
 ]
 

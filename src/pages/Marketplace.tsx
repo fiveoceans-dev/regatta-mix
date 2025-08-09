@@ -483,287 +483,162 @@ export default function Marketplace() {
 
         {/* Marketplace Tab */}
         <TabsContent value="marketplace" className="space-y-6">
-          <Tabs defaultValue="boats" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="boats">
-                Boats
-              </TabsTrigger>
-              <TabsTrigger value="crew">
-                Crew
-              </TabsTrigger>
-              <TabsTrigger value="parts">
-                Parts
-              </TabsTrigger>
-            </TabsList>
+          {/* Boats Section */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Available Boats</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Boat</TableHead>
+                    <TableHead>Class</TableHead>
+                    <TableHead>Price</TableHead>
+                    <TableHead>Rating</TableHead>
+                    <TableHead>Speed</TableHead>
+                    <TableHead>Handling</TableHead>
+                    <TableHead>Condition</TableHead>
+                    <TableHead>Seller</TableHead>
+                    <TableHead>Action</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {paginateData(mockBoats, currentPage.boats).map((boat) => (
+                    <TableRow key={boat.id}>
+                      <TableCell className="font-medium">{boat.name}</TableCell>
+                      <TableCell>{boat.class}</TableCell>
+                      <TableCell className="font-medium">
+                        {boat.price.toLocaleString()}
+                      </TableCell>
+                      <TableCell>
+                        {boat.rating}
+                      </TableCell>
+                      <TableCell>{boat.speed}</TableCell>
+                      <TableCell>{boat.handling}</TableCell>
+                      <TableCell>
+                        <span className={`font-medium ${getConditionColor(boat.condition)}`}>
+                          {boat.condition}
+                        </span>
+                      </TableCell>
+                      <TableCell>{boat.seller}</TableCell>
+                      <TableCell>
+                        <SimpleButton size="sm">
+                          Buy
+                        </SimpleButton>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
 
-            <TabsContent value="boats" className="space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Available Boats</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Boat</TableHead>
-                        <TableHead>Class</TableHead>
-                        <TableHead>Price</TableHead>
-                        <TableHead>Rating</TableHead>
-                        <TableHead>Speed</TableHead>
-                        <TableHead>Handling</TableHead>
-                        <TableHead>Condition</TableHead>
-                        <TableHead>Seller</TableHead>
-                        <TableHead>Action</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {paginateData(mockBoats, currentPage.boats).map((boat) => (
-                        <TableRow key={boat.id}>
-                          <TableCell className="font-medium">{boat.name}</TableCell>
-                          <TableCell>{boat.class}</TableCell>
-                           <TableCell className="font-medium">
-                             {boat.price.toLocaleString()}
-                           </TableCell>
-                           <TableCell>
-                             {boat.rating}
-                           </TableCell>
-                          <TableCell>{boat.speed}</TableCell>
-                          <TableCell>{boat.handling}</TableCell>
-                          <TableCell>
-                            <span className={`font-medium ${getConditionColor(boat.condition)}`}>
-                              {boat.condition}
-                            </span>
-                          </TableCell>
-                          <TableCell>{boat.seller}</TableCell>
-                           <TableCell>
-                             <SimpleButton size="sm">
-                               Buy
-                             </SimpleButton>
-                           </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                  
-                  {getTotalPages(mockBoats.length) > 1 && (
-                    <Pagination>
-                      <PaginationContent>
-                        <PaginationItem>
-                          <PaginationPrevious 
-                            onClick={() => setCurrentPage(prev => ({
-                              ...prev,
-                              boats: Math.max(1, prev.boats - 1)
-                            }))}
-                            className={currentPage.boats === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
-                          />
-                        </PaginationItem>
-                        {[...Array(getTotalPages(mockBoats.length))].map((_, i) => (
-                          <PaginationItem key={i}>
-                            <PaginationLink
-                              onClick={() => setCurrentPage(prev => ({ ...prev, boats: i + 1 }))}
-                              isActive={currentPage.boats === i + 1}
-                              className="cursor-pointer"
-                            >
-                              {i + 1}
-                            </PaginationLink>
-                          </PaginationItem>
-                        ))}
-                        <PaginationItem>
-                          <PaginationNext 
-                            onClick={() => setCurrentPage(prev => ({
-                              ...prev,
-                              boats: Math.min(getTotalPages(mockBoats.length), prev.boats + 1)
-                            }))}
-                            className={currentPage.boats === getTotalPages(mockBoats.length) ? "pointer-events-none opacity-50" : "cursor-pointer"}
-                          />
-                        </PaginationItem>
-                      </PaginationContent>
-                    </Pagination>
-                  )}
-                </CardContent>
-              </Card>
-            </TabsContent>
+          {/* Crew Section */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Available Crew</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Name</TableHead>
+                    <TableHead>Role</TableHead>
+                    <TableHead>Price</TableHead>
+                    <TableHead>Rating</TableHead>
+                    <TableHead>Experience</TableHead>
+                    <TableHead>Specialty</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Action</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {paginateData(mockCrew, currentPage.crew).map((member) => (
+                    <TableRow key={member.id}>
+                      <TableCell className="font-medium">{member.name}</TableCell>
+                      <TableCell>{member.role}</TableCell>
+                      <TableCell className="font-medium">
+                        {member.price.toLocaleString()}
+                      </TableCell>
+                      <TableCell>
+                        {member.rating}
+                      </TableCell>
+                      <TableCell>{member.experience}</TableCell>
+                      <TableCell>{member.specialty}</TableCell>
+                      <TableCell>
+                        <span className={`font-medium ${getAvailabilityColor(member.availability)}`}>
+                          {member.availability}
+                        </span>
+                      </TableCell>
+                      <TableCell>
+                        {member.availability === "Available" ? (
+                          <SimpleButton size="sm">
+                            Hire
+                          </SimpleButton>
+                        ) : (
+                          <SimpleButton size="sm" disabled className="bg-secondary">
+                            Unavailable
+                          </SimpleButton>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
 
-            <TabsContent value="crew" className="space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Available Crew</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Name</TableHead>
-                        <TableHead>Role</TableHead>
-                        <TableHead>Price</TableHead>
-                        <TableHead>Rating</TableHead>
-                        <TableHead>Experience</TableHead>
-                        <TableHead>Specialty</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead>Action</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {paginateData(mockCrew, currentPage.crew).map((member) => (
-                        <TableRow key={member.id}>
-                          <TableCell className="font-medium">{member.name}</TableCell>
-                          <TableCell>{member.role}</TableCell>
-                           <TableCell className="font-medium">
-                             {member.price.toLocaleString()}
-                           </TableCell>
-                           <TableCell>
-                             {member.rating}
-                           </TableCell>
-                          <TableCell>{member.experience}</TableCell>
-                          <TableCell>{member.specialty}</TableCell>
-                          <TableCell>
-                            <span className={`font-medium ${getAvailabilityColor(member.availability)}`}>
-                              {member.availability}
-                            </span>
-                          </TableCell>
-                           <TableCell>
-                             {member.availability === "Available" ? (
-                               <SimpleButton size="sm">
-                                 Hire
-                               </SimpleButton>
-                             ) : (
-                               <SimpleButton size="sm" disabled className="bg-secondary">
-                                 Unavailable
-                               </SimpleButton>
-                             )}
-                           </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                  
-                  {getTotalPages(mockCrew.length) > 1 && (
-                    <Pagination>
-                      <PaginationContent>
-                        <PaginationItem>
-                          <PaginationPrevious 
-                            onClick={() => setCurrentPage(prev => ({
-                              ...prev,
-                              crew: Math.max(1, prev.crew - 1)
-                            }))}
-                            className={currentPage.crew === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
-                          />
-                        </PaginationItem>
-                        {[...Array(getTotalPages(mockCrew.length))].map((_, i) => (
-                          <PaginationItem key={i}>
-                            <PaginationLink
-                              onClick={() => setCurrentPage(prev => ({ ...prev, crew: i + 1 }))}
-                              isActive={currentPage.crew === i + 1}
-                              className="cursor-pointer"
-                            >
-                              {i + 1}
-                            </PaginationLink>
-                          </PaginationItem>
-                        ))}
-                        <PaginationItem>
-                          <PaginationNext 
-                            onClick={() => setCurrentPage(prev => ({
-                              ...prev,
-                              crew: Math.min(getTotalPages(mockCrew.length), prev.crew + 1)
-                            }))}
-                            className={currentPage.crew === getTotalPages(mockCrew.length) ? "pointer-events-none opacity-50" : "cursor-pointer"}
-                          />
-                        </PaginationItem>
-                      </PaginationContent>
-                    </Pagination>
-                  )}
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="parts" className="space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Available Parts</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Part</TableHead>
-                        <TableHead>Category</TableHead>
-                        <TableHead>Price</TableHead>
-                        <TableHead>Rating</TableHead>
-                        <TableHead>Performance</TableHead>
-                        <TableHead>Weight</TableHead>
-                        <TableHead>Condition</TableHead>
-                        <TableHead>Seller</TableHead>
-                        <TableHead>Action</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {paginateData(mockParts, currentPage.parts).map((part) => (
-                        <TableRow key={part.id}>
-                          <TableCell className="font-medium">{part.name}</TableCell>
-                          <TableCell>{part.category}</TableCell>
-                           <TableCell className="font-medium">
-                             {part.price.toLocaleString()}
-                           </TableCell>
-                           <TableCell>
-                             {part.rating}
-                           </TableCell>
-                          <TableCell>{part.performance}</TableCell>
-                          <TableCell>{part.weight}</TableCell>
-                          <TableCell>
-                            <span className={`font-medium ${getConditionColor(part.condition)}`}>
-                              {part.condition}
-                            </span>
-                          </TableCell>
-                          <TableCell>{part.seller}</TableCell>
-                           <TableCell>
-                             <SimpleButton size="sm">
-                               Buy
-                             </SimpleButton>
-                           </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                  
-                  {getTotalPages(mockParts.length) > 1 && (
-                    <Pagination>
-                      <PaginationContent>
-                        <PaginationItem>
-                          <PaginationPrevious 
-                            onClick={() => setCurrentPage(prev => ({
-                              ...prev,
-                              parts: Math.max(1, prev.parts - 1)
-                            }))}
-                            className={currentPage.parts === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
-                          />
-                        </PaginationItem>
-                        {[...Array(getTotalPages(mockParts.length))].map((_, i) => (
-                          <PaginationItem key={i}>
-                            <PaginationLink
-                              onClick={() => setCurrentPage(prev => ({ ...prev, parts: i + 1 }))}
-                              isActive={currentPage.parts === i + 1}
-                              className="cursor-pointer"
-                            >
-                              {i + 1}
-                            </PaginationLink>
-                          </PaginationItem>
-                        ))}
-                        <PaginationItem>
-                          <PaginationNext 
-                            onClick={() => setCurrentPage(prev => ({
-                              ...prev,
-                              parts: Math.min(getTotalPages(mockParts.length), prev.parts + 1)
-                            }))}
-                            className={currentPage.parts === getTotalPages(mockParts.length) ? "pointer-events-none opacity-50" : "cursor-pointer"}
-                          />
-                        </PaginationItem>
-                      </PaginationContent>
-                    </Pagination>
-                  )}
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
+          {/* Parts Section */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Available Parts</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Part</TableHead>
+                    <TableHead>Category</TableHead>
+                    <TableHead>Price</TableHead>
+                    <TableHead>Rating</TableHead>
+                    <TableHead>Performance</TableHead>
+                    <TableHead>Weight</TableHead>
+                    <TableHead>Condition</TableHead>
+                    <TableHead>Seller</TableHead>
+                    <TableHead>Action</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {paginateData(mockParts, currentPage.parts).map((part) => (
+                    <TableRow key={part.id}>
+                      <TableCell className="font-medium">{part.name}</TableCell>
+                      <TableCell>{part.category}</TableCell>
+                      <TableCell className="font-medium">
+                        {part.price.toLocaleString()}
+                      </TableCell>
+                      <TableCell>
+                        {part.rating}
+                      </TableCell>
+                      <TableCell>{part.performance}</TableCell>
+                      <TableCell>{part.weight}</TableCell>
+                      <TableCell>
+                        <span className={`font-medium ${getConditionColor(part.condition)}`}>
+                          {part.condition}
+                        </span>
+                      </TableCell>
+                      <TableCell>{part.seller}</TableCell>
+                      <TableCell>
+                        <SimpleButton size="sm">
+                          Buy
+                        </SimpleButton>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
     </div>

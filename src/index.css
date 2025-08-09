@@ -29,7 +29,7 @@ All colors MUST be HSL.
     --border: 0 0% 88%;
     --input: 0 0% 96%;
     --ring: 220 100% 50%;
-    --radius: 50px;
+    --radius: 0.25rem;
     
     /* Clean shadows */
     --shadow-sm: 0 1px 2px 0 hsl(220 25% 25% / 0.05);

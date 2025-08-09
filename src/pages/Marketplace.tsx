@@ -298,7 +298,7 @@ export default function Marketplace() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Available Boats</CardTitle>
+            <CardTitle className="text-sm font-medium">Boats</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{mockBoats.length}</div>
@@ -308,7 +308,7 @@ export default function Marketplace() {
         
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Crew Members</CardTitle>
+            <CardTitle className="text-sm font-medium">Crew</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{mockCrew.filter(c => c.availability === "Available").length}</div>
@@ -486,7 +486,7 @@ export default function Marketplace() {
           {/* Boats Section */}
           <Card>
             <CardHeader>
-              <CardTitle>Available Boats</CardTitle>
+              <CardTitle>Boats</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <Table>
@@ -537,7 +537,7 @@ export default function Marketplace() {
           {/* Crew Section */}
           <Card>
             <CardHeader>
-              <CardTitle>Available Crew</CardTitle>
+              <CardTitle>Crew</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <Table>
@@ -592,7 +592,7 @@ export default function Marketplace() {
           {/* Parts Section */}
           <Card>
             <CardHeader>
-              <CardTitle>Available Parts</CardTitle>
+              <CardTitle>Parts</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <Table>

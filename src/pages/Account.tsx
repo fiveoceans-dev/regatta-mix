@@ -44,7 +44,7 @@ const mockHistory = [
   }
 ]
 
-export default function History() {
+export default function Account() {
   const getPositionColor = (position: number) => {
     if (position === 1) return "default"
     if (position <= 3) return "secondary"
@@ -54,20 +54,20 @@ export default function History() {
   return (
     <div className="container py-8 space-y-8 pt-20">
       <div className="space-y-2">
-        <h1 className="text-3xl font-bold text-foreground">Race History</h1>
+        <h1 className="text-3xl font-bold text-foreground">Account</h1>
         <p className="text-muted-foreground">View your racing performance, statistics, and race replays</p>
       </div>
 
       {/* Performance Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Points</CardTitle>
-            <Trophy className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">Rank</CardTitle>
+            <Target className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">3,847</div>
-            <p className="text-xs text-muted-foreground">Season total</p>
+            <div className="text-2xl font-bold">4.2</div>
+            <p className="text-xs text-muted-foreground">Top 20% performer</p>
           </CardContent>
         </Card>
         
@@ -84,12 +84,79 @@ export default function History() {
         
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Rank</CardTitle>
-            <Target className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">Karma</CardTitle>
+            <Award className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">4.2</div>
-            <p className="text-xs text-muted-foreground">Top 20% performer</p>
+            <div className="text-2xl font-bold">1,247</div>
+            <p className="text-xs text-muted-foreground">Community reputation</p>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Points</CardTitle>
+            <Trophy className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">3,847</div>
+            <p className="text-xs text-muted-foreground">Season total</p>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Season Progress */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <Card>
+          <CardHeader>
+            <CardTitle>Season Progress</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <span className="text-sm font-medium">Current Ranking</span>
+                <span className="text-2xl font-bold">#42</span>
+              </div>
+              <div className="w-full bg-muted rounded-full h-2">
+                <div className="bg-primary h-2 rounded-full w-[65%]"></div>
+              </div>
+              <div className="flex justify-between text-xs text-muted-foreground">
+                <span>Season Start</span>
+                <span>65% Complete</span>
+                <span>Season End</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Recent Achievements</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="flex items-center gap-3 p-3 border border-border rounded-lg">
+                <Trophy className="h-8 w-8 text-yellow-500" />
+                <div>
+                  <div className="font-medium">First Place</div>
+                  <div className="text-sm text-muted-foreground">Mediterranean Series R2</div>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 p-3 border border-border rounded-lg">
+                <Award className="h-8 w-8 text-blue-500" />
+                <div>
+                  <div className="font-medium">Perfect Start</div>
+                  <div className="text-sm text-muted-foreground">5 consecutive clean starts</div>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 p-3 border border-border rounded-lg">
+                <Target className="h-8 w-8 text-green-500" />
+                <div>
+                  <div className="font-medium">Top 10 Streak</div>
+                  <div className="text-sm text-muted-foreground">10 races in top 10</div>
+                </div>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -149,62 +216,6 @@ export default function History() {
           </Table>
         </CardContent>
       </Card>
-
-      {/* Season Progress */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <Card>
-          <CardHeader>
-            <CardTitle>Season Progress</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="flex justify-between items-center">
-                <span className="text-sm font-medium">Current Ranking</span>
-                <span className="text-2xl font-bold">#42</span>
-              </div>
-              <div className="w-full bg-muted rounded-full h-2">
-                <div className="bg-primary h-2 rounded-full w-[65%]"></div>
-              </div>
-              <div className="flex justify-between text-xs text-muted-foreground">
-                <span>Season Start</span>
-                <span>65% Complete</span>
-                <span>Season End</span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Achievements</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="flex items-center gap-3 p-3 border border-border rounded-lg">
-                <Trophy className="h-8 w-8 text-yellow-500" />
-                <div>
-                  <div className="font-medium">First Place</div>
-                  <div className="text-sm text-muted-foreground">Mediterranean Series R2</div>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 p-3 border border-border rounded-lg">
-                <Award className="h-8 w-8 text-blue-500" />
-                <div>
-                  <div className="font-medium">Perfect Start</div>
-                  <div className="text-sm text-muted-foreground">5 consecutive clean starts</div>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 p-3 border border-border rounded-lg">
-                <Target className="h-8 w-8 text-green-500" />
-                <div>
-                  <div className="font-medium">Top 10 Streak</div>
-                  <div className="text-sm text-muted-foreground">10 races in top 10</div>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
     </div>
   )
 }

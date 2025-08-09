@@ -10,7 +10,7 @@ import DashboardHome from "./pages/dashboard/DashboardHome";
 import Play from "./pages/Play";
 import Marketplace from "./pages/Marketplace";
 import ProtestRoom from "./pages/ProtestRoom";
-import History from "./pages/History";
+import Account from "./pages/Account";
 import Settings from "./pages/Settings";
 import GamePlay from "./pages/GamePlay";
 import NotFound from "./pages/NotFound";
@@ -50,7 +50,7 @@ const AppContent = () => {
             <Route path="/play" element={<Play />} />
             <Route path="/marketplace" element={<Marketplace />} />
             <Route path="/protestroom" element={<ProtestRoom />} />
-            <Route path="/history" element={<History />} />
+            <Route path="/history" element={<Account />} />
             <Route path="/settings" element={<Settings />} />
             
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

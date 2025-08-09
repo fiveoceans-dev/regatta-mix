@@ -97,7 +97,7 @@ export default function ProtestRoom() {
         
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">This Week</CardTitle>
+            <CardTitle className="text-sm font-medium">This Month</CardTitle>
             <MessageSquare className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -130,65 +130,15 @@ export default function ProtestRoom() {
         
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">My Protests</CardTitle>
+            <CardTitle className="text-sm font-medium">Points</CardTitle>
             <User className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{myProtests.length}</div>
-            <p className="text-xs text-muted-foreground">Filed by you</p>
+            <div className="text-2xl font-bold">3,847</div>
+            <p className="text-xs text-muted-foreground">Season total</p>
           </CardContent>
         </Card>
       </div>
-
-      {/* All Protests Section */}
-      <Card>
-        <CardHeader>
-          <CardTitle>All Protests</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Protest</TableHead>
-                <TableHead>Regatta</TableHead>
-                <TableHead>Class</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Incident</TableHead>
-                <TableHead>Responses</TableHead>
-                <TableHead>Action</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {allProtests.map((protest) => (
-                <TableRow key={protest.id}>
-                  <TableCell className="font-medium max-w-xs">
-                    <div className="truncate">{protest.title}</div>
-                  </TableCell>
-                  <TableCell>{protest.regatta}</TableCell>
-                  <TableCell>{protest.class}</TableCell>
-                  <TableCell>
-                    <Badge variant={getStatusColor(protest.status)}>
-                      {protest.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>{protest.incident}</TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-1">
-                      <MessageSquare className="h-4 w-4" />
-                      {protest.responses}
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <Button size="sm" variant="outline">
-                      View
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
 
       {/* My Protests Section */}
       {myProtests.length > 0 && (
@@ -241,6 +191,56 @@ export default function ProtestRoom() {
           </CardContent>
         </Card>
       )}
+
+      {/* All Protests Section */}
+      <Card>
+        <CardHeader>
+          <CardTitle>All Protests</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Protest</TableHead>
+                <TableHead>Regatta</TableHead>
+                <TableHead>Class</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Incident</TableHead>
+                <TableHead>Responses</TableHead>
+                <TableHead>Action</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {allProtests.map((protest) => (
+                <TableRow key={protest.id}>
+                  <TableCell className="font-medium max-w-xs">
+                    <div className="truncate">{protest.title}</div>
+                  </TableCell>
+                  <TableCell>{protest.regatta}</TableCell>
+                  <TableCell>{protest.class}</TableCell>
+                  <TableCell>
+                    <Badge variant={getStatusColor(protest.status)}>
+                      {protest.status}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>{protest.incident}</TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-1">
+                      <MessageSquare className="h-4 w-4" />
+                      {protest.responses}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <Button size="sm" variant="outline">
+                      View
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
     </div>
   )
 }

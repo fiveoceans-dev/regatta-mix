@@ -151,14 +151,14 @@ export default function Play() {
   }
 
   return (
-    <div className="relative h-screen overflow-hidden pt-16">
+    <div className="relative min-h-screen pt-16">
       {/* Game Background */}
       <div className="absolute inset-0 z-0">
         <SailingScene />
       </div>
       
       {/* Overlay Content */}
-      <div className="relative z-10 h-full overflow-y-auto">
+      <div className="relative z-10">
         <div className="container py-8 space-y-6">
           {/* Quick Match Section */}
           <Card className="bg-background/80 backdrop-blur-md border-border/50">

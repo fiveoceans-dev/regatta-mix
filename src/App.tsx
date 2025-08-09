@@ -48,8 +48,8 @@ const AppContent = () => {
             
             {/* Other pages */}
             <Route path="/play" element={<Play />} />
-            <Route path="/marketplace" element={<Marketplace />} />
             <Route path="/protestroom" element={<ProtestRoom />} />
+            <Route path="/marketplace" element={<Marketplace />} />
             <Route path="/Account" element={<Account />} />
             <Route path="/settings" element={<Settings />} />
             

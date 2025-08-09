@@ -34,7 +34,7 @@ export function PartnersSection() {
             {[...partners, ...partners].map((partner, index) => (
               <div 
                 key={`row1-${index}`}
-                className="flex-shrink-0 border border-border/30 rounded-lg p-8 hover:border-primary/50 transition-all duration-300"
+                className="flex-shrink-0 rounded-lg p-8 hover:bg-muted/20 transition-all duration-300"
               >
                 <div className="flex flex-col items-center space-y-4 min-w-[200px]">
                   <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
@@ -53,7 +53,7 @@ export function PartnersSection() {
             {[...partners.slice().reverse(), ...partners.slice().reverse()].map((partner, index) => (
               <div 
                 key={`row2-${index}`}
-                className="flex-shrink-0 border border-border/30 rounded-lg p-8 hover:border-primary/50 transition-all duration-300"
+                className="flex-shrink-0 rounded-lg p-8 hover:bg-muted/20 transition-all duration-300"
               >
                 <div className="flex flex-col items-center space-y-4 min-w-[200px]">
                   <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">

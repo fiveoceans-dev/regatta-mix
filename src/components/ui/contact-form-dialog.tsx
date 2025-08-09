@@ -34,12 +34,15 @@ export function ContactFormDialog({ children }: ContactFormDialogProps) {
       <DialogTrigger asChild>
         {children}
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Mail className="h-5 w-5" />
             Contact Us
           </DialogTitle>
+          <p className="text-sm text-muted-foreground">
+            Send us a message and we'll get back to you as soon as possible.
+          </p>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
@@ -82,8 +85,9 @@ export function ContactFormDialog({ children }: ContactFormDialogProps) {
               value={formData.message}
               onChange={(e) => handleChange("message", e.target.value)}
               placeholder="Tell us how we can help you..."
-              rows={4}
+              rows={12}
               required
+              className="min-h-[200px]"
             />
           </div>
           

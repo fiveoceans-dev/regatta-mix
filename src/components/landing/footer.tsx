@@ -88,20 +88,6 @@ export function Footer() {
                 <span>{company.contact.address}</span>
               </div>
             </div>
-
-            {/* Social Links */}
-            <div className="flex gap-4">
-              {[Facebook, Twitter, Instagram, Youtube].map((Icon, index) => (
-                <Button
-                  key={index}
-                  variant="outline"
-                  size="icon"
-                  className="border-border/50 hover:border-primary hover:bg-primary/10"
-                >
-                  <Icon className="h-4 w-4" />
-                </Button>
-              ))}
-            </div>
           </div>
 
           {/* Resource Links */}

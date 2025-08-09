@@ -5,7 +5,7 @@ import { Wind, Compass, Flag, Clock, Users } from "lucide-react"
 
 export default function GamePlay() {
   return (
-    <div className="min-h-screen w-full h-screen overflow-hidden relative">
+    <div className="h-screen w-screen overflow-hidden relative">
       {/* Full Screen Game Scene */}
       <div className="absolute inset-0">
         <SailingScene />
@@ -29,26 +29,58 @@ export default function GamePlay() {
       </div>
 
       {/* Left Side Panels */}
-      <div className="absolute top-20 left-4 w-80 space-y-4 z-10">
+      <div className="absolute top-20 left-4 w-72 space-y-4 z-10">
         {/* Signals Panel */}
         <Card className="bg-gray-500/30 backdrop-blur-sm border-border/50">
-          <CardContent className="p-6 text-center">
+          <CardContent className="p-4 text-center">
             <h4 className="text-primary mb-3 text-sm font-semibold">Signals</h4>
-            <div className="w-24 h-24 bg-black border-2 border-primary rounded-lg flex items-center justify-center mx-auto mb-3">
-              <span className="text-4xl text-sailing-warning">⚡</span>
+            <div className="w-20 h-20 bg-black border-2 border-primary rounded-lg flex items-center justify-center mx-auto mb-3">
+              <span className="text-3xl text-sailing-warning">⚡</span>
             </div>
             <div className="text-xs text-muted-foreground">Starting Signal</div>
           </CardContent>
         </Card>
 
+        {/* Race Control Chat */}
+        <Card className="bg-gray-500/30 backdrop-blur-sm border-border/50">
+          <CardContent className="p-4">
+            <h4 className="text-primary mb-3 text-sm font-semibold flex items-center gap-2">
+              <Flag className="h-4 w-4" />
+              Race Control
+            </h4>
+            <div className="h-24 overflow-y-auto text-xs space-y-1 mb-3">
+              {[
+                { sender: 'Race Control', message: '5 minutes to start sequence', color: 'text-sailing-success' },
+                { sender: 'SailShark', message: 'Good luck everyone!', color: 'text-primary' },
+                { sender: 'TackTitan', message: 'Wind shift coming from the right', color: 'text-sailing-warning' }
+              ].map((msg, index) => (
+                <div key={index} className="leading-relaxed">
+                  <strong className={msg.color}>{msg.sender}:</strong> {msg.message}
+                </div>
+              ))}
+            </div>
+            <div className="flex gap-2">
+              <input 
+                type="text" 
+                placeholder="Type message..." 
+                className="flex-1 bg-secondary border border-border text-foreground px-2 py-1 rounded text-xs"
+              />
+              <Button size="sm" className="text-xs">Send</Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Right Side Panels */}
+      <div className="absolute top-20 right-4 w-72 space-y-4 z-10">
         {/* Instruments Panel */}
         <Card className="bg-gray-500/30 backdrop-blur-sm border-border/50">
-          <CardContent className="p-6">
+          <CardContent className="p-4">
             <h4 className="text-primary mb-3 text-sm font-semibold text-center">Instruments</h4>
             <div className="text-center mb-4">
               <div className="text-muted-foreground text-xs mb-1">BOAT SPD</div>
               <div className="flex items-baseline justify-center">
-                <span className="text-4xl font-bold text-primary">10.6</span>
+                <span className="text-3xl font-bold text-primary">10.6</span>
                 <span className="text-sm text-muted-foreground ml-1">kn</span>
               </div>
             </div>
@@ -102,109 +134,81 @@ export default function GamePlay() {
         </Card>
       </div>
 
-      {/* Left Actions Panel */}
-      <div className="absolute bottom-4 left-4 w-48 z-10">
-        <Card className="bg-gray-500/30 backdrop-blur-sm border-border/50">
-          <CardContent className="p-4">
-            <h3 className="text-sm font-semibold text-primary mb-3 uppercase tracking-wide">
-              Actions
-            </h3>
-            <div className="flex flex-col gap-2">
-              {['Protest', 'Redress', 'Retire'].map((action) => (
-                <Button 
-                  key={action}
-                  variant="secondary"
-                  size="sm"
-                  className="text-xs w-full"
-                >
-                  {action}
-                </Button>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+      {/* Bottom Control Panels */}
+      <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end z-10">
+        {/* Left Actions Panel */}
+        <div className="w-40">
+          <Card className="bg-gray-500/30 backdrop-blur-sm border-border/50">
+            <CardContent className="p-3">
+              <h3 className="text-xs font-semibold text-primary mb-2 uppercase tracking-wide">
+                Actions
+              </h3>
+              <div className="flex flex-col gap-1">
+                {['Protest', 'Redress', 'Retire'].map((action) => (
+                  <Button 
+                    key={action}
+                    variant="secondary"
+                    size="sm"
+                    className="text-xs w-full h-8"
+                  >
+                    {action}
+                  </Button>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
 
-      {/* Center Controls Panel */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-96 z-10">
-        <Card className="bg-gray-500/30 backdrop-blur-sm border-border/50">
-          <CardContent className="p-4">
-            <h3 className="text-sm font-semibold text-primary mb-3 uppercase tracking-wide text-center">
-              Controls
-            </h3>
-            <div className="grid grid-cols-2 gap-2">
-              {['Tack to Port', 'Tack to Starboard', 'Bear Away', 'Head Up'].map((action) => (
-                <Button 
-                  key={action}
-                  variant="secondary"
-                  size="sm"
-                  className="text-xs"
-                >
-                  {action}
-                </Button>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+        {/* Center Controls Panel */}
+        <div className="w-80">
+          <Card className="bg-gray-500/30 backdrop-blur-sm border-border/50">
+            <CardContent className="p-4">
+              <h3 className="text-sm font-semibold text-primary mb-3 uppercase tracking-wide text-center">
+                Controls
+              </h3>
+              <div className="grid grid-cols-2 gap-2">
+                {['Tack to Port', 'Tack to Starboard', 'Bear Away', 'Head Up'].map((action) => (
+                  <Button 
+                    key={action}
+                    variant="secondary"
+                    size="sm"
+                    className="text-xs"
+                  >
+                    {action}
+                  </Button>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
 
-      {/* Right View Panel */}
-      <div className="absolute bottom-4 right-4 w-48 z-10">
-        <Card className="bg-gray-500/30 backdrop-blur-sm border-border/50">
-          <CardContent className="p-4">
-            <h3 className="text-sm font-semibold text-primary mb-3 uppercase tracking-wide">
-              View
-            </h3>
-            <div className="flex flex-col gap-2">
-              {[
-                { name: 'Course', active: true },
-                { name: 'Tactical', active: false },
-                { name: 'Wind Map', active: false },
-                { name: 'Currents', active: false }
-              ].map((option) => (
-                <Button 
-                  key={option.name}
-                  variant={option.active ? "default" : "secondary"}
-                  size="sm"
-                  className="text-xs w-full"
-                >
-                  {option.name}
-                </Button>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Race Control Chat */}
-      <div className="absolute top-20 right-4 w-80 z-10">
-        <Card className="bg-gray-500/30 backdrop-blur-sm border-border/50">
-          <CardContent className="p-4">
-            <h4 className="text-primary mb-3 text-sm font-semibold flex items-center gap-2">
-              <Flag className="h-4 w-4" />
-              Race Control
-            </h4>
-            <div className="h-32 overflow-y-auto text-xs space-y-1 mb-3">
-              {[
-                { sender: 'Race Control', message: '5 minutes to start sequence', color: 'text-sailing-success' },
-                { sender: 'SailShark', message: 'Good luck everyone!', color: 'text-primary' },
-                { sender: 'TackTitan', message: 'Wind shift coming from the right', color: 'text-sailing-warning' }
-              ].map((msg, index) => (
-                <div key={index} className="leading-relaxed">
-                  <strong className={msg.color}>{msg.sender}:</strong> {msg.message}
-                </div>
-              ))}
-            </div>
-            <div className="flex gap-2">
-              <input 
-                type="text" 
-                placeholder="Type message..." 
-                className="flex-1 bg-secondary border border-border text-foreground px-2 py-1 rounded text-xs"
-              />
-              <Button size="sm" className="text-xs">Send</Button>
-            </div>
-          </CardContent>
-        </Card>
+        {/* Right View Panel */}
+        <div className="w-40">
+          <Card className="bg-gray-500/30 backdrop-blur-sm border-border/50">
+            <CardContent className="p-3">
+              <h3 className="text-xs font-semibold text-primary mb-2 uppercase tracking-wide">
+                View
+              </h3>
+              <div className="flex flex-col gap-1">
+                {[
+                  { name: 'Course', active: true },
+                  { name: 'Tactical', active: false },
+                  { name: 'Wind Map', active: false },
+                  { name: 'Currents', active: false }
+                ].map((option) => (
+                  <Button 
+                    key={option.name}
+                    variant={option.active ? "default" : "secondary"}
+                    size="sm"
+                    className="text-xs w-full h-8"
+                  >
+                    {option.name}
+                  </Button>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   )

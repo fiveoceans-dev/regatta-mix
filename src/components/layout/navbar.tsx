@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { AuthDialog } from "@/components/ui/auth-dialog"
 import { Anchor, Sun, Moon } from "lucide-react"
-import { useTheme } from "next-themes"
+import { useTheme } from "@/components/ui/theme-provider"
 
 const navigation = [
   { name: "Home", href: "/" },

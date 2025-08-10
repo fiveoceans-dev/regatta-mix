@@ -2,9 +2,10 @@ import { useState } from "react"
 import { Link, useLocation } from "react-router-dom"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { AuthDialog } from "@/components/ui/auth-dialog"
-import { Anchor, Sun, Moon } from "lucide-react"
+import { Anchor, Sun, Moon, LogOut, LogIn } from "lucide-react"
 import { useTheme } from "@/components/ui/theme-provider"
+import { useAuth } from "@/hooks/useAuth"
+import { toast } from "sonner"
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -17,8 +18,13 @@ const navigation = [
 
 export function Navbar() {
   const location = useLocation()
-  const [isLoggedIn, setIsLoggedIn] = useState(false) // TODO: Replace with actual auth state
+  const { user, signOut } = useAuth()
   const { theme, setTheme } = useTheme()
+
+  const handleSignOut = async () => {
+    await signOut()
+    toast.success("Signed out successfully")
+  }
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -64,16 +70,23 @@ export function Navbar() {
             </Button>
             
             {/* Login/Account Button */}
-            {isLoggedIn ? (
-              <Button variant="outline" size="sm">
-                Account
-              </Button>
-            ) : (
-              <AuthDialog onSuccess={() => setIsLoggedIn(true)}>
-                <Button variant="default" size="sm">
-                  Login
+            {user ? (
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-muted-foreground">
+                  Welcome, {user.email?.split('@')[0]}
+                </span>
+                <Button variant="outline" size="sm" onClick={handleSignOut}>
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Sign Out
                 </Button>
-              </AuthDialog>
+              </div>
+            ) : (
+              <Link to="/auth">
+                <Button variant="default" size="sm">
+                  <LogIn className="h-4 w-4 mr-2" />
+                  Sign In
+                </Button>
+              </Link>
             )}
           </div>
         </div>

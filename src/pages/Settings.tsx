@@ -73,7 +73,7 @@ export default function Settings() {
             </div>
           </div>
           
-          <Button>Save Changes</Button>
+          <Button>Save</Button>
         </CardContent>
       </Card>
 
@@ -158,7 +158,7 @@ export default function Settings() {
             <div className="h-24 w-40 bg-muted rounded border-2 border-dashed border-border flex items-center justify-center">
               <span className="text-sm text-muted-foreground">Boat Preview</span>
             </div>
-            <Button>Save Configuration</Button>
+            <Button>Save</Button>
           </div>
         </CardContent>
       </Card>

@@ -1,4 +1,5 @@
-import { SailingScene } from "@/components/game/sailing-scene"
+import { SailingGame2D } from "@/components/game/sailing-game-2d"
+import { GameStateProvider } from "@/hooks/use-game-state"
 import { CollapsibleGameCard } from "@/components/game/collapsible-game-card"
 import { GameSignalsPanel } from "@/components/game/game-signals-panel"
 import { RaceControlChat } from "@/components/game/race-control-chat"
@@ -9,11 +10,12 @@ import { GameButton } from "@/components/ui/game-button"
 
 export default function GamePlay() {
   return (
-    <div className="h-screen w-screen overflow-hidden relative flex flex-col">
-      {/* Full Screen Game Scene */}
-      <div className="absolute inset-0">
-        <SailingScene />
-      </div>
+    <GameStateProvider>
+      <div className="h-screen w-screen overflow-hidden relative flex flex-col">
+        {/* Full Screen 2D Sailing Game */}
+        <div className="absolute inset-0">
+          <SailingGame2D />
+        </div>
 
       {/* Game UI Overlays */}
       
@@ -192,6 +194,7 @@ export default function GamePlay() {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </GameStateProvider>
   )
 }

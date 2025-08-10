@@ -11,6 +11,7 @@ export interface BoatToken {
   headingDeg: number // 0-360 degrees
   sailAngleDeg: number // relative to boat heading
   centerline: boolean // show centerline indicator
+  position: { x: number, y: number } // world coordinates
   number?: string | number
   team?: 'red' | 'blue'
 }
@@ -21,6 +22,7 @@ export interface MarkToken {
   radius: number // meters
   color: string
   label?: string
+  position: { x: number, y: number }
   strokeWidth?: number
   pattern?: string // pattern ID for accessibility
 }

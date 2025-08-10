@@ -1,5 +1,4 @@
 import { useRef, useEffect, useState, useCallback } from 'react'
-import { useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import { worldToScreen } from './sailing-game-2d'
 import { GameState, Boat, Mark, WindData } from '../../types/game-types'
@@ -11,21 +10,17 @@ import { RulesOverlay } from './svg-components/rules-overlay'
 interface SvgOverlayProps {
   canvasRef: React.RefObject<HTMLCanvasElement>
   gameState: GameState
-  onCameraUpdate: (camera: THREE.Camera, size: { width: number, height: number }) => void
+  camera: THREE.Camera
+  size: { width: number, height: number }
 }
 
-export function SvgOverlay({ canvasRef, gameState, onCameraUpdate }: SvgOverlayProps) {
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
-  const [camera, setCamera] = useState<THREE.Camera | null>(null)
+export function SvgOverlay({ canvasRef, gameState, camera, size }: SvgOverlayProps) {
+  const [dimensions, setDimensions] = useState({ width: size.width, height: size.height })
   const svgRef = useRef<SVGSVGElement>(null)
   
-  // Get Three.js camera reference
-  const { camera: threeCamera, size } = useThree()
-  
   useEffect(() => {
-    setCamera(threeCamera)
     setDimensions({ width: size.width, height: size.height })
-  }, [threeCamera, size])
+  }, [size])
 
   useEffect(() => {
     const handleResize = () => {
@@ -57,7 +52,7 @@ export function SvgOverlay({ canvasRef, gameState, onCameraUpdate }: SvgOverlayP
            screenPos.y <= dimensions.height + radius
   }, [getScreenPosition, dimensions])
 
-  if (!camera) return null
+  
 
   return (
     <svg

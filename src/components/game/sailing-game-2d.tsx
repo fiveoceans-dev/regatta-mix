@@ -17,8 +17,8 @@ export function worldToScreen(worldPos: THREE.Vector3, camera: THREE.Camera, siz
   }
 }
 
-function GameCamera() {
-  const { camera } = useThree()
+function GameCamera({ onCameraUpdate }: { onCameraUpdate: (camera: THREE.Camera, size: { width: number, height: number }) => void }) {
+  const { camera, size } = useThree()
   
   useEffect(() => {
     if (camera) {
@@ -28,8 +28,11 @@ function GameCamera() {
       orthoCamera.lookAt(0, 0, 0)
       orthoCamera.zoom = 1
       orthoCamera.updateProjectionMatrix()
+      
+      // Pass camera data to parent
+      onCameraUpdate(camera, size)
     }
-  }, [camera])
+  }, [camera, size, onCameraUpdate])
 
   return null
 }
@@ -72,12 +75,13 @@ export function SailingGame2D() {
     position: [0, 50, 0] as [number, number, number],
     zoom: 1
   })
+  const [cameraData, setCameraData] = useState<{ camera: THREE.Camera, size: { width: number, height: number } } | null>(null)
   
   const { gameState, dispatch } = useGameState()
   const { sendMessage, connectionState } = useWebSocket('ws://localhost:8080')
 
   const handleCameraUpdate = useCallback((camera: THREE.Camera, size: { width: number, height: number }) => {
-    // This will be called from SvgOverlay to sync coordinates
+    setCameraData({ camera, size })
   }, [])
 
   return (
@@ -95,16 +99,19 @@ export function SailingGame2D() {
         className="absolute inset-0"
         style={{ background: 'transparent' }}
       >
-        <GameCamera />
+        <GameCamera onCameraUpdate={handleCameraUpdate} />
         <GameWorld />
       </Canvas>
       
       {/* SVG Overlay - all visible game objects */}
-      <SvgOverlay 
-        canvasRef={canvasRef}
-        gameState={gameState}
-        onCameraUpdate={handleCameraUpdate}
-      />
+      {cameraData && (
+        <SvgOverlay 
+          canvasRef={canvasRef}
+          gameState={gameState}
+          camera={cameraData.camera}
+          size={cameraData.size}
+        />
+      )}
       
       {/* Game HUD */}
       <GameHUD 

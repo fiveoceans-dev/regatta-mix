@@ -176,7 +176,7 @@ export function CommunitySection() {
                         <p className="text-xs leading-relaxed">{post.content}</p>
                         
                         {post.image && (
-                          <div className="rounded-lg overflow-hidden">
+                          <div className="rounded-sm overflow-hidden">
                             <img
                               src={post.image}
                               alt="Post image"

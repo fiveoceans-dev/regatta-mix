@@ -789,7 +789,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      create_quick_match: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
     }
     Enums: {
       boat_class: "j24" | "j70" | "laser" | "optimist" | "flying_dutchman"

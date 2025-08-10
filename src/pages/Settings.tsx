@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -6,8 +7,105 @@ import { Separator } from "@/components/ui/separator"
 import { Switch } from "@/components/ui/switch"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { User, Settings as SettingsIcon, Volume2, Monitor, Globe } from "lucide-react"
+import { useAuth } from "@/hooks/useAuth"
+import { supabase } from "@/integrations/supabase/client"
+import { toast } from "sonner"
 
 export default function Settings() {
+  const { user } = useAuth()
+  const [profile, setProfile] = useState<any>(null)
+  const [settings, setSettings] = useState<any>(null)
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    if (user) {
+      fetchProfile()
+      fetchSettings()
+    }
+  }, [user])
+
+  const fetchProfile = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user?.id)
+        .single()
+
+      if (error) throw error
+      setProfile(data)
+    } catch (error) {
+      console.error('Error fetching profile:', error)
+    }
+  }
+
+  const fetchSettings = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('user_settings')
+        .select('*')
+        .eq('user_id', user?.id)
+        .single()
+
+      if (error) throw error
+      setSettings(data)
+    } catch (error) {
+      console.error('Error fetching settings:', error)
+    }
+  }
+
+  const updateProfile = async () => {
+    if (!profile || !user) return
+
+    setLoading(true)
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .update({
+          nickname: profile.nickname,
+          country: profile.country,
+          timezone: profile.timezone
+        })
+        .eq('id', user.id)
+
+      if (error) throw error
+      toast.success('Profile updated successfully!')
+    } catch (error) {
+      console.error('Error updating profile:', error)
+      toast.error('Failed to update profile')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const updateSettings = async () => {
+    if (!settings || !user) return
+
+    setLoading(true)
+    try {
+      const { error } = await supabase
+        .from('user_settings')
+        .update(settings)
+        .eq('user_id', user.id)
+
+      if (error) throw error
+      toast.success('Settings updated successfully!')
+    } catch (error) {
+      console.error('Error updating settings:', error)
+      toast.error('Failed to update settings')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  if (!profile || !settings) {
+    return (
+      <div className="container py-8 pt-20">
+        <div className="text-center">Loading...</div>
+      </div>
+    )
+  }
+
   return (
     <div className="container py-8 space-y-8 pt-20">
       <div className="space-y-2">
@@ -37,15 +135,19 @@ export default function Settings() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <Label htmlFor="username">Username</Label>
-              <Input id="username" placeholder="Sailor_Mike" />
+              <Input 
+                id="username" 
+                value={profile.nickname || ""} 
+                onChange={(e) => setProfile({...profile, nickname: e.target.value})}
+              />
             </div>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" placeholder="mike@example.com" />
+              <Input id="email" type="email" value={profile.email || ""} disabled />
             </div>
             <div className="space-y-2">
               <Label htmlFor="country">Country</Label>
-              <Select>
+              <Select value={profile.country || ""} onValueChange={(value) => setProfile({...profile, country: value})}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select country" />
                 </SelectTrigger>
@@ -59,21 +161,23 @@ export default function Settings() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="timezone">Timezone</Label>
-              <Select>
+              <Select value={profile.timezone || ""} onValueChange={(value) => setProfile({...profile, timezone: value})}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select timezone" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="utc">UTC</SelectItem>
-                  <SelectItem value="est">EST</SelectItem>
-                  <SelectItem value="pst">PST</SelectItem>
-                  <SelectItem value="cet">CET</SelectItem>
+                  <SelectItem value="UTC">UTC</SelectItem>
+                  <SelectItem value="EST">EST</SelectItem>
+                  <SelectItem value="PST">PST</SelectItem>
+                  <SelectItem value="CET">CET</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
           
-          <Button>Save</Button>
+          <Button onClick={updateProfile} disabled={loading}>
+            {loading ? 'Saving...' : 'Save Profile'}
+          </Button>
         </CardContent>
       </Card>
 
@@ -93,18 +197,38 @@ export default function Settings() {
             </h3>
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <Label htmlFor="master-volume">Master Volume</Label>
+                <Label htmlFor="sfx-volume">SFX Volume: {settings.sfx_volume}</Label>
                 <div className="w-32">
-                  <Input id="master-volume" type="range" min="0" max="100" defaultValue="80" />
+                  <Input 
+                    id="sfx-volume" 
+                    type="range" 
+                    min="0" 
+                    max="100" 
+                    value={settings.sfx_volume || 75}
+                    onChange={(e) => setSettings({...settings, sfx_volume: parseInt(e.target.value)})}
+                  />
                 </div>
               </div>
               <div className="flex items-center justify-between">
-                <Label htmlFor="sfx-volume">Sound Effects</Label>
-                <Switch id="sfx-volume" defaultChecked />
+                <Label htmlFor="music-volume">Music Volume: {settings.music_volume}</Label>
+                <div className="w-32">
+                  <Input 
+                    id="music-volume" 
+                    type="range" 
+                    min="0" 
+                    max="100" 
+                    value={settings.music_volume || 50}
+                    onChange={(e) => setSettings({...settings, music_volume: parseInt(e.target.value)})}
+                  />
+                </div>
               </div>
               <div className="flex items-center justify-between">
-                <Label htmlFor="music-volume">Background Music</Label>
-                <Switch id="music-volume" defaultChecked />
+                <Label htmlFor="audio-enabled">Audio Enabled</Label>
+                <Switch 
+                  id="audio-enabled" 
+                  checked={settings.audio_enabled}
+                  onCheckedChange={(checked) => setSettings({...settings, audio_enabled: checked})}
+                />
               </div>
             </div>
           </div>
@@ -119,9 +243,12 @@ export default function Settings() {
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <Label htmlFor="graphics-quality">Graphics Quality</Label>
-                <Select>
+                <Select 
+                  value={settings.graphics_quality || "medium"} 
+                  onValueChange={(value) => setSettings({...settings, graphics_quality: value})}
+                >
                   <SelectTrigger className="w-40">
-                    <SelectValue placeholder="High" />
+                    <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="low">Low</SelectItem>
@@ -132,12 +259,20 @@ export default function Settings() {
                 </Select>
               </div>
               <div className="flex items-center justify-between">
-                <Label htmlFor="fps-counter">Show FPS Counter</Label>
-                <Switch id="fps-counter" />
+                <Label htmlFor="notifications">Notifications</Label>
+                <Switch 
+                  id="notifications" 
+                  checked={settings.notifications_enabled}
+                  onCheckedChange={(checked) => setSettings({...settings, notifications_enabled: checked})}
+                />
               </div>
               <div className="flex items-center justify-between">
-                <Label htmlFor="wind-arrows">Wind Direction Arrows</Label>
-                <Switch id="wind-arrows" defaultChecked />
+                <Label htmlFor="auto-save">Auto Save</Label>
+                <Switch 
+                  id="auto-save" 
+                  checked={settings.auto_save}
+                  onCheckedChange={(checked) => setSettings({...settings, auto_save: checked})}
+                />
               </div>
             </div>
           </div>
@@ -165,7 +300,9 @@ export default function Settings() {
             </div>
           </div>
           
-          <Button>Save</Button>
+          <Button onClick={updateSettings} disabled={loading}>
+            {loading ? 'Saving...' : 'Save Settings'}
+          </Button>
         </CardContent>
       </Card>
     </div>

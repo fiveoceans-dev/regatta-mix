@@ -10,9 +10,9 @@ interface BuyCreditsDialogProps {
 
 export function BuyCreditsDialog({ open, onOpenChange }: BuyCreditsDialogProps) {
   const subscriptionPlans = [
-    { price: 1, credits: 100, popular: false },
-    { price: 3, credits: 350, popular: true },
-    { price: 5, credits: 650, popular: false }
+    { price: 1, credits: 1000, popular: false },
+    { price: 3, credits: 3000, popular: true },
+    { price: 5, credits: 5000, popular: false }
   ]
 
   const handlePayPal = (price: number) => {
@@ -34,7 +34,7 @@ export function BuyCreditsDialog({ open, onOpenChange }: BuyCreditsDialogProps) 
             Buy Credits
           </DialogTitle>
           <DialogDescription>
-            Choose a monthly subscription plan to get credits for racing
+            $1 = 1000 credits. Choose a plan to get credits for racing.
           </DialogDescription>
         </DialogHeader>
         

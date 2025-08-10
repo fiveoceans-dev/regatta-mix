@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/table"
 import { Trophy, Clock, MapPin, Play as PlayIcon, Target, Award, DollarSign } from "lucide-react"
 import { BuyCreditsDialog } from "@/components/ui/buy-credits-dialog"
+import { useAuth } from "@/hooks/useAuth"
+import { supabase } from "@/integrations/supabase/client"
 
 const mockHistory = [
   {
@@ -47,7 +49,70 @@ const mockHistory = [
 ]
 
 export default function Account() {
+  const { user } = useAuth()
   const [buyCreditsOpen, setBuyCreditsOpen] = useState(false)
+  const [profile, setProfile] = useState<any>(null)
+  const [raceHistory, setRaceHistory] = useState<any[]>([])
+  const [achievements, setAchievements] = useState<any[]>([])
+
+  useEffect(() => {
+    if (user) {
+      fetchProfile()
+      fetchRaceHistory()
+      fetchAchievements()
+    }
+  }, [user])
+
+  const fetchProfile = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user?.id)
+        .single()
+
+      if (error) throw error
+      setProfile(data)
+    } catch (error) {
+      console.error('Error fetching profile:', error)
+    }
+  }
+
+  const fetchRaceHistory = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('regatta_registrations')
+        .select(`
+          *,
+          regattas (name, location, start_date)
+        `)
+        .eq('user_id', user?.id)
+        .order('created_at', { ascending: false })
+        .limit(10)
+
+      if (error) throw error
+      setRaceHistory(data || [])
+    } catch (error) {
+      console.error('Error fetching race history:', error)
+    }
+  }
+
+  const fetchAchievements = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('achievements')
+        .select('*')
+        .eq('user_id', user?.id)
+        .order('earned_at', { ascending: false })
+        .limit(3)
+
+      if (error) throw error
+      setAchievements(data || [])
+    } catch (error) {
+      console.error('Error fetching achievements:', error)
+    }
+  }
+
   const getPositionColor = (position: number) => {
     if (position === 1) return "default"
     if (position <= 3) return "secondary"
@@ -69,8 +134,8 @@ export default function Account() {
             <Target className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">4.2</div>
-            <p className="text-xs text-muted-foreground">Top 20% performer</p>
+            <div className="text-2xl font-bold">{profile?.rank || 'Novice'}</div>
+            <p className="text-xs text-muted-foreground">{profile?.karma >= 1000 ? 'Elite' : 'Rising'} sailor</p>
           </CardContent>
         </Card>
         
@@ -80,8 +145,8 @@ export default function Account() {
             <Trophy className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">47</div>
-            <p className="text-xs text-muted-foreground">+3 this week</p>
+            <div className="text-2xl font-bold">{profile?.total_races || 0}</div>
+            <p className="text-xs text-muted-foreground">Total races completed</p>
           </CardContent>
         </Card>
         
@@ -91,7 +156,7 @@ export default function Account() {
             <Award className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">1,247</div>
+            <div className="text-2xl font-bold">{profile?.karma || 0}</div>
             <p className="text-xs text-muted-foreground">Community reputation</p>
           </CardContent>
         </Card>
@@ -102,8 +167,8 @@ export default function Account() {
             <Trophy className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">3,847</div>
-            <p className="text-xs text-muted-foreground">Season total</p>
+            <div className="text-2xl font-bold">{profile?.credits || 0}</div>
+            <p className="text-xs text-muted-foreground">Available credits</p>
             <Button 
               size="sm" 
               className="mt-2 w-full"
@@ -146,27 +211,21 @@ export default function Account() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div className="flex items-center gap-3 p-3 border border-border rounded-lg">
-                <Trophy className="h-8 w-8 text-yellow-500" />
-                <div>
-                  <div className="font-medium">First Place</div>
-                  <div className="text-sm text-muted-foreground">Mediterranean Series R2</div>
+              {achievements.length === 0 ? (
+                <div className="text-center py-8 text-muted-foreground">
+                  No achievements yet. Start racing to earn some!
                 </div>
-              </div>
-              <div className="flex items-center gap-3 p-3 border border-border rounded-lg">
-                <Award className="h-8 w-8 text-blue-500" />
-                <div>
-                  <div className="font-medium">Perfect Start</div>
-                  <div className="text-sm text-muted-foreground">5 consecutive clean starts</div>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 p-3 border border-border rounded-lg">
-                <Target className="h-8 w-8 text-green-500" />
-                <div>
-                  <div className="font-medium">Top 10 Streak</div>
-                  <div className="text-sm text-muted-foreground">10 races in top 10</div>
-                </div>
-              </div>
+              ) : (
+                achievements.map((achievement) => (
+                  <div key={achievement.id} className="flex items-center gap-3 p-3 border border-border rounded-lg">
+                    <Trophy className="h-8 w-8 text-yellow-500" />
+                    <div>
+                      <div className="font-medium">{achievement.title}</div>
+                      <div className="text-sm text-muted-foreground">{achievement.description}</div>
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           </CardContent>
         </Card>
@@ -193,37 +252,45 @@ export default function Account() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {mockHistory.map((race) => (
-                <TableRow key={race.id}>
-                  <TableCell className="font-medium">{race.race}</TableCell>
-                  <TableCell>
-                    <Badge variant={getPositionColor(race.position)}>
-                      #{race.position}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="font-medium">{race.credits}</TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-1">
-                      <Clock className="h-4 w-4" />
-                      {race.time}
-                    </div>
-                  </TableCell>
-                  <TableCell>{race.date}</TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-1">
-                      <MapPin className="h-4 w-4" />
-                      {race.location}
-                    </div>
-                  </TableCell>
-                  <TableCell>{race.participants}</TableCell>
-                  <TableCell>
-                    <Button size="sm" variant="outline" className="gap-1">
-                      <PlayIcon className="h-3 w-3" />
-                      Watch
-                    </Button>
+              {raceHistory.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
+                    No race history yet. Join some regattas to see your progress!
                   </TableCell>
                 </TableRow>
-              ))}
+              ) : (
+                raceHistory.map((registration) => (
+                  <TableRow key={registration.id}>
+                    <TableCell className="font-medium">{registration.regattas?.name}</TableCell>
+                    <TableCell>
+                      <Badge variant={getPositionColor(registration.final_position || 0)}>
+                        #{registration.final_position || 'TBD'}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="font-medium">{registration.prize_money || 0}</TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-1">
+                        <Clock className="h-4 w-4" />
+                        --:--
+                      </div>
+                    </TableCell>
+                    <TableCell>{new Date(registration.registration_date).toLocaleDateString()}</TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-1">
+                        <MapPin className="h-4 w-4" />
+                        {registration.regattas?.location}
+                      </div>
+                    </TableCell>
+                    <TableCell>--</TableCell>
+                    <TableCell>
+                      <Button size="sm" variant="outline" className="gap-1" disabled>
+                        <PlayIcon className="h-3 w-3" />
+                        Watch
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
             </TableBody>
           </Table>
         </CardContent>

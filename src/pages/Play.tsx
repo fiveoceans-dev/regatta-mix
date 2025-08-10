@@ -21,8 +21,12 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination"
-import { Trophy, Users, Clock, MapPin, Play as PlayIcon, Wind, Waves, Calendar } from "lucide-react"
+import { Trophy, Users, Clock, MapPin, Play as PlayIcon, Wind, Waves, Calendar, Plus } from "lucide-react"
 import { SailingScene } from "@/components/game/sailing-scene"
+import { CreateRegattaDialog } from "@/components/ui/create-regatta-dialog"
+import { supabase } from "@/integrations/supabase/client"
+import { useAuth } from "@/hooks/useAuth"
+import { toast } from "sonner"
 
 // Generate 100 regattas for pagination demo
 const generateRegattas = () => {
@@ -107,45 +111,137 @@ const mockRegattas = generateRegattas()
 
 export default function Play() {
   const navigate = useNavigate()
+  const { user } = useAuth()
   const [countdown, setCountdown] = useState("2:30:45")
   const [currentPage, setCurrentPage] = useState(1)
   const [activeTab, setActiveTab] = useState("all")
+  const [regattas, setRegattas] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
+  const [quickMatch, setQuickMatch] = useState<any>(null)
   const itemsPerPage = 10
 
   useEffect(() => {
+    fetchRegattas()
+    fetchQuickMatch()
+  }, [activeTab])
+
+  useEffect(() => {
     const timer = setInterval(() => {
-      // Simple countdown logic - in real app would calculate from actual start time
-      const now = new Date()
-      const targetTime = new Date(now.getTime() + 2.5 * 60 * 60 * 1000) // 2.5 hours from now
-      const diff = targetTime.getTime() - now.getTime()
-      
-      const hours = Math.floor(diff / (1000 * 60 * 60))
-      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
-      const seconds = Math.floor((diff % (1000 * 60)) / 1000)
-      
-      setCountdown(`${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`)
+      if (quickMatch?.start_date) {
+        const now = new Date()
+        const startTime = new Date(quickMatch.start_date)
+        const diff = startTime.getTime() - now.getTime()
+        
+        if (diff > 0) {
+          const hours = Math.floor(diff / (1000 * 60 * 60))
+          const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
+          const seconds = Math.floor((diff % (1000 * 60)) / 1000)
+          
+          setCountdown(`${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`)
+        } else {
+          setCountdown("Starting...")
+        }
+      }
     }, 1000)
 
     return () => clearInterval(timer)
-  }, [])
+  }, [quickMatch])
 
-  const getRegattas = () => {
-    switch (activeTab) {
-      case "my":
-        return mockRegattas.slice(0, 15) // Mock "my regattas"
-      case "top":
-        return mockRegattas.slice(0, 20) // Mock "top regattas"
-      default:
-        return mockRegattas
+  const fetchRegattas = async () => {
+    setLoading(true)
+    try {
+      let query = supabase
+        .from('regattas')
+        .select(`
+          *,
+          regatta_registrations (count)
+        `)
+        .order('start_date', { ascending: true })
+
+      if (activeTab === 'my' && user) {
+        query = query.eq('organizer_id', user.id)
+      }
+
+      const { data, error } = await query
+
+      if (error) throw error
+
+      setRegattas(data || [])
+    } catch (error) {
+      console.error('Error fetching regattas:', error)
+      toast.error('Failed to load regattas')
+    } finally {
+      setLoading(false)
     }
   }
 
-  const currentRegattas = getRegattas()
+  const fetchQuickMatch = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('regattas')
+        .select('*')
+        .like('name', 'Quick Match%')
+        .eq('status', 'upcoming')
+        .gte('start_date', new Date().toISOString())
+        .order('start_date', { ascending: true })
+        .limit(1)
+        .single()
+
+      if (error && error.code !== 'PGRST116') throw error
+
+      setQuickMatch(data)
+    } catch (error) {
+      console.error('Error fetching quick match:', error)
+    }
+  }
+
+  const getDisplayRegattas = () => {
+    if (activeTab === 'top') {
+      return regattas.filter(r => r.prize_pool >= 2000)
+    }
+    return regattas
+  }
+
+  const currentRegattas = getDisplayRegattas()
   const totalPages = Math.ceil(currentRegattas.length / itemsPerPage)
   const paginatedRegattas = currentRegattas.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   )
+
+  const handleJoinRegatta = async (regattaId: string) => {
+    if (!user) {
+      toast.error('Please sign in to join regattas')
+      return
+    }
+
+    try {
+      const { error } = await supabase
+        .from('regatta_registrations')
+        .insert({
+          regatta_id: regattaId,
+          user_id: user.id,
+          registration_date: new Date().toISOString()
+        })
+
+      if (error) throw error
+
+      toast.success('Successfully joined regatta!')
+      fetchRegattas()
+    } catch (error) {
+      console.error('Error joining regatta:', error)
+      toast.error('Failed to join regatta')
+    }
+  }
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    })
+  }
 
   const handleTabChange = (value: string) => {
     setActiveTab(value)
@@ -177,36 +273,41 @@ export default function Play() {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-                <div className="space-y-2">
-                  <div className="text-sm text-muted-foreground">Starts In</div>
-                  <div className="text-lg font-bold">{countdown}</div>
-                </div>
-                <div className="space-y-2">
-                  <div className="text-sm text-muted-foreground">Location</div>
-                  <div className="text-lg font-bold">Monaco, MC</div>
-                </div>
-                <div className="space-y-2">
-                  <div className="text-sm text-muted-foreground">Course Type</div>
-                  <div className="text-lg font-bold">Windward/Leeward</div>
-                </div>
-                <div className="space-y-2">
-                  <div className="text-sm text-muted-foreground">Wind</div>
-                  <div className="flex items-center gap-1">
-                    <Wind className="h-4 w-4 text-primary" />
-                    <span className="text-lg font-bold">12 kts</span>
+              {quickMatch ? (
+                <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                  <div className="space-y-2">
+                    <div className="text-sm text-muted-foreground">Starts In</div>
+                    <div className="text-lg font-bold">{countdown}</div>
                   </div>
-                  <div className="text-xs text-muted-foreground">SW 240°</div>
-                </div>
-                <div className="space-y-2">
-                  <div className="text-sm text-muted-foreground">Conditions</div>
-                  <div className="flex items-center gap-1">
-                    <Waves className="h-4 w-4 text-primary" />
-                    <span className="text-lg font-bold">2-3 ft</span>
+                  <div className="space-y-2">
+                    <div className="text-sm text-muted-foreground">Location</div>
+                    <div className="text-lg font-bold">{quickMatch.location}</div>
                   </div>
-                  <div className="text-xs text-muted-foreground">Light chop</div>
+                  <div className="space-y-2">
+                    <div className="text-sm text-muted-foreground">Class</div>
+                    <div className="text-lg font-bold">{quickMatch.class?.toUpperCase()}</div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="text-sm text-muted-foreground">Wind</div>
+                    <div className="flex items-center gap-1">
+                      <Wind className="h-4 w-4 text-primary" />
+                      <span className="text-lg font-bold">{quickMatch.wind_speed || 12} kts</span>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="text-sm text-muted-foreground">Conditions</div>
+                    <div className="flex items-center gap-1">
+                      <Waves className="h-4 w-4 text-primary" />
+                      <span className="text-lg font-bold">{quickMatch.wave_height || 2}-{(quickMatch.wave_height || 2) + 1} ft</span>
+                    </div>
+                    <div className="text-xs text-muted-foreground">{quickMatch.weather_condition}</div>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div className="text-center py-8 text-muted-foreground">
+                  No quick match available. Next one will be created soon!
+                </div>
+              )}
             </CardContent>
           </Card>
 
@@ -221,6 +322,12 @@ export default function Play() {
                     <TabsTrigger value="top">Top Regattas</TabsTrigger>
                   </TabsList>
                 </Tabs>
+                <CreateRegattaDialog onSuccess={fetchRegattas}>
+                  <SimpleButton>
+                    <Plus className="h-4 w-4 mr-2" />
+                    Create Regatta
+                  </SimpleButton>
+                </CreateRegattaDialog>
               </div>
             </CardHeader>
             <CardContent>
@@ -239,40 +346,45 @@ export default function Play() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {paginatedRegattas.map((regatta) => (
-                      <TableRow key={regatta.id}>
-                        <TableCell className="font-medium text-left">{regatta.name}</TableCell>
-                        <TableCell>{regatta.class}</TableCell>
-                        <TableCell>{regatta.players}/{regatta.maxPlayers}</TableCell>
-                        <TableCell>
-                          <div className="flex items-center gap-1">
-                            {regatta.date}
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex items-center gap-1">
-                            {regatta.startTime}
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex items-center gap-1">
-                            {regatta.location}
-                          </div>
-                        </TableCell>
-                        <TableCell className="font-medium">{regatta.prizePool} pts</TableCell>
-                        <TableCell>
-                          {regatta.players >= regatta.maxPlayers ? (
-                            <SimpleButton size="sm" disabled variant="secondary">
-                              Closed
-                            </SimpleButton>
-                          ) : (
-                            <SimpleButton size="sm" onClick={() => navigate("/game")}>
-                              Join
-                            </SimpleButton>
-                          )}
+                    {loading ? (
+                      <TableRow>
+                        <TableCell colSpan={8} className="text-center py-8">
+                          Loading regattas...
                         </TableCell>
                       </TableRow>
-                    ))}
+                    ) : paginatedRegattas.length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
+                          No regattas found. Create one to get started!
+                        </TableCell>
+                      </TableRow>
+                    ) : (
+                      paginatedRegattas.map((regatta) => (
+                        <TableRow key={regatta.id}>
+                          <TableCell className="font-medium text-left">{regatta.name}</TableCell>
+                          <TableCell>{regatta.class?.toUpperCase()}</TableCell>
+                          <TableCell>{regatta.current_players}/{regatta.max_players}</TableCell>
+                          <TableCell>{formatDate(regatta.start_date)}</TableCell>
+                          <TableCell>{formatDate(regatta.start_date)}</TableCell>
+                          <TableCell>{regatta.location}</TableCell>
+                          <TableCell className="font-medium">{regatta.prize_pool} pts</TableCell>
+                          <TableCell>
+                            {regatta.current_players >= regatta.max_players ? (
+                              <SimpleButton size="sm" disabled variant="secondary">
+                                Full
+                              </SimpleButton>
+                            ) : (
+                              <SimpleButton 
+                                size="sm" 
+                                onClick={() => handleJoinRegatta(regatta.id)}
+                              >
+                                Join
+                              </SimpleButton>
+                            )}
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    )}
                   </TableBody>
                 </Table>
                 

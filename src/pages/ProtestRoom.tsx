@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { SimpleButton } from "@/components/ui/simple-button"
@@ -12,6 +12,8 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { MessageSquare, Clock, User, AlertTriangle, Plus } from "lucide-react"
+import { useAuth } from "@/hooks/useAuth"
+import { supabase } from "@/integrations/supabase/client"
 
 const mockProtests = [
   {
@@ -60,15 +62,42 @@ const myProtests = mockProtests.filter(p => p.reporter === "Sailor_Mike")
 const allProtests = mockProtests
 
 export default function ProtestRoom() {
+  const { user } = useAuth()
+  const [protests, setProtests] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    if (user) {
+      fetchProtests()
+    }
+  }, [user])
+
+  const fetchProtests = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('protests')
+        .select('*')
+        .order('created_at', { ascending: false })
+
+      if (error) throw error
+      setProtests(data || [])
+    } catch (error) {
+      console.error('Error fetching protests:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "Under Review": return "text-primary"
-      case "Resolved": return "text-secondary"
-      case "Pending": return "text-destructive"
+      case "submitted": return "text-primary"
+      case "resolved": return "text-secondary" 
+      case "pending": return "text-destructive"
       default: return "text-muted-foreground"
     }
   }
+
+  const myProtests = protests.filter(p => p.protester_id === user?.id)
 
   return (
     <div className="container py-8 space-y-8 pt-20">
@@ -161,32 +190,37 @@ export default function ProtestRoom() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {myProtests.map((protest) => (
-                  <TableRow key={protest.id}>
-                    <TableCell className="font-medium max-w-xs">
-                      <div className="truncate">{protest.title}</div>
-                    </TableCell>
-                    <TableCell>{protest.regatta}</TableCell>
-                    <TableCell>{protest.class}</TableCell>
-                    <TableCell>
-                      <span className={`font-medium ${getStatusColor(protest.status)}`}>
-                        {protest.status}
-                      </span>
-                    </TableCell>
-                    <TableCell>{protest.incident}</TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-1">
-                        <MessageSquare className="h-4 w-4" />
-                        {protest.responses}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <SimpleButton size="sm">
-                        Edit
-                      </SimpleButton>
+                {loading ? (
+                  <TableRow>
+                    <TableCell colSpan={7} className="text-center py-8">Loading protests...</TableCell>
+                  </TableRow>
+                ) : myProtests.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
+                      No protests filed yet.
                     </TableCell>
                   </TableRow>
-                ))}
+                ) : (
+                  myProtests.map((protest) => (
+                    <TableRow key={protest.id}>
+                      <TableCell className="font-medium max-w-xs">
+                        <div className="truncate">{protest.incident_description}</div>
+                      </TableCell>
+                      <TableCell>--</TableCell>
+                      <TableCell>--</TableCell>
+                      <TableCell>
+                        <span className={`font-medium ${getStatusColor(protest.status)}`}>
+                          {protest.status}
+                        </span>
+                      </TableCell>
+                      <TableCell>{protest.rule_citation}</TableCell>
+                      <TableCell>--</TableCell>
+                      <TableCell>
+                        <SimpleButton size="sm">Edit</SimpleButton>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
               </TableBody>
             </Table>
           </CardContent>

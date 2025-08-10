@@ -4,6 +4,10 @@
 
 This document defines the SVG asset schema and theme token system for the 2D multiplayer sailing game. All visual elements are rendered as SVG components synchronized to the Three.js camera system.
 
+## SVG Token Library
+
+Parametric SVG tokens describe boats, marks, vectors, and zone rings with runtime-adjustable colors and patterns. Factory helpers create these tokens and a `renderToken(token, worldToScreen)` utility converts them into positioned `<g>` groups within the overlay.
+
 ## SVG Component Architecture
 
 ### Boat SVG (`boat-svg.tsx`)

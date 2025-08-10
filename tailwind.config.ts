@@ -87,7 +87,7 @@ export default {
 				'card-sailing': 'var(--shadow-card)'
 			},
 			borderRadius: {
-				lg: '50px',
+				lg: '15px',
 				md: '50px',
 				sm: '50px'
 			},

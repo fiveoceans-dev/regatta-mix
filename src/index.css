@@ -2,67 +2,77 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Modern Minimal Design System
-Clean, simple, focused design with subtle shadows and clean lines.
+/* Yacht Club Brand System
+Elegant nautical palette with clean lines and subtle luxury.
 All colors MUST be HSL.
 */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 5%;
-    --card: 0 0% 99%;
-    --card-foreground: 0 0% 5%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 5%;
-    --primary: 220 100% 50%; /* Royal Blue */
+    --background: 210 40% 98%;
+    --foreground: 210 40% 15%;
+    --card: 210 40% 100%;
+    --card-foreground: 210 40% 15%;
+    --popover: 210 40% 100%;
+    --popover-foreground: 210 40% 15%;
+    --primary: 220 60% 25%; /* Deep Yacht Navy */
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 220 100% 60%;
-    --secondary: 45 95% 50%; /* Golden Yellow */
-    --secondary-foreground: 0 0% 10%;
-    --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 45%;
-    --accent: 45 95% 85%; /* Light Golden */
-    --accent-foreground: 0 0% 10%;
-    --destructive: 0 75% 60%;
+    --primary-glow: 220 60% 35%;
+    --secondary: 42 65% 50%; /* Nautical Gold */
+    --secondary-foreground: 220 20% 15%;
+    --muted: 210 20% 92%;
+    --muted-foreground: 210 20% 40%;
+    --accent: 352 75% 45%; /* Regatta Red */
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 75% 50%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 88%;
-    --input: 0 0% 96%;
-    --ring: 220 100% 50%;
+    --border: 210 30% 85%;
+    --input: 210 30% 95%;
+    --ring: 220 60% 25%;
+    --sailing-wind: 210 80% 90%;
+    --sailing-water: 220 70% 35%;
+    --sailing-warning: 42 65% 50%;
+    --sailing-danger: 0 65% 55%;
+    --sailing-success: 142 50% 40%;
     --radius: 0.25rem;
-    
+
     /* Clean shadows */
-    --shadow-sm: 0 1px 2px 0 hsl(220 25% 25% / 0.05);
-    --shadow-md: 0 4px 6px -1px hsl(220 25% 25% / 0.1), 0 2px 4px -1px hsl(220 25% 25% / 0.06);
-    --shadow-lg: 0 10px 15px -3px hsl(220 25% 25% / 0.1), 0 4px 6px -2px hsl(220 25% 25% / 0.05);
+    --shadow-sm: 0 1px 2px 0 hsl(210 25% 25% / 0.05);
+    --shadow-md: 0 4px 6px -1px hsl(210 25% 25% / 0.1), 0 2px 4px -1px hsl(210 25% 25% / 0.06);
+    --shadow-lg: 0 10px 15px -3px hsl(210 25% 25% / 0.1), 0 4px 6px -2px hsl(210 25% 25% / 0.05);
   }
 
   .dark {
-    --background: 0 0% 6%;
-    --foreground: 0 0% 95%;
-    --card: 0 0% 8%;
-    --card-foreground: 0 0% 95%;
-    --popover: 0 0% 8%;
-    --popover-foreground: 0 0% 95%;
-    --primary: 220 100% 60%; /* Royal Blue - lighter for dark mode */
+    --background: 220 40% 10%;
+    --foreground: 210 20% 92%;
+    --card: 220 40% 14%;
+    --card-foreground: 210 20% 92%;
+    --popover: 220 40% 14%;
+    --popover-foreground: 210 20% 92%;
+    --primary: 220 60% 40%; /* Bright Yacht Navy */
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 220 100% 70%;
-    --secondary: 45 95% 55%; /* Golden Yellow - slightly lighter */
-    --secondary-foreground: 0 0% 10%;
-    --muted: 0 0% 12%;
-    --muted-foreground: 0 0% 65%;
-    --accent: 45 95% 25%; /* Dark Golden */
-    --accent-foreground: 0 0% 90%;
-    --destructive: 0 75% 60%;
+    --primary-glow: 220 60% 50%;
+    --secondary: 42 70% 55%; /* Polished Gold */
+    --secondary-foreground: 220 20% 10%;
+    --muted: 220 15% 25%;
+    --muted-foreground: 210 15% 70%;
+    --accent: 352 70% 55%; /* Regatta Red */
+    --accent-foreground: 220 20% 10%;
+    --destructive: 0 65% 55%;
     --destructive-foreground: 0 0% 100%;
-    --border: 0 0% 20%;
-    --input: 0 0% 15%;
-    --ring: 220 100% 60%;
-    
+    --border: 220 25% 25%;
+    --input: 220 25% 15%;
+    --ring: 220 60% 40%;
+    --sailing-wind: 210 70% 80%;
+    --sailing-water: 220 60% 30%;
+    --sailing-warning: 42 70% 60%;
+    --sailing-danger: 0 70% 60%;
+    --sailing-success: 142 50% 45%;
+
     /* Clean shadows - dark mode */
-    --shadow-sm: 0 1px 2px 0 hsl(220 25% 0% / 0.1);
-    --shadow-md: 0 4px 6px -1px hsl(220 25% 0% / 0.2), 0 2px 4px -1px hsl(220 25% 0% / 0.1);
-    --shadow-lg: 0 10px 15px -3px hsl(220 25% 0% / 0.2), 0 4px 6px -2px hsl(220 25% 0% / 0.1);
+    --shadow-sm: 0 1px 2px 0 hsl(210 25% 0% / 0.1);
+    --shadow-md: 0 4px 6px -1px hsl(210 25% 0% / 0.2), 0 2px 4px -1px hsl(210 25% 0% / 0.1);
+    --shadow-lg: 0 10px 15px -3px hsl(210 25% 0% / 0.2), 0 4px 6px -2px hsl(210 25% 0% / 0.1);
   }
 }
 

@@ -117,7 +117,18 @@ export default function ProtestRoom() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">My Protests</CardTitle>
+            <User className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{myProtests.length}</div>
+            <p className="text-xs text-muted-foreground">Filed by me</p>
+          </CardContent>
+        </Card>
+        
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Active Protests</CardTitle>
@@ -126,22 +137,6 @@ export default function ProtestRoom() {
           <CardContent>
             <div className="text-2xl font-bold">{protests.filter(p => p.status === 'submitted').length}</div>
             <p className="text-xs text-muted-foreground">Currently under review</p>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">This Month</CardTitle>
-            <MessageSquare className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{protests.filter(p => {
-              const createdDate = new Date(p.created_at)
-              const currentDate = new Date()
-              return createdDate.getMonth() === currentDate.getMonth() && 
-                     createdDate.getFullYear() === currentDate.getFullYear()
-            }).length}</div>
-            <p className="text-xs text-muted-foreground">New protests filed</p>
           </CardContent>
         </Card>
         
@@ -160,23 +155,12 @@ export default function ProtestRoom() {
         
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">My Protests</CardTitle>
+            <CardTitle className="text-sm font-medium">Karma</CardTitle>
             <User className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{myProtests.length}</div>
-            <p className="text-xs text-muted-foreground">Filed by me</p>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Protests</CardTitle>
-            <User className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{protests.length}</div>
-            <p className="text-xs text-muted-foreground">All protests</p>
+            <div className="text-2xl font-bold">100</div>
+            <p className="text-xs text-muted-foreground">Community reputation</p>
           </CardContent>
         </Card>
       </div>

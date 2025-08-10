@@ -150,16 +150,6 @@ export default function Marketplace() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Boats</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{boats.length}</div>
-            <p className="text-xs text-muted-foreground">Available for purchase</p>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium">Crew</CardTitle>
           </CardHeader>
           <CardContent>
@@ -170,21 +160,31 @@ export default function Marketplace() {
         
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Your Credits</CardTitle>
+            <CardTitle className="text-sm font-medium">Boats</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{profile?.credits || 0}</div>
-            <p className="text-xs text-muted-foreground">Available for purchases</p>
+            <div className="text-2xl font-bold">{boats.length}</div>
+            <p className="text-xs text-muted-foreground">Available for purchase</p>
           </CardContent>
         </Card>
         
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Parts</CardTitle>
+            <CardTitle className="text-sm font-medium">Inventory</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{parts.length}</div>
             <p className="text-xs text-muted-foreground">Available parts</p>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium">Your Credits</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{profile?.credits || 0}</div>
+            <p className="text-xs text-muted-foreground">Available for purchases</p>
           </CardContent>
         </Card>
       </div>
@@ -295,10 +295,10 @@ export default function Marketplace() {
             </CardContent>
           </Card>
 
-          {/* Parts Section */}
+          {/* Inventory Section */}
           <Card>
             <CardHeader>
-              <CardTitle>My Parts</CardTitle>
+              <CardTitle>My Inventory</CardTitle>
             </CardHeader>
             <CardContent>
               <Table>
@@ -520,10 +520,10 @@ export default function Marketplace() {
             </CardContent>
           </Card>
 
-          {/* Parts Section */}
+          {/* Inventory Section */}
           <Card>
             <CardHeader>
-              <CardTitle>Parts for Sale</CardTitle>
+              <CardTitle>Inventory for Sale</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <Table>

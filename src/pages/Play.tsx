@@ -291,7 +291,7 @@ export default function Play() {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <CardTitle className="flex items-center gap-2 text-primary">
+                  <CardTitle className="flex items-center gap-2 text-foreground">
                     Quick Match
                   </CardTitle>
                   <SimpleButton size="lg" onClick={() => navigate("/game")}>
@@ -352,6 +352,7 @@ export default function Play() {
                 </Tabs>
                 <CreateRegattaDialog onSuccess={fetchRegattas}>
                   <SimpleButton>
+                    <Plus className="h-4 w-4 mr-2" />
                     Create
                   </SimpleButton>
                 </CreateRegattaDialog>

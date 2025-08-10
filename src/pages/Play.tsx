@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { SimpleButton } from "@/components/ui/simple-button"
 import { Badge } from "@/components/ui/badge"
@@ -105,6 +106,7 @@ const generateRegattas = () => {
 const mockRegattas = generateRegattas()
 
 export default function Play() {
+  const navigate = useNavigate()
   const [countdown, setCountdown] = useState("2:30:45")
   const [currentPage, setCurrentPage] = useState(1)
   const [activeTab, setActiveTab] = useState("all")
@@ -168,7 +170,7 @@ export default function Play() {
                   <CardTitle className="flex items-center gap-2 text-primary">
                     Quick Match
                   </CardTitle>
-                  <SimpleButton size="lg">
+                  <SimpleButton size="lg" onClick={() => navigate("/game")}>
                     Join
                   </SimpleButton>
                 </div>
@@ -264,7 +266,7 @@ export default function Play() {
                               Closed
                             </SimpleButton>
                           ) : (
-                            <SimpleButton size="sm">
+                            <SimpleButton size="sm" onClick={() => navigate("/game")}>
                               Join
                             </SimpleButton>
                           )}

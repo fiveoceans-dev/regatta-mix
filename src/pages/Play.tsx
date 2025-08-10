@@ -350,12 +350,22 @@ export default function Play() {
                     <TabsTrigger value="top">Top Regattas</TabsTrigger>
                   </TabsList>
                 </Tabs>
-                <CreateRegattaDialog onSuccess={fetchRegattas}>
-                  <SimpleButton>
+                {user ? (
+                  <CreateRegattaDialog onSuccess={fetchRegattas}>
+                    <SimpleButton>
+                      <Plus className="h-4 w-4 mr-2" />
+                      Create
+                    </SimpleButton>
+                  </CreateRegattaDialog>
+                ) : (
+                  <SimpleButton 
+                    onClick={() => toast.error('Please sign in to create regattas')}
+                    variant="outline"
+                  >
                     <Plus className="h-4 w-4 mr-2" />
                     Create
                   </SimpleButton>
-                </CreateRegattaDialog>
+                )}
               </div>
             </CardHeader>
             <CardContent>

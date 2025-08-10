@@ -1,6 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { SimpleButton } from "@/components/ui/simple-button"
 import { Badge } from "@/components/ui/badge"
+import { ManageBoatDialog } from "@/components/ui/manage-boat-dialog"
+import { ManageCrewDialog } from "@/components/ui/manage-crew-dialog"
+import { ManagePartsDialog } from "@/components/ui/manage-parts-dialog"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
   Table,
@@ -379,9 +382,7 @@ export default function Marketplace() {
                         </span>
                       </TableCell>
                       <TableCell>
-                        <SimpleButton size="sm">
-                          Manage
-                        </SimpleButton>
+                        <ManageCrewDialog crewData={member} />
                       </TableCell>
                     </TableRow>
                   ))}
@@ -424,9 +425,7 @@ export default function Marketplace() {
                         </span>
                       </TableCell>
                       <TableCell>
-                        <SimpleButton size="sm">
-                          Manage
-                        </SimpleButton>
+                        <ManageBoatDialog boatData={boat} />
                       </TableCell>
                     </TableRow>
                   ))}
@@ -469,9 +468,7 @@ export default function Marketplace() {
                         </span>
                       </TableCell>
                       <TableCell>
-                        <SimpleButton size="sm">
-                          Manage
-                        </SimpleButton>
+                        <ManagePartsDialog partData={part} />
                       </TableCell>
                     </TableRow>
                   ))}

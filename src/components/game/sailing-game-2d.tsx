@@ -15,22 +15,22 @@ export function worldToScreen(worldPos: THREE.Vector3, camera: THREE.Camera, siz
   }
 }
 
-function GameCamera({ onCameraUpdate }: { onCameraUpdate: (camera: THREE.Camera, size: { width: number, height: number }) => void }) {
+function GameCamera({ zoom, onCameraUpdate }: { zoom: number; onCameraUpdate: (camera: THREE.Camera, size: { width: number, height: number }) => void }) {
   const { camera, size } = useThree()
-  
+
   useEffect(() => {
     if (camera) {
       // Set up orthographic camera for top-down view
       const orthoCamera = camera as THREE.OrthographicCamera
       orthoCamera.position.set(0, 50, 0)
       orthoCamera.lookAt(0, 0, 0)
-      orthoCamera.zoom = 1
+      orthoCamera.zoom = zoom
       orthoCamera.updateProjectionMatrix()
-      
+
       // Pass camera data to parent
       onCameraUpdate(camera, size)
     }
-  }, [camera, size, onCameraUpdate])
+  }, [camera, size, onCameraUpdate, zoom])
 
   return null
 }
@@ -65,12 +65,9 @@ function GameWorld({ gameState }: { gameState: GameState }) {
   )
 }
 
-export function SailingGame2D({ gameState }: { gameState: GameState }) {
+export function SailingGame2D({ gameState, zoom }: { gameState: GameState; zoom: number }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const [cameraProps] = useState({
-    position: [0, 50, 0] as [number, number, number],
-    zoom: 1
-  })
+  const cameraPosition: [number, number, number] = [0, 50, 0]
   const [cameraData, setCameraData] = useState<{ camera: THREE.Camera, size: { width: number, height: number } } | null>(null)
 
   const handleCameraUpdate = useCallback((camera: THREE.Camera, size: { width: number, height: number }) => {
@@ -86,8 +83,8 @@ export function SailingGame2D({ gameState }: { gameState: GameState }) {
       <Canvas
         ref={canvasRef}
         camera={{
-          position: cameraProps.position,
-          zoom: cameraProps.zoom,
+          position: cameraPosition,
+          zoom,
           near: 0.1,
           far: 1000
         }}
@@ -95,7 +92,7 @@ export function SailingGame2D({ gameState }: { gameState: GameState }) {
         className="absolute inset-0"
         style={{ background: 'transparent' }}
       >
-        <GameCamera onCameraUpdate={handleCameraUpdate} />
+        <GameCamera zoom={zoom} onCameraUpdate={handleCameraUpdate} />
         <GameWorld gameState={gameState} />
       </Canvas>
 

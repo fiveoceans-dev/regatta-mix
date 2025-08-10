@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, WheelEvent } from "react"
 import { Wifi, WifiOff } from "lucide-react"
 import { SailingGame2D } from "@/components/game/sailing-game-2d"
 import { GameStateProvider, useGameState } from "@/hooks/use-game-state"
@@ -24,14 +24,29 @@ function GamePlayContent() {
   const { gameState, dispatch } = useGameState()
   const { connectionState } = useWebSocket('ws://localhost:8080')
   const [showDebug, setShowDebug] = useState(false)
+  const [zoom, setZoom] = useState(1)
+
+  const ZOOM_STEP = 0.5
+  const MIN_ZOOM = 0.5
+  const MAX_ZOOM = 2
+  const ZOOM_LEVELS = { S: 0.5, M: 1, L: 2 } as const
+
+  const adjustZoom = (delta: number) => {
+    setZoom(z => Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, z + delta)))
+  }
+
+  const handleWheel = (event: WheelEvent) => {
+    event.preventDefault()
+    adjustZoom(event.deltaY < 0 ? ZOOM_STEP : -ZOOM_STEP)
+  }
 
   const playerBoat = gameState.boats.find(boat => boat.id === gameState.playerId)
 
   return (
     <div className="h-screen w-screen overflow-hidden relative flex flex-col">
       {/* Full Screen 2D Sailing Game */}
-      <div className="absolute inset-0">
-        <SailingGame2D gameState={gameState} />
+      <div className="absolute inset-0" onWheel={handleWheel}>
+        <SailingGame2D gameState={gameState} zoom={zoom} />
       </div>
 
       {/* Game UI Overlays */}
@@ -180,7 +195,41 @@ function GamePlayContent() {
 
           {/* Right View Panel - Hidden on small screens */}
           <div className="w-0 sm:w-32 transition-all">
-            <div className="hidden sm:block">
+            <div className="hidden sm:block space-y-2">
+              <Card className="bg-transparent backdrop-blur-sm border border-border/30 rounded-none shadow-sm">
+                <CardContent className="p-3">
+                  <h3 className="text-sm font-semibold text-primary mb-2 uppercase tracking-wide">
+                    Zoom
+                  </h3>
+                  <div className="flex flex-col gap-1">
+                    <div className="flex gap-1 mb-1">
+                      <GameButton onClick={() => adjustZoom(ZOOM_STEP)}>+</GameButton>
+                      <GameButton onClick={() => adjustZoom(-ZOOM_STEP)}>-</GameButton>
+                    </div>
+                    <div className="flex gap-1">
+                      <GameButton
+                        variant={zoom === ZOOM_LEVELS.S ? "default" : "secondary"}
+                        onClick={() => setZoom(ZOOM_LEVELS.S)}
+                      >
+                        S
+                      </GameButton>
+                      <GameButton
+                        variant={zoom === ZOOM_LEVELS.M ? "default" : "secondary"}
+                        onClick={() => setZoom(ZOOM_LEVELS.M)}
+                      >
+                        M
+                      </GameButton>
+                      <GameButton
+                        variant={zoom === ZOOM_LEVELS.L ? "default" : "secondary"}
+                        onClick={() => setZoom(ZOOM_LEVELS.L)}
+                      >
+                        L
+                      </GameButton>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
               <Card className="bg-transparent backdrop-blur-sm border border-border/30 rounded-none shadow-sm">
                 <CardContent className="p-3">
                   <h3 className="text-sm font-semibold text-primary mb-2 uppercase tracking-wide">

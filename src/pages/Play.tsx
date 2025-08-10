@@ -359,7 +359,7 @@ export default function Play() {
                   </CreateRegattaDialog>
                 ) : (
                   <SimpleButton 
-                    onClick={() => toast.error('Please sign in to create regattas')}
+                    onClick={() => navigate('/auth')}
                     variant="outline"
                   >
                     <Plus className="h-4 w-4 mr-2" />

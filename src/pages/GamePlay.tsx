@@ -122,10 +122,6 @@ function GamePlayContent() {
                   <h3 className="text-sm font-semibold text-primary mb-2 uppercase tracking-wide">
                     Commands
                   </h3>
-                  <div className="flex flex-col gap-1 mb-2">
-                    <GameButton>Ready</GameButton>
-                    <GameButton>Abort</GameButton>
-                  </div>
                   <div className="flex flex-col gap-1">
                     {['Protest', 'Redress', 'Retire'].map((action) => (
                       <GameButton key={action}>{action}</GameButton>
@@ -188,6 +184,20 @@ function GamePlayContent() {
                       ))}
                     </div>
                   </div>
+
+                  {/* Vertical Separator - Hidden on small screens */}
+                  <div className="hidden sm:block w-px bg-border"></div>
+
+                  {/* RIght Column - Hoisting Sails - Hidden on small screens */}
+                  <div className="hidden sm:flex flex-col gap-1 min-w-0">
+                    <div className="text-xs text-primary text-center mb-1 font-semibold">
+                      Commands
+                    </div>
+                    {['Port', 'Stabord', 'Spinnaker'].map((sail) => (
+                      <GameButton key={sail}>{sail}</GameButton>
+                    ))}
+                  </div>
+
                 </div>
               </CardContent>
             </Card>

@@ -88,7 +88,8 @@ const mockCrew = [
       navigation: 92,
       leadership: 98
     },
-    availability: "Available"
+    availability: "Available",
+    seller: "Single Hand Racing"
   },
   {
     id: 2,
@@ -103,7 +104,8 @@ const mockCrew = [
       windReading: 88,
       communication: 85
     },
-    availability: "Available"
+    availability: "Available",
+    seller: "Single Hand Racing"
   },
   {
     id: 3,
@@ -118,7 +120,8 @@ const mockCrew = [
       boatSpeed: 88,
       teamwork: 90
     },
-    availability: "Busy"
+    availability: "Busy",
+    seller: "Single Hand Racing"
   },
   {
     id: 4,
@@ -133,7 +136,8 @@ const mockCrew = [
       deckWork: 92,
       safety: 90
     },
-    availability: "Available"
+    availability: "Available",
+    seller: "Single Hand Racing",
   }
 ]
 
@@ -480,6 +484,64 @@ export default function Marketplace() {
 
         {/* Marketplace Tab */}
         <TabsContent value="marketplace" className="space-y-6">
+
+          {/* Crew Section */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Crew</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Name</TableHead>
+                    <TableHead>Role</TableHead>
+                    <TableHead>Salary</TableHead>
+                    <TableHead>Rating</TableHead>
+                    <TableHead>Experience</TableHead>
+                    <TableHead>Specialty</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Seller</TableHead>
+                    <TableHead>Action</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {paginateData(mockCrew, currentPage.crew).map((member) => (
+                    <TableRow key={member.id}>
+                      <TableCell className="font-medium">{member.name}</TableCell>
+                      <TableCell>{member.role}</TableCell>
+                      <TableCell className="font-medium">
+                        {member.price.toLocaleString()}
+                      </TableCell>
+                      <TableCell>
+                        {member.rating}
+                      </TableCell>
+                      <TableCell>{member.experience}</TableCell>
+                      <TableCell>{member.specialty}</TableCell>
+                      <TableCell>
+                        <span className={`font-medium ${getAvailabilityColor(member.availability)}`}>
+                          {member.availability}
+                        </span>
+                      </TableCell>
+                      <TableCell>{member.seller}</TableCell>
+                      <TableCell>
+                        {member.availability === "Available" ? (
+                          <SimpleButton size="sm">
+                            Hire
+                          </SimpleButton>
+                        ) : (
+                          <SimpleButton size="sm" disabled className="bg-secondary">
+                            Unavailable
+                          </SimpleButton>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+
           {/* Boats Section */}
           <Card>
             <CardHeader>
@@ -523,61 +585,6 @@ export default function Marketplace() {
                         <SimpleButton size="sm">
                           Buy
                         </SimpleButton>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-
-          {/* Crew Section */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Crew</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Role</TableHead>
-                    <TableHead>Price</TableHead>
-                    <TableHead>Rating</TableHead>
-                    <TableHead>Experience</TableHead>
-                    <TableHead>Specialty</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Action</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {paginateData(mockCrew, currentPage.crew).map((member) => (
-                    <TableRow key={member.id}>
-                      <TableCell className="font-medium">{member.name}</TableCell>
-                      <TableCell>{member.role}</TableCell>
-                      <TableCell className="font-medium">
-                        {member.price.toLocaleString()}
-                      </TableCell>
-                      <TableCell>
-                        {member.rating}
-                      </TableCell>
-                      <TableCell>{member.experience}</TableCell>
-                      <TableCell>{member.specialty}</TableCell>
-                      <TableCell>
-                        <span className={`font-medium ${getAvailabilityColor(member.availability)}`}>
-                          {member.availability}
-                        </span>
-                      </TableCell>
-                      <TableCell>
-                        {member.availability === "Available" ? (
-                          <SimpleButton size="sm">
-                            Hire
-                          </SimpleButton>
-                        ) : (
-                          <SimpleButton size="sm" disabled className="bg-secondary">
-                            Unavailable
-                          </SimpleButton>
-                        )}
                       </TableCell>
                     </TableRow>
                   ))}

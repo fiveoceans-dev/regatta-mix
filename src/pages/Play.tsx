@@ -229,9 +229,9 @@ export default function Play() {
                       <TableHead>Regatta</TableHead>
                       <TableHead>Class</TableHead>
                       <TableHead>Players</TableHead>
-                      <TableHead><Calendar className="h-4 w-4" />Date</TableHead>
-                      <TableHead><Clock className="h-4 w-4" />Starts In</TableHead>
-                      <TableHead><MapPin className="h-4 w-4" />Location</TableHead>
+                      <TableHead><Calendar className="h-4 w-4" /></TableHead>
+                      <TableHead><Clock className="h-4 w-4" /></TableHead>
+                      <TableHead><MapPin className="h-4 w-4" /></TableHead>
                       <TableHead>Prize Pool</TableHead>
                       <TableHead>Register</TableHead>
                     </TableRow>

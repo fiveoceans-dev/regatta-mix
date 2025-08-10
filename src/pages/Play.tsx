@@ -325,7 +325,7 @@ export default function Play() {
                 <CreateRegattaDialog onSuccess={fetchRegattas}>
                   <SimpleButton>
                     <Plus className="h-4 w-4 mr-2" />
-                    Create Regatta
+                    Create
                   </SimpleButton>
                 </CreateRegattaDialog>
               </div>

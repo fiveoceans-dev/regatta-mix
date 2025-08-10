@@ -2,7 +2,7 @@ import { useState } from "react"
 import { Link, useLocation } from "react-router-dom"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { Anchor, Sun, Moon, LogOut, LogIn } from "lucide-react"
+import { Sun, Moon, LogOut, LogIn } from "lucide-react"
 import { useTheme } from "@/components/ui/theme-provider"
 import { useAuth } from "@/hooks/useAuth"
 import { toast } from "sonner"
@@ -31,7 +31,7 @@ export function Navbar() {
       <div className="container flex h-14 items-center justify-between px-4">
         {/* Left side - Logo and Title */}
         <div className="flex items-center gap-2">
-          <Anchor className="h-6 w-6 text-primary" />
+          <img src="/logo.svg" alt="Cyber Sailing" className="h-8 w-8" />
           <Link to="/" className="font-serif-renaissance text-xl font-semibold text-primary">
             Cyber Sailing
           </Link>

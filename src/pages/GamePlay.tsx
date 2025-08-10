@@ -166,18 +166,12 @@ function GamePlayContent() {
                       <GameButton className="hidden sm:block">Port</GameButton>
                     </div>
                     {/* Second row */}
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-1 mb-1">
-                      <GameButton className="hidden sm:block">Starboard</GameButton>
-                      <GameButton>Tack to Port</GameButton>
-                      <GameButton>Tack to Starboard</GameButton>
-                    </div>
-                    {/* Third row */}
                     <div className="grid grid-cols-2 gap-1 mb-1">
-                      {['Bear Away', 'Head Up'].map((action) => (
+                      {['BearAway', 'HeadUp'].map((action) => (
                         <GameButton key={action}>{action}</GameButton>
                       ))}
                     </div>
-                    {/* Fourth row */}
+                    {/* Third row */}
                     <div className="grid grid-cols-2 gap-1">
                       {['Trim', 'Ease'].map((action) => (
                         <GameButton key={action}>{action}</GameButton>
@@ -193,7 +187,7 @@ function GamePlayContent() {
                     <div className="text-xs text-primary text-center mb-1 font-semibold">
                       Commands
                     </div>
-                    {['Port', 'Stabord', 'Spinnaker'].map((sail) => (
+                    {['Port', 'Stabord', 'You Tack'].map((sail) => (
                       <GameButton key={sail}>{sail}</GameButton>
                     ))}
                   </div>

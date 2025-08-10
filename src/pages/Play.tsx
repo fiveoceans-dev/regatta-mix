@@ -294,15 +294,9 @@ export default function Play() {
                   <CardTitle className="flex items-center gap-2 text-primary">
                     Quick Match
                   </CardTitle>
-                  {user ? (
-                    <SimpleButton size="lg" onClick={() => navigate("/game")}>
-                      Join
-                    </SimpleButton>
-                  ) : (
-                    <SimpleButton size="lg" variant="outline" onClick={() => navigate("/auth")}>
-                      Login to Join
-                    </SimpleButton>
-                  )}
+                  <SimpleButton size="lg" onClick={() => navigate("/game")}>
+                    Join
+                  </SimpleButton>
                 </div>
               </div>
             </CardHeader>
@@ -356,19 +350,11 @@ export default function Play() {
                     <TabsTrigger value="top">Top Regattas</TabsTrigger>
                   </TabsList>
                 </Tabs>
-                {user ? (
-                  <CreateRegattaDialog onSuccess={fetchRegattas}>
-                    <SimpleButton>
-                      <Plus className="h-4 w-4 mr-2" />
-                      Create
-                    </SimpleButton>
-                  </CreateRegattaDialog>
-                ) : (
-                  <SimpleButton variant="outline" onClick={() => navigate("/auth")}>
-                    <Plus className="h-4 w-4 mr-2" />
-                    Login to Create
+                <CreateRegattaDialog onSuccess={fetchRegattas}>
+                  <SimpleButton>
+                    Create
                   </SimpleButton>
-                )}
+                </CreateRegattaDialog>
               </div>
             </CardHeader>
             <CardContent>
@@ -423,20 +409,12 @@ export default function Play() {
                               <SimpleButton size="sm" disabled variant="secondary">
                                 Full
                               </SimpleButton>
-                            ) : user ? (
+                            ) : (
                               <SimpleButton 
                                 size="sm" 
                                 onClick={() => handleJoinRegatta(regatta)}
                               >
                                 Join
-                              </SimpleButton>
-                            ) : (
-                              <SimpleButton 
-                                size="sm" 
-                                variant="outline"
-                                onClick={() => navigate("/auth")}
-                              >
-                                Login to Join
                               </SimpleButton>
                             )}
                           </TableCell>

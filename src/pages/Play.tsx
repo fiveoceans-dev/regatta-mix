@@ -241,7 +241,7 @@ export default function Play() {
                   <TableBody>
                     {paginatedRegattas.map((regatta) => (
                       <TableRow key={regatta.id}>
-                        <TableCell className="font-medium">{regatta.name}</TableCell>
+                        <TableCell className="font-medium text-left">{regatta.name}</TableCell>
                         <TableCell>{regatta.class}</TableCell>
                         <TableCell>{regatta.players}/{regatta.maxPlayers}</TableCell>
                         <TableCell>

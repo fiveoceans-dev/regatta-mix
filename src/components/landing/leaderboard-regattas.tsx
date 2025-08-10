@@ -54,7 +54,7 @@ export function LeaderboardRegattas() {
                       className="border-border/30 hover:bg-muted/30 transition-colors"
                     >
                       <TableCell className="font-medium">
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center justify-center gap-2">
                           <span className={`
                             ${player.rank === 1 ? "text-yellow-400" : ""}
                             ${player.rank === 2 ? "text-gray-300" : ""}
@@ -66,7 +66,7 @@ export function LeaderboardRegattas() {
                           {player.trend === "down" && <span className="text-sailing-danger text-xs">↘</span>}
                         </div>
                       </TableCell>
-                      <TableCell className="font-semibold">{player.nickname}</TableCell>
+                      <TableCell className="font-semibold text-left">{player.nickname}</TableCell>
                       <TableCell className="text-primary font-medium">{player.points.toLocaleString()}</TableCell>
                       <TableCell className="text-muted-foreground text-sm">
                         <div className="flex items-center gap-1">
@@ -105,7 +105,7 @@ export function LeaderboardRegattas() {
                       key={index}
                       className="border-border/30 hover:bg-muted/30 transition-colors"
                     >
-                      <TableCell>
+                      <TableCell className="text-left">
                         <div className="font-semibold">{regatta.name}</div>
                       </TableCell>
                       <TableCell>

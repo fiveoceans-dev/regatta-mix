@@ -37,6 +37,29 @@ All colors MUST be HSL.
     --sailing-success: 142 50% 40%;
     --radius: 0.25rem;
 
+    /* Game Card-Specific Text Colors */
+    /* Instruments Panel - Neon Colors */
+    --instruments-text-primary: 177 100% 50%; /* Neon Cyan */
+    --instruments-text-secondary: 84 100% 60%; /* Neon Green */
+    --instruments-text-accent: 280 100% 70%; /* Neon Purple */
+    --instruments-text-label: 60 100% 60%; /* Neon Yellow */
+    
+    /* Chat Panel - High Contrast */
+    --chat-text-primary: 0 0% 0%; /* Black text */
+    --chat-text-secondary: 0 0% 20%; /* Dark gray */
+    --chat-text-sender: 220 60% 25%; /* Navy for senders */
+    --chat-text-system: 142 50% 40%; /* Green for system */
+    
+    /* Standing Panel - High Contrast */
+    --standing-text-primary: 0 0% 0%; /* Black text */
+    --standing-text-secondary: 0 0% 30%; /* Dark gray */
+    --standing-text-user: 42 95% 45%; /* Gold for user */
+    --standing-text-position: 220 60% 25%; /* Navy for positions */
+    
+    /* Signals Panel */
+    --signals-text-primary: 0 0% 0%; /* Black text */
+    --signals-text-secondary: 0 0% 30%; /* Dark gray */
+
     /* Clean shadows */
     --shadow-sm: 0 1px 2px 0 hsl(210 25% 25% / 0.05);
     --shadow-md: 0 4px 6px -1px hsl(210 25% 25% / 0.1), 0 2px 4px -1px hsl(210 25% 25% / 0.06);
@@ -69,6 +92,29 @@ All colors MUST be HSL.
     --sailing-warning: 42 70% 60%;
     --sailing-danger: 0 70% 60%;
     --sailing-success: 142 50% 45%;
+
+    /* Game Card-Specific Text Colors - Dark Mode */
+    /* Instruments Panel - Brighter Neon Colors */
+    --instruments-text-primary: 177 100% 70%; /* Brighter Neon Cyan */
+    --instruments-text-secondary: 84 100% 70%; /* Brighter Neon Green */
+    --instruments-text-accent: 280 100% 80%; /* Brighter Neon Purple */
+    --instruments-text-label: 60 100% 70%; /* Brighter Neon Yellow */
+    
+    /* Chat Panel - High Contrast White */
+    --chat-text-primary: 0 0% 100%; /* White text */
+    --chat-text-secondary: 0 0% 80%; /* Light gray */
+    --chat-text-sender: 220 60% 70%; /* Light navy for senders */
+    --chat-text-system: 142 50% 60%; /* Light green for system */
+    
+    /* Standing Panel - High Contrast White */
+    --standing-text-primary: 0 0% 100%; /* White text */
+    --standing-text-secondary: 0 0% 70%; /* Light gray */
+    --standing-text-user: 42 95% 65%; /* Brighter gold for user */
+    --standing-text-position: 220 60% 70%; /* Light navy for positions */
+    
+    /* Signals Panel */
+    --signals-text-primary: 0 0% 100%; /* White text */
+    --signals-text-secondary: 0 0% 70%; /* Light gray */
 
     /* Clean shadows - dark mode */
     --shadow-sm: 0 1px 2px 0 hsl(210 25% 0% / 0.1);
@@ -103,6 +149,84 @@ All colors MUST be HSL.
 
   .game-text-contrast {
     color: hsl(var(--foreground));
+    font-weight: 500;
+  }
+
+  /* Instruments Panel Neon Styles */
+  .instruments-text-primary {
+    color: hsl(var(--instruments-text-primary));
+    font-weight: 700;
+    text-shadow: 0 0 10px hsl(var(--instruments-text-primary) / 0.6);
+  }
+
+  .instruments-text-secondary {
+    color: hsl(var(--instruments-text-secondary));
+    font-weight: 600;
+    text-shadow: 0 0 8px hsl(var(--instruments-text-secondary) / 0.5);
+  }
+
+  .instruments-text-label {
+    color: hsl(var(--instruments-text-label));
+    font-weight: 500;
+    text-shadow: 0 0 6px hsl(var(--instruments-text-label) / 0.4);
+  }
+
+  .instruments-text-accent {
+    color: hsl(var(--instruments-text-accent));
+    font-weight: 600;
+    text-shadow: 0 0 8px hsl(var(--instruments-text-accent) / 0.5);
+  }
+
+  /* Chat Panel High Contrast Styles */
+  .chat-text-primary {
+    color: hsl(var(--chat-text-primary));
+    font-weight: 600;
+  }
+
+  .chat-text-secondary {
+    color: hsl(var(--chat-text-secondary));
+    font-weight: 500;
+  }
+
+  .chat-text-sender {
+    color: hsl(var(--chat-text-sender));
+    font-weight: 700;
+  }
+
+  .chat-text-system {
+    color: hsl(var(--chat-text-system));
+    font-weight: 600;
+  }
+
+  /* Standing Panel High Contrast Styles */
+  .standing-text-primary {
+    color: hsl(var(--standing-text-primary));
+    font-weight: 600;
+  }
+
+  .standing-text-secondary {
+    color: hsl(var(--standing-text-secondary));
+    font-weight: 500;
+  }
+
+  .standing-text-user {
+    color: hsl(var(--standing-text-user));
+    font-weight: 700;
+  }
+
+  .standing-text-position {
+    color: hsl(var(--standing-text-position));
+    font-weight: 600;
+  }
+
+  /* Signals Panel Styles */
+  .signals-text-primary {
+    color: hsl(var(--signals-text-primary));
+    font-weight: 600;
+  }
+
+  .signals-text-secondary {
+    color: hsl(var(--signals-text-secondary));
     font-weight: 500;
   }
 }

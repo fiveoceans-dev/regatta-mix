@@ -1,4 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 export function StandingPanel() {
   const standings = [
@@ -17,26 +18,35 @@ export function StandingPanel() {
   ]
 
   return (
-    <div className="space-y-1 text-xs max-h-40 overflow-y-auto">
-      {standings.map((sailor) => (
-        <div key={sailor.rank} className="flex items-center gap-2 py-1 border-b border-border/30 last:border-0">
-          <span className="text-primary font-bold w-4 text-center">{sailor.rank}</span>
-          {sailor.current && (
-            <Avatar className="h-4 w-4">
-              <AvatarImage src="/placeholder-avatar.jpg" />
-              <AvatarFallback className="text-[8px] bg-accent text-accent-foreground">WM</AvatarFallback>
-            </Avatar>
+    <div className="h-48">
+      <ScrollArea className="h-full">
+        <div className="space-y-1">
+          {standings.slice(0, 10).map((sailor) => (
+            <div key={sailor.rank} className="flex items-center gap-2 py-1 text-xs">
+              <span className="standing-text-position w-4 text-center">{sailor.rank}</span>
+              {sailor.current && (
+                <Avatar className="h-4 w-4">
+                  <AvatarImage src="/placeholder-avatar.jpg" />
+                  <AvatarFallback className="text-[8px] bg-standing-text-user text-background">WM</AvatarFallback>
+                </Avatar>
+              )}
+              <span className={`flex-1 truncate ${
+                sailor.current 
+                  ? 'standing-text-user' 
+                  : 'standing-text-primary'
+              }`}>
+                {sailor.current ? sailor.name : sailor.username}
+              </span>
+              <span className="standing-text-secondary">{sailor.distance}</span>
+            </div>
+          ))}
+          {standings.length > 10 && (
+            <div className="text-center standing-text-secondary text-xs py-1">
+              +{standings.length - 10} more sailors
+            </div>
           )}
-          <span className={`flex-1 text-xs truncate font-medium ${
-            sailor.current 
-              ? 'text-accent font-bold' 
-              : 'text-foreground'
-          }`}>
-            {sailor.current ? sailor.name : sailor.username}
-          </span>
-          <span className="text-xs font-medium text-foreground">{sailor.distance}</span>
         </div>
-      ))}
+      </ScrollArea>
     </div>
   )
 }

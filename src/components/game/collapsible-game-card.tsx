@@ -20,6 +20,16 @@ export function CollapsibleGameCard({
 }: CollapsibleGameCardProps) {
   const [isExpanded, setIsExpanded] = useState(defaultOpen)
 
+  const getCardTextClass = (title: string) => {
+    switch (title.toLowerCase()) {
+      case 'instruments': return 'instruments-text-label'
+      case 'chat': return 'chat-text-primary'
+      case 'standing': return 'standing-text-primary'
+      case 'signals': return 'signals-text-primary'
+      default: return 'text-foreground'
+    }
+  }
+
   const handleToggle = () => {
     setIsExpanded(!isExpanded)
   }
@@ -31,20 +41,20 @@ export function CollapsibleGameCard({
         <Button
           variant="ghost"
           onClick={handleToggle}
-          className="w-full p-3 h-auto flex items-center justify-between hover:bg-muted/30 text-foreground"
+          className="w-full p-3 h-auto flex items-center justify-between hover:bg-muted/30"
         >
           <div className="flex items-center gap-2">
             {icon}
-            <span className={`text-sm font-semibold text-foreground transition-all ${
+            <span className={`text-sm font-semibold transition-all ${
               isExpanded ? 'block' : 'hidden sm:block'
-            }`}>
+            } ${getCardTextClass(title)}`}>
               {title}
             </span>
           </div>
           <div className={`transition-transform ${isExpanded ? 'rotate-180' : ''} ${
             isExpanded ? 'block' : 'hidden sm:block'
           }`}>
-            <ChevronDown className="h-4 w-4 text-foreground" />
+            <ChevronDown className={`h-4 w-4 ${getCardTextClass(title)}`} />
           </div>
         </Button>
 

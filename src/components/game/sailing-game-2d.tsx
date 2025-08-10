@@ -74,14 +74,17 @@ export function SailingGame2D() {
   })
   
   const { gameState, dispatch } = useGameState()
-  const { sendMessage, connectionState } = useWebSocket('ws://localhost:8080')
+  const { connectionState } = useWebSocket('ws://localhost:8080')
 
   const handleCameraUpdate = useCallback((camera: THREE.Camera, size: { width: number, height: number }) => {
     // This will be called from SvgOverlay to sync coordinates
   }, [])
 
   return (
-    <div className="relative w-full h-full bg-background">
+    <div
+      className="relative w-full h-full"
+      style={{ background: 'linear-gradient(hsl(var(--water-mid)), hsl(var(--water-deep)))' }}
+    >
       {/* Three.js Canvas - invisible but handles camera/world transforms */}
       <Canvas
         ref={canvasRef}

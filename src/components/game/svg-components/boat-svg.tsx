@@ -1,29 +1,25 @@
-import * as THREE from 'three'
 import { Boat } from '../../../types/game-types'
 
 interface BoatSvgProps {
   boat: Boat
   screenPosition: { x: number, y: number }
-  camera: THREE.Camera
   isPlayer: boolean
 }
 
-export function BoatSvg({ boat, screenPosition, camera, isPlayer }: BoatSvgProps) {
+export function BoatSvg({ boat, screenPosition, isPlayer }: BoatSvgProps) {
   const boatLength = 12 // pixels
   const boatWidth = 4
   
   // Convert world heading to screen rotation
   const rotation = -boat.heading * (180 / Math.PI)
   
-  // Team colors - red vs blue like Finckh diagrams
-  const teamColor = boat.team === 'red' 
-    ? 'hsl(var(--destructive))' 
-    : 'hsl(var(--primary))'
-  
-  const strokeColor = isPlayer 
-    ? 'hsl(var(--secondary))' 
-    : teamColor
-    
+  // Team colors - red vs blue mapped to CSS variables
+  const teamColor = boat.team === 'red'
+    ? 'hsl(var(--boat-red))'
+    : 'hsl(var(--boat-blue))'
+
+  const strokeColor = teamColor
+
   const strokeWidth = isPlayer ? 2 : 1
   
   // Sail pattern for accessibility
@@ -74,10 +70,10 @@ export function BoatSvg({ boat, screenPosition, camera, isPlayer }: BoatSvgProps
           cy="0"
           r={boatLength}
           fill="none"
-          stroke="hsl(var(--secondary))"
+          stroke={`hsl(var(--neon-aqua)/var(--neon-alpha))`}
           strokeWidth="2"
           strokeDasharray="3,3"
-          opacity="0.6"
+          className="neon-edge"
         />
       )}
       

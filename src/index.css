@@ -35,6 +35,13 @@ All colors MUST be HSL.
     --sailing-warning: 42 65% 50%;
     --sailing-danger: 0 65% 55%;
     --sailing-success: 142 50% 40%;
+    --water-deep: 210 65% 18%;
+    --water-mid: 210 58% 23%;
+    --water-foam: 195 18% 78%;
+    --neon-aqua: 188 92% 56%;
+    --neon-alpha: 0.18;
+    --boat-red: 352 75% 55%;
+    --boat-blue: 215 100% 40%;
     --radius: 0.25rem;
 
     /* Game Card-Specific Text Colors */
@@ -92,6 +99,13 @@ All colors MUST be HSL.
     --sailing-warning: 42 70% 60%;
     --sailing-danger: 0 70% 60%;
     --sailing-success: 142 50% 45%;
+    --water-deep: 210 65% 18%;
+    --water-mid: 210 58% 23%;
+    --water-foam: 195 18% 78%;
+    --neon-aqua: 188 92% 56%;
+    --neon-alpha: 0.18;
+    --boat-red: 352 75% 55%;
+    --boat-blue: 215 100% 40%;
 
     /* Game Card-Specific Text Colors - Dark Mode */
     /* Instruments Panel - Brighter Neon Colors */
@@ -150,6 +164,10 @@ All colors MUST be HSL.
   .game-text-contrast {
     color: hsl(var(--foreground));
     font-weight: 500;
+  }
+
+  .neon-edge {
+    filter: drop-shadow(0 0 6px hsl(var(--neon-aqua)/var(--neon-alpha)));
   }
 
   /* Instruments Panel Neon Styles */

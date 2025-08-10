@@ -10,7 +10,8 @@ All colors MUST be HSL.
 @layer base {
   :root {
     --background: 210 40% 98%;
-    --foreground: 210 88% 15%;
+    --foreground: 106.5 100% 50% / 40%;
+    --game-text-primary: 48.48 95.22% 49.67%;
     --card: 210 40% 100%;
     --card-foreground: 210 40% 15%;
     --popover: 210 40% 100%;
@@ -96,7 +97,7 @@ All colors MUST be HSL.
   }
 
   .game-text-primary {
-    color: hsl(var(--primary));
+    color: hsl(var(--game-text-primary));
     font-weight: 600;
   }
 

@@ -101,10 +101,10 @@ export function SailingScene() {
 
   return (
     <div className="w-full h-full">
-      <Canvas camera={{ position: [0, 15, 15], fov: 60 }}>
-        {/* Lighting */}
-        <ambientLight intensity={0.4} />
-        <directionalLight position={[10, 10, 5]} intensity={0.8} />
+      <Canvas camera={{ position: [0, 25, 0], fov: 45 }}>
+        {/* Lighting optimized for top-down view */}
+        <ambientLight intensity={0.6} />
+        <directionalLight position={[0, 20, 0]} intensity={0.8} />
         
         {/* Ocean */}
         <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.5, 0]}>
@@ -150,10 +150,10 @@ export function SailingScene() {
         <OrbitControls 
           enablePan={true}
           enableZoom={true}
-          enableRotate={true}
-          minDistance={5}
-          maxDistance={50}
-          maxPolarAngle={Math.PI / 2.2}
+          enableRotate={false}
+          minDistance={15}
+          maxDistance={40}
+          target={[0, 0, 0]}
         />
       </Canvas>
     </div>

@@ -35,7 +35,7 @@ export function CollapsibleGameCard({
         >
           <div className="flex items-center gap-2">
             {icon}
-            <span className={`text-sm font-semibold text-primary transition-all ${
+            <span className={`text-sm font-semibold text-foreground transition-all ${
               isExpanded ? 'block' : 'hidden sm:block'
             }`}>
               {title}

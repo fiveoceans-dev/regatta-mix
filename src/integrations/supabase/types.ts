@@ -588,6 +588,7 @@ export type Database = {
       regattas: {
         Row: {
           class: Database["public"]["Enums"]["boat_class"]
+          code: string | null
           created_at: string | null
           current_players: number | null
           description: string | null
@@ -615,6 +616,7 @@ export type Database = {
         }
         Insert: {
           class: Database["public"]["Enums"]["boat_class"]
+          code?: string | null
           created_at?: string | null
           current_players?: number | null
           description?: string | null
@@ -642,6 +644,7 @@ export type Database = {
         }
         Update: {
           class?: Database["public"]["Enums"]["boat_class"]
+          code?: string | null
           created_at?: string | null
           current_players?: number | null
           description?: string | null

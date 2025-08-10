@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Switch } from "@/components/ui/switch"
 import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { CalendarIcon, Plus, DollarSign } from "lucide-react"
@@ -37,10 +38,12 @@ export function CreateRegattaDialog({ children, onSuccess }: CreateRegattaDialog
     entryFee: "",
     windSpeed: "",
     waveHeight: "",
-    weatherCondition: ""
+    weatherCondition: "",
+    isPrivate: false,
+    code: ""
   })
 
-  const handleInputChange = (field: string, value: string) => {
+  const handleInputChange = (field: string, value: string | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }))
   }
 
@@ -67,7 +70,8 @@ export function CreateRegattaDialog({ children, onSuccess }: CreateRegattaDialog
           wave_height: formData.waveHeight ? parseFloat(formData.waveHeight) : null,
           weather_condition: formData.weatherCondition as any,
           organizer_id: user.id,
-          status: 'upcoming'
+          status: 'upcoming',
+          code: formData.isPrivate ? formData.code : null
         })
 
       if (error) throw error
@@ -104,7 +108,9 @@ export function CreateRegattaDialog({ children, onSuccess }: CreateRegattaDialog
         entryFee: "",
         windSpeed: "",
         waveHeight: "",
-        weatherCondition: ""
+        weatherCondition: "",
+        isPrivate: false,
+        code: ""
       })
       setStartDate(undefined)
       setEndDate(undefined)
@@ -356,6 +362,31 @@ export function CreateRegattaDialog({ children, onSuccess }: CreateRegattaDialog
                 </SelectContent>
               </Select>
             </div>
+          </div>
+
+          <div className="space-y-4">
+            <div className="flex items-center space-x-2">
+              <Switch
+                id="private"
+                checked={formData.isPrivate}
+                onCheckedChange={(checked) => handleInputChange('isPrivate', checked)}
+              />
+              <Label htmlFor="private">Private Regatta</Label>
+            </div>
+            
+            {formData.isPrivate && (
+              <div className="space-y-2">
+                <Label htmlFor="code">Access Code *</Label>
+                <Input
+                  id="code"
+                  type="text"
+                  value={formData.code}
+                  onChange={(e) => handleInputChange('code', e.target.value)}
+                  placeholder="Enter access code for participants"
+                  required={formData.isPrivate}
+                />
+              </div>
+            )}
           </div>
 
           <div className="flex gap-3 pt-4">

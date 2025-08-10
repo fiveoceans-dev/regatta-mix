@@ -21,9 +21,10 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination"
-import { Trophy, Users, Clock, MapPin, Play as PlayIcon, Wind, Waves, Calendar, Plus } from "lucide-react"
+import { Trophy, Users, Clock, MapPin, Play as PlayIcon, Wind, Waves, Calendar, Plus, Lock } from "lucide-react"
 import { SailingScene } from "@/components/game/sailing-scene"
 import { CreateRegattaDialog } from "@/components/ui/create-regatta-dialog"
+import { JoinPrivateRegattaDialog } from "@/components/ui/join-private-regatta-dialog"
 import { supabase } from "@/integrations/supabase/client"
 import { useAuth } from "@/hooks/useAuth"
 import { toast } from "sonner"
@@ -118,6 +119,8 @@ export default function Play() {
   const [regattas, setRegattas] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [quickMatch, setQuickMatch] = useState<any>(null)
+  const [privateDialogOpen, setPrivateDialogOpen] = useState(false)
+  const [selectedRegatta, setSelectedRegatta] = useState<any>(null)
   const itemsPerPage = 10
 
   useEffect(() => {
@@ -209,13 +212,32 @@ export default function Play() {
     currentPage * itemsPerPage
   )
 
-  const handleJoinRegatta = async (regattaId: string) => {
+  const handleJoinRegatta = async (regatta: any) => {
     if (!user) {
       toast.error('Please sign in to join regattas')
       return
     }
 
+    // Check if regatta is private
+    if (regatta.code) {
+      setSelectedRegatta(regatta)
+      setPrivateDialogOpen(true)
+      return
+    }
+
+    await joinRegatta(regatta.id)
+  }
+
+  const joinRegatta = async (regattaId: string, code?: string) => {
     try {
+      // If code is provided for private regatta, verify it
+      if (code && selectedRegatta) {
+        if (code !== selectedRegatta.code) {
+          toast.error('Invalid access code')
+          return
+        }
+      }
+
       const { error } = await supabase
         .from('regatta_registrations')
         .insert({
@@ -231,6 +253,12 @@ export default function Play() {
     } catch (error) {
       console.error('Error joining regatta:', error)
       toast.error('Failed to join regatta')
+    }
+  }
+
+  const handlePrivateRegattaJoin = (code: string) => {
+    if (selectedRegatta) {
+      joinRegatta(selectedRegatta.id, code)
     }
   }
 
@@ -337,9 +365,9 @@ export default function Play() {
                     <TableRow>
                       <TableHead>Regatta</TableHead>
                       <TableHead>Class</TableHead>
+                      <TableHead>Type</TableHead>
                       <TableHead>Players</TableHead>
                       <TableHead>Date & Time</TableHead>
-                      <TableHead>Starts In</TableHead>
                       <TableHead>Location</TableHead>
                       <TableHead>Prize Pool</TableHead>
                       <TableHead>Register</TableHead>
@@ -363,8 +391,17 @@ export default function Play() {
                         <TableRow key={regatta.id}>
                           <TableCell className="font-medium text-left">{regatta.name}</TableCell>
                           <TableCell>{regatta.class?.toUpperCase()}</TableCell>
+                          <TableCell>
+                            {regatta.code ? (
+                              <Badge variant="outline" className="flex items-center gap-1 w-fit">
+                                <Lock className="h-3 w-3" />
+                                Private
+                              </Badge>
+                            ) : (
+                              <Badge variant="secondary">Open</Badge>
+                            )}
+                          </TableCell>
                           <TableCell>{regatta.current_players}/{regatta.max_players}</TableCell>
-                          <TableCell>{formatDate(regatta.start_date)}</TableCell>
                           <TableCell>{formatDate(regatta.start_date)}</TableCell>
                           <TableCell>{regatta.location}</TableCell>
                           <TableCell className="font-medium">{regatta.prize_pool} pts</TableCell>
@@ -376,7 +413,7 @@ export default function Play() {
                             ) : (
                               <SimpleButton 
                                 size="sm" 
-                                onClick={() => handleJoinRegatta(regatta.id)}
+                                onClick={() => handleJoinRegatta(regatta)}
                               >
                                 Join
                               </SimpleButton>
@@ -432,6 +469,13 @@ export default function Play() {
           </Card>
         </div>
       </div>
+
+      <JoinPrivateRegattaDialog
+        open={privateDialogOpen}
+        onOpenChange={setPrivateDialogOpen}
+        onJoin={handlePrivateRegattaJoin}
+        regattaName={selectedRegatta?.name || ''}
+      />
     </div>
   )
 }

@@ -146,7 +146,7 @@ export function CommunitySection() {
                       <p className="text-muted-foreground">45.2K followers</p>
                     </div>
                   </div>
-                  <Button variant="outline" size="sm" className="group-hover:border-primary">
+                  <Button variant="outline" size="sm" className="group-hover:border-accent border-accent">
                     <ExternalLink className="h-4 w-4 mr-2" />
                     Follow
                   </Button>
@@ -176,7 +176,7 @@ export function CommunitySection() {
                         <p className="text-xs leading-relaxed">{post.content}</p>
                         
                         {post.image && (
-                          <div className="rounded-sm overflow-hidden">
+                          <div className="rounded-none overflow-hidden">
                             <img
                               src={post.image}
                               alt="Post image"
@@ -217,7 +217,7 @@ export function CommunitySection() {
                       <p className="text-muted-foreground">127K followers</p>
                     </div>
                   </div>
-                  <Button variant="outline" size="sm" className="group-hover:border-primary">
+                  <Button variant="outline" size="sm" className="group-hover:border-accent border-accent">
                     <ExternalLink className="h-4 w-4 mr-2" />
                     Follow
                   </Button>
@@ -247,7 +247,7 @@ export function CommunitySection() {
                         <p className="text-xs leading-relaxed">{post.content}</p>
                         
                         {post.image && (
-                          <div className="rounded-lg overflow-hidden">
+                          <div className="rounded-none overflow-hidden">
                             <img
                               src={post.image}
                               alt="Post image"
@@ -288,7 +288,7 @@ export function CommunitySection() {
                       <p className="text-muted-foreground">89.1K followers</p>
                     </div>
                   </div>
-                  <Button variant="outline" size="sm" className="group-hover:border-primary">
+                  <Button variant="outline" size="sm" className="group-hover:border-accent border-accent">
                     <ExternalLink className="h-4 w-4 mr-2" />
                     Follow
                   </Button>

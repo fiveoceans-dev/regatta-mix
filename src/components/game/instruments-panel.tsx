@@ -2,29 +2,29 @@ export function InstrumentsPanel() {
   return (
     <div>
       <div className="text-center mb-3">
-        <div className="text-muted-foreground text-xs mb-1">BOAT SPD</div>
+        <div className="text-muted-foreground text-xs mb-1 font-medium">BOAT SPD</div>
         <div className="flex items-baseline justify-center">
-          <span className="text-2xl font-bold text-primary">10.6</span>
-          <span className="text-xs text-muted-foreground ml-1">kn</span>
+          <span className="text-2xl font-bold game-text-primary">10.6</span>
+          <span className="text-xs text-muted-foreground ml-1 font-medium">kn</span>
         </div>
       </div>
       
       <div className="grid grid-cols-2 gap-2 text-center text-xs">
         <div>
-          <div className="text-muted-foreground">HDG</div>
-          <div className="text-primary font-bold">045°</div>
+          <div className="text-muted-foreground font-medium">HDG</div>
+          <div className="game-text-primary font-bold">045°</div>
         </div>
         <div>
-          <div className="text-muted-foreground">TWS</div>
-          <div className="text-primary font-bold">12.5</div>
+          <div className="text-muted-foreground font-medium">TWS</div>
+          <div className="game-text-primary font-bold">12.5</div>
         </div>
         <div>
-          <div className="text-muted-foreground">VMG</div>
-          <div className="text-primary font-bold">8.2</div>
+          <div className="text-muted-foreground font-medium">VMG</div>
+          <div className="game-text-primary font-bold">8.2</div>
         </div>
         <div>
-          <div className="text-muted-foreground">DTM</div>
-          <div className="text-primary font-bold">2.1</div>
+          <div className="text-muted-foreground font-medium">DTM</div>
+          <div className="game-text-primary font-bold">2.1</div>
         </div>
       </div>
     </div>

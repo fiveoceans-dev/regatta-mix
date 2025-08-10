@@ -10,10 +10,10 @@ export function StandingPanel() {
       ].map((sailor) => (
         <div key={sailor.rank} className="flex justify-between items-center py-1 border-b border-border/30 last:border-0">
           <span className="text-muted-foreground font-bold w-3">{sailor.rank}</span>
-          <span className={`flex-1 text-xs ml-2 truncate ${sailor.current ? 'text-sailing-success font-bold' : 'text-foreground'}`}>
+          <span className={`flex-1 text-xs ml-2 truncate font-medium ${sailor.current ? 'text-sailing-success font-bold' : 'game-text-contrast'}`}>
             {sailor.name}
           </span>
-          <span className="text-xs">{sailor.distance}</span>
+          <span className="text-xs font-medium game-text-contrast">{sailor.distance}</span>
         </div>
       ))}
     </div>

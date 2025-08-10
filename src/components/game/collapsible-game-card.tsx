@@ -25,17 +25,17 @@ export function CollapsibleGameCard({
   }
 
   return (
-    <Card className="bg-transparent backdrop-blur-sm border-border transition-all duration-300 rounded-none">
+    <Card className="game-card-enhanced transition-all duration-300 rounded-none">
       <CardContent className="p-0">
         {/* Always visible header with icon and title */}
         <Button
           variant="ghost"
           onClick={handleToggle}
-          className="w-full p-3 h-auto flex items-center justify-between hover:bg-muted/50"
+          className="w-full p-3 h-auto flex items-center justify-between hover:bg-muted/30 text-foreground"
         >
           <div className="flex items-center gap-2">
             {icon}
-            <span className={`text-sm font-semibold text-primary transition-all ${
+            <span className={`text-sm font-semibold game-text-primary transition-all ${
               isExpanded ? 'block' : 'hidden sm:block'
             }`}>
               {title}
@@ -44,7 +44,7 @@ export function CollapsibleGameCard({
           <div className={`transition-transform ${isExpanded ? 'rotate-180' : ''} ${
             isExpanded ? 'block' : 'hidden sm:block'
           }`}>
-            <ChevronDown className="h-4 w-4" />
+            <ChevronDown className="h-4 w-4 text-foreground" />
           </div>
         </Button>
 

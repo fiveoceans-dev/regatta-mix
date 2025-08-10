@@ -24,7 +24,7 @@ export function GameButton({
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        "h-6 px-2 text-xs gap-1 min-w-0 w-auto font-medium",
+        "h-6 px-2 text-xs gap-1 min-w-0 w-auto font-medium border-border/50 hover:border-border",
         className
       )}
     >

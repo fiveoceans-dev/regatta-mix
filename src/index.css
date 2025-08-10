@@ -87,6 +87,23 @@ All colors MUST be HSL.
     font-weight: 400;
     letter-spacing: 0.01em;
   }
+
+  /* Enhanced contrast for game UI elements */
+  .game-card-enhanced {
+    background: hsl(var(--card) / 0.95);
+    backdrop-filter: blur(12px);
+    border: 1px solid hsl(var(--border) / 0.8);
+  }
+
+  .game-text-primary {
+    color: hsl(var(--primary));
+    font-weight: 600;
+  }
+
+  .game-text-contrast {
+    color: hsl(var(--foreground));
+    font-weight: 500;
+  }
 }
 
 /* Skeleton Loading Animation */

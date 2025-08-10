@@ -2,9 +2,7 @@ import { useRef, useEffect, useState, useCallback } from 'react'
 import { Canvas, useThree, useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { SvgOverlay } from './svg-overlay'
-import { GameHUD } from './game-hud'
-import { useGameState } from '../../hooks/use-game-state'
-import { useWebSocket } from '../../hooks/use-websocket'
+import { GameState } from '../../types/game-types'
 
 // Game world to screen coordinates
 export function worldToScreen(worldPos: THREE.Vector3, camera: THREE.Camera, size: { width: number, height: number }) {
@@ -37,12 +35,10 @@ function GameCamera({ onCameraUpdate }: { onCameraUpdate: (camera: THREE.Camera,
   return null
 }
 
-function GameWorld() {
-  const { gameState } = useGameState()
-  
+function GameWorld({ gameState }: { gameState: GameState }) {
   // Wind field visualization (invisible in Three.js, rendered in SVG)
   const windFieldRef = useRef<THREE.Group>(null)
-  
+
   useFrame(() => {
     // Update wind field data for SVG rendering
     // This runs at 60fps but SVG updates are throttled
@@ -58,9 +54,9 @@ function GameWorld() {
           </mesh>
         ))}
       </group>
-      
+
       {/* Boats (invisible, positions tracked for SVG) */}
-      {gameState.boats.map((boat, index) => (
+      {gameState.boats.map((boat) => (
         <mesh key={boat.id} position={[boat.x, 0, boat.z]} rotation={[0, boat.heading, 0]} visible={false}>
           <boxGeometry args={[1, 0.1, 3]} />
         </mesh>
@@ -69,16 +65,13 @@ function GameWorld() {
   )
 }
 
-export function SailingGame2D() {
+export function SailingGame2D({ gameState }: { gameState: GameState }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const [cameraProps, setCameraProps] = useState({
+  const [cameraProps] = useState({
     position: [0, 50, 0] as [number, number, number],
     zoom: 1
   })
   const [cameraData, setCameraData] = useState<{ camera: THREE.Camera, size: { width: number, height: number } } | null>(null)
-  
-  const { gameState, dispatch } = useGameState()
-  const { connectionState } = useWebSocket('ws://localhost:8080')
 
   const handleCameraUpdate = useCallback((camera: THREE.Camera, size: { width: number, height: number }) => {
     setCameraData({ camera, size })
@@ -103,25 +96,18 @@ export function SailingGame2D() {
         style={{ background: 'transparent' }}
       >
         <GameCamera onCameraUpdate={handleCameraUpdate} />
-        <GameWorld />
+        <GameWorld gameState={gameState} />
       </Canvas>
-      
+
       {/* SVG Overlay - all visible game objects */}
       {cameraData && (
-        <SvgOverlay 
+        <SvgOverlay
           canvasRef={canvasRef}
           gameState={gameState}
           camera={cameraData.camera}
           size={cameraData.size}
         />
       )}
-      
-      {/* Game HUD */}
-      <GameHUD 
-        gameState={gameState}
-        connectionState={connectionState}
-        onAction={(action) => dispatch(action)}
-      />
     </div>
   )
 }

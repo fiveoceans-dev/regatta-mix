@@ -10,7 +10,7 @@ export function GameSignalsPanel() {
           className="w-full h-full object-cover"
         />
       </div>
-      <div className="text-xs text-foreground font-semibold">Starting Signal</div>
+      <div className="text-xs standing-text-primary font-semibold">Starting Signal</div>
     </div>
   )
 }

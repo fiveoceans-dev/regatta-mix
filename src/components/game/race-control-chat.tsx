@@ -10,8 +10,8 @@ export function RaceControlChat() {
           { sender: 'TackTitan', message: 'Wind shift right', color: 'text-sailing-warning' }
         ].map((msg, index) => (
           <div key={index} className="leading-tight">
-            <strong className={`${msg.color} font-medium`}>{msg.sender}:</strong> 
-            <span className="game-text-contrast ml-1">{msg.message}</span>
+            <strong className={`${msg.color} font-semibold`}>{msg.sender}:</strong> 
+            <span className="text-foreground ml-1 font-medium">{msg.message}</span>
           </div>
         ))}
       </div>
@@ -19,7 +19,7 @@ export function RaceControlChat() {
         <input 
           type="text" 
           placeholder="Type..." 
-          className="flex-1 bg-card border border-border text-foreground px-2 py-1 rounded text-xs h-6 font-medium placeholder:text-muted-foreground"
+          className="flex-1 bg-transparent border border-border/50 text-foreground px-2 py-1 rounded-none text-xs h-6 font-medium placeholder:text-muted-foreground"
         />
         <Button size="sm" className="text-xs h-6 px-2 font-medium">Send</Button>
       </div>

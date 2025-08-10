@@ -25,7 +25,7 @@ export function CollapsibleGameCard({
   }
 
   return (
-    <Card className="game-card-enhanced transition-all duration-300 rounded-none">
+    <Card className="bg-transparent backdrop-blur-sm border border-border/30 rounded-none shadow-sm transition-all duration-300">
       <CardContent className="p-0">
         {/* Always visible header with icon and title */}
         <Button
@@ -35,7 +35,7 @@ export function CollapsibleGameCard({
         >
           <div className="flex items-center gap-2">
             {icon}
-            <span className={`text-sm font-semibold game-text-primary transition-all ${
+            <span className={`text-sm font-semibold text-primary transition-all ${
               isExpanded ? 'block' : 'hidden sm:block'
             }`}>
               {title}

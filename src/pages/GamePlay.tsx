@@ -19,11 +19,11 @@ export default function GamePlay() {
       
       {/* Top Game Info Bar */}
       <div className="absolute top-2 left-1/2 transform -translate-x-1/2 z-10">
-        <Card className="game-card-enhanced rounded-none">
+        <Card className="bg-transparent backdrop-blur-sm border border-border/30 rounded-none shadow-sm">
           <CardContent className="p-2">
             <div className="flex items-center gap-3 text-sm">
-              <div className="game-text-primary hidden sm:block">Mediterranean Sprint Championship</div>
-              <div className="game-text-primary sm:hidden">Med Sprint</div>
+              <div className="text-primary font-semibold hidden sm:block">Mediterranean Sprint Championship</div>
+              <div className="text-primary font-semibold sm:hidden">Med Sprint</div>
               <div className="bg-sailing-success/20 text-sailing-success px-2 py-1 rounded-md font-semibold text-xs border border-sailing-success/30">
                 5:42 to Start
               </div>
@@ -45,7 +45,7 @@ export default function GamePlay() {
 
         {/* Race Control Chat */}
         <CollapsibleGameCard
-          title="Race Control"
+          title="Chat"
           position="left"
         >
           <RaceControlChat />
@@ -78,11 +78,15 @@ export default function GamePlay() {
           {/* Left Actions Panel - Hidden on small screens */}
           <div className="w-0 sm:w-32 transition-all">
             <div className="hidden sm:block">
-              <Card className="game-card-enhanced rounded-none">
+              <Card className="bg-transparent backdrop-blur-sm border border-border/30 rounded-none shadow-sm">
                 <CardContent className="p-3">
-                  <h3 className="text-sm font-semibold game-text-primary mb-2 uppercase tracking-wide">
-                    Actions
+                  <h3 className="text-sm font-semibold text-primary mb-2 uppercase tracking-wide">
+                    Commands
                   </h3>
+                   <div className="flex flex-col gap-1 mb-2">
+                     <GameButton>Ready</GameButton>
+                     <GameButton>Abort</GameButton>
+                   </div>
                    <div className="flex flex-col gap-1">
                      {['Protest', 'Redress', 'Retire'].map((action) => (
                        <GameButton key={action}>
@@ -97,15 +101,15 @@ export default function GamePlay() {
 
           {/* Center Controls Panel - Always visible, responsive width */}
           <div className="w-full sm:w-96 max-w-2xl mx-2">
-            <Card className="game-card-enhanced rounded-none">
+            <Card className="bg-transparent backdrop-blur-sm border border-border/30 rounded-none shadow-sm">
               <CardContent className="p-2 sm:p-3">
-                <h3 className="text-xs sm:text-sm font-semibold game-text-primary mb-2 uppercase tracking-wide text-center">
+                <h3 className="text-xs sm:text-sm font-semibold text-primary mb-2 uppercase tracking-wide text-center">
                   Controls
                 </h3>
                 <div className="flex gap-2 sm:gap-3">
                   {/* Left Column - Hoisting Sails - Hidden on small screens */}
                   <div className="hidden sm:flex flex-col gap-1 min-w-0">
-                    <div className="text-xs text-muted-foreground text-center mb-1 font-medium">Sails</div>
+                    <div className="text-xs text-primary text-center mb-1 font-semibold">Sails</div>
                      {['Mainsail', 'Jib', 'Spinnaker'].map((sail) => (
                        <GameButton key={sail}>
                          {sail}
@@ -120,26 +124,17 @@ export default function GamePlay() {
                   <div className="flex-1 min-w-0">
                     {/* Top row */}
                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-1 mb-1">
-                       <GameButton>Ready</GameButton>
-                       <GameButton>Abort</GameButton>
                        <GameButton className="hidden sm:block">Tack</GameButton>
+                       <GameButton>Gybe</GameButton>
+                       <GameButton className="hidden sm:block">Port</GameButton>
                      </div>
                     {/* Second row */}
                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-1 mb-1">
-                       <GameButton>Gybe</GameButton>
-                       <GameButton>Port</GameButton>
                        <GameButton className="hidden sm:block">Starboard</GameButton>
+                       <GameButton>Tack to Port</GameButton>
+                       <GameButton>Tack to Starboard</GameButton>
                      </div>
                     {/* Third row */}
-                     <div className="grid grid-cols-2 gap-1 mb-1">
-                       {['Tack to Port', 'Tack to Starboard'].map((action) => (
-                         <GameButton key={action}>
-                           <span className="hidden sm:inline">{action}</span>
-                           <span className="sm:hidden">{action.split(' ')[0]} {action.split(' ')[2]}</span>
-                         </GameButton>
-                       ))}
-                     </div>
-                    {/* Fourth row */}
                      <div className="grid grid-cols-2 gap-1 mb-1">
                        {['Bear Away', 'Head Up'].map((action) => (
                          <GameButton key={action}>
@@ -147,14 +142,14 @@ export default function GamePlay() {
                          </GameButton>
                        ))}
                      </div>
-                    {/* Fifth row */}
+                    {/* Fourth row */}
                      <div className="grid grid-cols-2 gap-1">
                        {['Trim', 'Ease'].map((action) => (
                          <GameButton key={action}>
                            {action}
                          </GameButton>
                        ))}
-                     </div>
+                   </div>
                   </div>
                 </div>
               </CardContent>
@@ -164,9 +159,9 @@ export default function GamePlay() {
           {/* Right View Panel - Hidden on small screens */}
           <div className="w-0 sm:w-32 transition-all">
             <div className="hidden sm:block">
-              <Card className="game-card-enhanced rounded-none">
+              <Card className="bg-transparent backdrop-blur-sm border border-border/30 rounded-none shadow-sm">
                 <CardContent className="p-3">
-                  <h3 className="text-sm font-semibold game-text-primary mb-2 uppercase tracking-wide">
+                  <h3 className="text-sm font-semibold text-primary mb-2 uppercase tracking-wide">
                     View
                   </h3>
                   <div className="flex flex-col gap-1">

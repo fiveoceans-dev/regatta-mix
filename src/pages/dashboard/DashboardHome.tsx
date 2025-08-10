@@ -48,7 +48,7 @@ export default function DashboardHome() {
             </div>
             <div className="p-4 border border-border rounded-lg">
               <div className="text-2xl font-bold">3,847</div>
-              <div className="text-sm text-muted-foreground">Total Points</div>
+              <div className="text-sm text-muted-foreground">Total Credits</div>
             </div>
           </div>
         </div>

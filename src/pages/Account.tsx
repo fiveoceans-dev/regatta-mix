@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -9,18 +10,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { Trophy, Clock, MapPin, Play as PlayIcon, Target, Award, Sailboat } from "lucide-react"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Separator } from "@/components/ui/separator"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Trophy, Clock, MapPin, Play as PlayIcon, Target, Award, DollarSign } from "lucide-react"
+import { BuyCreditsDialog } from "@/components/ui/buy-credits-dialog"
 
 const mockHistory = [
   {
     id: 1,
     race: "America's Cup Q1",
     position: 3,
-    points: 85,
+    credits: 85,
     time: "45:23",
     date: "2024-01-15",
     location: "Bermuda",
@@ -30,7 +28,7 @@ const mockHistory = [
     id: 2,
     race: "Mediterranean Series R2",
     position: 1,
-    points: 100,
+    credits: 100,
     time: "38:17",
     date: "2024-01-14",
     location: "Monaco",
@@ -40,7 +38,7 @@ const mockHistory = [
     id: 3,
     race: "Coastal Championship",
     position: 7,
-    points: 65,
+    credits: 65,
     time: "52:45",
     date: "2024-01-13",
     location: "San Francisco",
@@ -49,6 +47,7 @@ const mockHistory = [
 ]
 
 export default function Account() {
+  const [buyCreditsOpen, setBuyCreditsOpen] = useState(false)
   const getPositionColor = (position: number) => {
     if (position === 1) return "default"
     if (position <= 3) return "secondary"
@@ -99,12 +98,20 @@ export default function Account() {
         
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Points</CardTitle>
+            <CardTitle className="text-sm font-medium">Total Credits</CardTitle>
             <Trophy className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">3,847</div>
             <p className="text-xs text-muted-foreground">Season total</p>
+            <Button 
+              size="sm" 
+              className="mt-2 w-full"
+              onClick={() => setBuyCreditsOpen(true)}
+            >
+              <DollarSign className="h-4 w-4 mr-2" />
+              Buy Credits
+            </Button>
           </CardContent>
         </Card>
       </div>
@@ -177,7 +184,7 @@ export default function Account() {
               <TableRow>
                 <TableHead>Race</TableHead>
                 <TableHead>Position</TableHead>
-                <TableHead>Points</TableHead>
+                <TableHead>Credits</TableHead>
                 <TableHead>Time</TableHead>
                 <TableHead>Date</TableHead>
                 <TableHead>Location</TableHead>
@@ -194,7 +201,7 @@ export default function Account() {
                       #{race.position}
                     </Badge>
                   </TableCell>
-                  <TableCell className="font-medium">{race.points}</TableCell>
+                  <TableCell className="font-medium">{race.credits}</TableCell>
                   <TableCell>
                     <div className="flex items-center gap-1">
                       <Clock className="h-4 w-4" />
@@ -221,6 +228,11 @@ export default function Account() {
           </Table>
         </CardContent>
       </Card>
+      
+      <BuyCreditsDialog 
+        open={buyCreditsOpen} 
+        onOpenChange={setBuyCreditsOpen} 
+      />
     </div>
   )
 }

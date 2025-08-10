@@ -6,14 +6,14 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { Trophy, Users, Clock } from "lucide-react"
 
 const leaderboardData = [
-  { rank: 1, nickname: "WindMaster", points: 2450, lastPlayed: "2h ago", trend: "up" },
-  { rank: 2, nickname: "SailShark", points: 2380, lastPlayed: "4h ago", trend: "same" },
-  { rank: 3, nickname: "TackTitan", points: 2290, lastPlayed: "1d ago", trend: "down" },
-  { rank: 4, nickname: "GybeGuru", points: 2150, lastPlayed: "6h ago", trend: "up" },
-  { rank: 5, nickname: "SpeedDemon", points: 2088, lastPlayed: "3h ago", trend: "up" },
-  { rank: 6, nickname: "WaveRider", points: 1995, lastPlayed: "8h ago", trend: "same" },
-  { rank: 7, nickname: "StormChaser", points: 1890, lastPlayed: "12h ago", trend: "down" },
-  { rank: 8, nickname: "TideRunner", points: 1750, lastPlayed: "1d ago", trend: "up" }
+  { rank: 1, nickname: "WindMaster", credits: 2450, lastPlayed: "2h ago", trend: "up" },
+  { rank: 2, nickname: "SailShark", credits: 2380, lastPlayed: "4h ago", trend: "same" },
+  { rank: 3, nickname: "TackTitan", credits: 2290, lastPlayed: "1d ago", trend: "down" },
+  { rank: 4, nickname: "GybeGuru", credits: 2150, lastPlayed: "6h ago", trend: "up" },
+  { rank: 5, nickname: "SpeedDemon", credits: 2088, lastPlayed: "3h ago", trend: "up" },
+  { rank: 6, nickname: "WaveRider", credits: 1995, lastPlayed: "8h ago", trend: "same" },
+  { rank: 7, nickname: "StormChaser", credits: 1890, lastPlayed: "12h ago", trend: "down" },
+  { rank: 8, nickname: "TideRunner", credits: 1750, lastPlayed: "1d ago", trend: "up" }
 ]
 
 const regattaData = [
@@ -43,7 +43,7 @@ export function LeaderboardRegattas() {
                   <TableRow className="border-border/50">
                     <TableHead className="text-muted-foreground">Rank</TableHead>
                     <TableHead className="text-muted-foreground">Sailor</TableHead>
-                    <TableHead className="text-muted-foreground">Points</TableHead>
+                    <TableHead className="text-muted-foreground">Credits</TableHead>
                     <TableHead className="text-muted-foreground">Last Active</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -67,7 +67,7 @@ export function LeaderboardRegattas() {
                         </div>
                       </TableCell>
                       <TableCell className="font-semibold text-left">{player.nickname}</TableCell>
-                      <TableCell className="text-primary font-medium">{player.points.toLocaleString()}</TableCell>
+                      <TableCell className="text-primary font-medium">{player.credits.toLocaleString()}</TableCell>
                       <TableCell className="text-muted-foreground text-sm">
                         <div className="flex items-center gap-1">
                           <Clock className="h-3 w-3" />

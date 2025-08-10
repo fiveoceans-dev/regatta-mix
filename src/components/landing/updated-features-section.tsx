@@ -16,7 +16,7 @@ const features = [
   {
     icon: Trophy,
     title: "Championship Series",
-    description: "Compete in seasonal championships with rankings, points, and prestigious sailing events"
+    description: "Compete in seasonal championships with rankings, credits, and prestigious sailing events"
   },
   {
     icon: Users,

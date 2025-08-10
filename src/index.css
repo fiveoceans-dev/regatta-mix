@@ -15,14 +15,13 @@ All colors MUST be HSL.
     --card-foreground: 210 40% 15%;
     --popover: 210 40% 100%;
     --popover-foreground: 210 40% 15%;
-
-    --primary: 220 60% 25%; /* Deep Yacht Navy */
+    --primary: 215 100% 34%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 220 60% 35%;
+    --primary-glow: 188 100% 60%;
     --secondary: 42 65% 50%; /* Nautical Gold */
     --secondary-foreground: 220 20% 15%;
-    --muted: 210 20% 92%;
-    --muted-foreground: 210 20% 40%;
+    --muted: 210 22% 96%;
+    --muted-foreground: 210 18% 42%;
     --accent: 352 75% 45%; /* Regatta Red */
     --accent-foreground: 0 0% 100%;
     --destructive: 0 75% 50%;
@@ -30,38 +29,17 @@ All colors MUST be HSL.
     --border: 210 30% 85%;
     --input: 210 30% 95%;
     --ring: 220 60% 25%;
-    --radius: 0.25rem;
-
-    /* Water kit (light) */
-    --water-deep: 205 72% 44%;
-    --water-mid: 205 64% 56%;
-    --water-shallow: 195 55% 70%;
-    --water-foam: 195 20% 93%;
-    --water-specular: 190 80% 86%;
-    --water-horizon: 215 36% 92%;
-    --water-ui-bg: 205 30% 96%;
-    --water-ui-stroke: 205 25% 75%;
-
-    /* Neon accents (light) — keep usage subtle */
-    --neon-aqua: 188 92% 54%;
-    --neon-lime: 154 90% 54%;
-    --neon-red: 352 88% 54%;
-    --neon-alpha: 0.12;
-
-    /* Semantics mapped to water kit */
-    --sailing-wind: 210 70% 82%;
-    --sailing-water: var(--water-mid);
+    --sailing-wind: 210 80% 90%;
+    --sailing-water: 220 70% 35%;
     --sailing-warning: 42 65% 50%;
     --sailing-danger: 0 65% 55%;
     --sailing-success: 142 50% 40%;
+    --radius: 0.25rem;
 
     /* Clean shadows */
     --shadow-sm: 0 1px 2px 0 hsl(210 25% 25% / 0.05);
     --shadow-md: 0 4px 6px -1px hsl(210 25% 25% / 0.1), 0 2px 4px -1px hsl(210 25% 25% / 0.06);
     --shadow-lg: 0 10px 15px -3px hsl(210 25% 25% / 0.1), 0 4px 6px -2px hsl(210 25% 25% / 0.05);
-
-    /* Optional vectors */
-    --wind-vector: 210 12% 45%;
   }
 
   .dark {
@@ -71,14 +49,13 @@ All colors MUST be HSL.
     --card-foreground: 210 20% 92%;
     --popover: 220 40% 14%;
     --popover-foreground: 210 20% 92%;
-
-    --primary: 220 60% 40%; /* Bright Yacht Navy */
+    --primary: 215 100% 40%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 220 60% 50%;
+    --primary-glow: 188 100% 65%;
     --secondary: 42 70% 55%; /* Polished Gold */
     --secondary-foreground: 220 20% 10%;
-    --muted: 220 15% 25%;
-    --muted-foreground: 210 15% 70%;
+    --muted: 220 14% 21%;
+    --muted-foreground: 210 16% 72%;
     --accent: 352 70% 55%; /* Regatta Red */
     --accent-foreground: 220 20% 10%;
     --destructive: 0 65% 55%;
@@ -86,26 +63,8 @@ All colors MUST be HSL.
     --border: 220 25% 25%;
     --input: 220 25% 15%;
     --ring: 220 60% 40%;
-
-    /* Water kit (dark) */
-    --water-deep: 210 65% 18%;
-    --water-mid: 210 58% 23%;
-    --water-shallow: 200 50% 28%;
-    --water-foam: 195 18% 78%;
-    --water-specular: 190 100% 75%;
-    --water-horizon: 220 28% 12%;
-    --water-ui-bg: 220 36% 14%;
-    --water-ui-stroke: 210 22% 38%;
-
-    /* Neon accents (dark) */
-    --neon-aqua: 188 92% 56%;
-    --neon-lime: 154 92% 56%;
-    --neon-red: 352 88% 58%;
-    --neon-alpha: 0.18;
-
-    /* Semantics mapped to water kit */
-    --sailing-wind: 210 70% 78%;
-    --sailing-water: var(--water-mid);
+    --sailing-wind: 210 70% 80%;
+    --sailing-water: 220 60% 30%;
     --sailing-warning: 42 70% 60%;
     --sailing-danger: 0 70% 60%;
     --sailing-success: 142 50% 45%;
@@ -114,11 +73,8 @@ All colors MUST be HSL.
     --shadow-sm: 0 1px 2px 0 hsl(210 25% 0% / 0.1);
     --shadow-md: 0 4px 6px -1px hsl(210 25% 0% / 0.2), 0 2px 4px -1px hsl(210 25% 0% / 0.1);
     --shadow-lg: 0 10px 15px -3px hsl(210 25% 0% / 0.2), 0 4px 6px -2px hsl(210 25% 0% / 0.1);
-
-    --wind-vector: 210 18% 70%;
   }
 }
-
 
 @layer base {
   * {

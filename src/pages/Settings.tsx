@@ -251,7 +251,7 @@ export default function Settings() {
             </div>
           </div>
           
-          <Button>Save Settings</Button>
+          <Button>Save</Button>
         </CardContent>
       </Card>
     </div>

@@ -10,9 +10,9 @@ interface BuyCreditsDialogProps {
 
 export function BuyCreditsDialog({ open, onOpenChange }: BuyCreditsDialogProps) {
   const subscriptionPlans = [
-    { price: 1, credits: 1000, popular: false },
-    { price: 3, credits: 3000, popular: true },
-    { price: 5, credits: 5000, popular: false }
+    { price: 1, credits: 1000 },
+    { price: 3, credits: 3000 },
+    { price: 5, credits: 5000 }
   ]
 
   const handlePayPal = (price: number) => {
@@ -40,14 +40,7 @@ export function BuyCreditsDialog({ open, onOpenChange }: BuyCreditsDialogProps) 
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
           {subscriptionPlans.map((plan) => (
-            <Card key={plan.price} className={`relative ${plan.popular ? 'border-primary ring-2 ring-primary/20' : ''}`}>
-              {plan.popular && (
-                <div className="absolute -top-2 left-1/2 transform -translate-x-1/2">
-                  <span className="bg-primary text-primary-foreground px-3 py-1 rounded-full text-xs font-medium">
-                    Most Popular
-                  </span>
-                </div>
-              )}
+            <Card key={plan.price}>
               <CardHeader className="text-center">
                 <CardTitle className="text-2xl">${plan.price}</CardTitle>
                 <CardDescription>per month</CardDescription>

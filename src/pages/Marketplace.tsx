@@ -1,6 +1,8 @@
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { SimpleButton } from "@/components/ui/simple-button"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import { ManageBoatDialog } from "@/components/ui/manage-boat-dialog"
 import { ManageCrewDialog } from "@/components/ui/manage-crew-dialog"
 import { ManagePartsDialog } from "@/components/ui/manage-parts-dialog"
@@ -21,266 +23,99 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination"
-import { useState } from "react"
-
-const mockBoats = [
-  {
-    id: 1,
-    name: "Storm Chaser AC75",
-    class: "AC75",
-    price: 250000,
-    rating: 4.8,
-    speed: 95,
-    handling: 88,
-    durability: 92,
-    seller: "TechSail Designs",
-    condition: "New"
-  },
-  {
-    id: 2,
-    name: "Ocean Warrior TP52",
-    class: "TP52",
-    price: 85000,
-    rating: 4.6,
-    speed: 82,
-    handling: 90,
-    durability: 85,
-    seller: "Maritime Classics",
-    condition: "Used"
-  },
-  {
-    id: 3,
-    name: "Wind Dancer J70",
-    class: "J70",
-    price: 35000,
-    rating: 4.5,
-    speed: 75,
-    handling: 88,
-    durability: 80,
-    seller: "Coastal Boats",
-    condition: "New"
-  },
-  {
-    id: 4,
-    name: "Lightning Laser",
-    class: "Laser",
-    price: 15000,
-    rating: 4.7,
-    speed: 70,
-    handling: 95,
-    durability: 88,
-    seller: "Single Hand Racing",
-    condition: "Refurbished"
-  }
-]
-
-const mockCrew = [
-  {
-    id: 1,
-    name: "Captain Sarah Mitchell",
-    role: "Skipper",
-    price: 5000,
-    rating: 4.9,
-    experience: "15 years",
-    specialty: "Match Racing",
-    skills: {
-      tactics: 95,
-      navigation: 92,
-      leadership: 98
-    },
-    availability: "Available",
-    seller: "Single Hand Racing"
-  },
-  {
-    id: 2,
-    name: "Jake Rodriguez",
-    role: "Tactician",
-    price: 3500,
-    rating: 4.7,
-    experience: "8 years",
-    specialty: "Fleet Racing",
-    skills: {
-      tactics: 90,
-      windReading: 88,
-      communication: 85
-    },
-    availability: "Available",
-    seller: "Single Hand Racing"
-  },
-  {
-    id: 3,
-    name: "Emma Thompson",
-    role: "Trimmer",
-    price: 2800,
-    rating: 4.6,
-    experience: "6 years",
-    specialty: "Sail Optimization",
-    skills: {
-      sailTrim: 92,
-      boatSpeed: 88,
-      teamwork: 90
-    },
-    availability: "Busy",
-    seller: "Single Hand Racing"
-  },
-  {
-    id: 4,
-    name: "Marco Silva",
-    role: "Bowman",
-    price: 2200,
-    rating: 4.8,
-    experience: "10 years",
-    specialty: "Maneuvers",
-    skills: {
-      agility: 95,
-      deckWork: 92,
-      safety: 90
-    },
-    availability: "Available",
-    seller: "Single Hand Racing",
-  }
-]
-
-const mockParts = [
-  {
-    id: 1,
-    name: "Carbon Fiber Mainsail",
-    category: "Sails",
-    price: 15000,
-    rating: 4.9,
-    performance: 95,
-    durability: 88,
-    weight: "Light",
-    compatibility: "AC75, TP52",
-    seller: "North Sails",
-    condition: "New"
-  },
-  {
-    id: 2,
-    name: "Titanium Winch Set",
-    category: "Hardware",
-    price: 8500,
-    rating: 4.7,
-    performance: 92,
-    durability: 95,
-    weight: "Medium",
-    compatibility: "All Classes",
-    seller: "Harken Racing",
-    condition: "New"
-  },
-  {
-    id: 3,
-    name: "GPS Navigation System",
-    category: "Electronics",
-    price: 3200,
-    rating: 4.8,
-    performance: 90,
-    durability: 85,
-    weight: "Light",
-    compatibility: "Universal",
-    seller: "B&G Marine",
-    condition: "Used"
-  },
-  {
-    id: 4,
-    name: "Carbon Boom",
-    category: "Rigging",
-    price: 12000,
-    rating: 4.6,
-    performance: 88,
-    durability: 92,
-    weight: "Light",
-    compatibility: "J70, Laser",
-    seller: "Selden Mast",
-    condition: "Refurbished"
-  }
-]
-
-// Mock user's team data
-const myTeam = {
-  boats: [
-    {
-      id: 1,
-      name: "My Wind Dancer J70",
-      class: "J70",
-      condition: "New",
-      performance: 85,
-      status: "Racing Ready"
-    }
-  ],
-  crew: [
-    {
-      id: 1,
-      name: "Captain Sarah Mitchell",
-      role: "Skipper",
-      rating: 4.9,
-      experience: "15 years",
-      status: "Active"
-    },
-    {
-      id: 2,
-      name: "Jake Rodriguez",
-      role: "Tactician",
-      rating: 4.7,
-      experience: "8 years",
-      status: "Active"
-    }
-  ],
-  parts: [
-    {
-      id: 1,
-      name: "Carbon Fiber Mainsail",
-      category: "Sails",
-      condition: "New",
-      performance: 95,
-      status: "Installed"
-    },
-    {
-      id: 2,
-      name: "GPS Navigation System",
-      category: "Electronics",
-      condition: "Used",
-      performance: 90,
-      status: "Installed"
-    }
-  ]
-}
+import { useAuth } from "@/hooks/useAuth"
+import { supabase } from "@/integrations/supabase/client"
 
 export default function Marketplace() {
+  const { user } = useAuth()
   const [currentPage, setCurrentPage] = useState({
     boats: 1,
     crew: 1,
     parts: 1
   })
+  const [boats, setBoats] = useState<any[]>([])
+  const [crew, setCrew] = useState<any[]>([])
+  const [parts, setParts] = useState<any[]>([])
+  const [myBoats, setMyBoats] = useState<any[]>([])
+  const [myCrew, setMyCrew] = useState<any[]>([])
+  const [myParts, setMyParts] = useState<any[]>([])
+  const [profile, setProfile] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
   
   const itemsPerPage = 10
+
+  useEffect(() => {
+    if (user) {
+      fetchMarketplaceData()
+      fetchMyItems()
+      fetchProfile()
+    }
+  }, [user])
+
+  const fetchProfile = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('credits')
+        .eq('id', user?.id)
+        .single()
+
+      if (error) throw error
+      setProfile(data)
+    } catch (error) {
+      console.error('Error fetching profile:', error)
+    }
+  }
+
+  const fetchMarketplaceData = async () => {
+    try {
+      const [boatsRes, crewRes, partsRes] = await Promise.all([
+        supabase.from('boats').select('*').is('owner_id', null).order('created_at', { ascending: false }),
+        supabase.from('crew').select('*').eq('status', 'available').order('created_at', { ascending: false }),
+        supabase.from('parts').select('*').is('owner_id', null).order('created_at', { ascending: false })
+      ])
+
+      setBoats(boatsRes.data || [])
+      setCrew(crewRes.data || [])
+      setParts(partsRes.data || [])
+    } catch (error) {
+      console.error('Error fetching marketplace data:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const fetchMyItems = async () => {
+    try {
+      const [boatsRes, crewRes, partsRes] = await Promise.all([
+        supabase.from('boats').select('*').eq('owner_id', user?.id),
+        supabase.from('crew').select('*').eq('owner_id', user?.id),
+        supabase.from('parts').select('*').eq('owner_id', user?.id)
+      ])
+
+      setMyBoats(boatsRes.data || [])
+      setMyCrew(crewRes.data || [])
+      setMyParts(partsRes.data || [])
+    } catch (error) {
+      console.error('Error fetching my items:', error)
+    }
+  }
   
   const getConditionColor = (condition: string) => {
     switch (condition) {
-      case "New": return "text-secondary"
-      case "Good": return "text-primary"
-      case "Fair": return "text-muted-foreground"
-      case "Excellent": return "text-secondary"
-      case "Refurbished": return "text-primary"
-      case "Used": return "text-muted-foreground"
+      case "new": return "text-secondary"
+      case "good": return "text-primary"
+      case "fair": return "text-muted-foreground"
+      case "excellent": return "text-secondary"
       default: return "text-muted-foreground"
     }
   }
 
-  const getAvailabilityColor = (availability: string) => {
-    switch (availability) {
-      case "Available": return "text-secondary"
-      case "Busy": return "text-destructive"
-      default: return "text-muted-foreground"
-    }
-  }
-
-  const getStatusColor = (status: string) => {
+  const getAvailabilityColor = (status: string) => {
     switch (status) {
-      case "Active": return "text-secondary"
-      case "Racing Ready": return "text-secondary"
-      case "Installed": return "text-secondary"
-      case "Available": return "text-primary"
+      case "available": return "text-secondary"
+      case "busy": return "text-destructive"
+      case "contracted": return "text-muted-foreground"
       default: return "text-muted-foreground"
     }
   }
@@ -292,6 +127,14 @@ export default function Marketplace() {
 
   const getTotalPages = (dataLength: number) => {
     return Math.ceil(dataLength / itemsPerPage)
+  }
+
+  if (loading) {
+    return (
+      <div className="container py-8 space-y-8 pt-20">
+        <div className="text-center py-8">Loading marketplace...</div>
+      </div>
+    )
   }
 
   return (
@@ -308,8 +151,8 @@ export default function Marketplace() {
             <CardTitle className="text-sm font-medium">Boats</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{mockBoats.length}</div>
-            <p className="text-xs text-muted-foreground">New listings this week</p>
+            <div className="text-2xl font-bold">{boats.length}</div>
+            <p className="text-xs text-muted-foreground">Available for purchase</p>
           </CardContent>
         </Card>
         
@@ -318,7 +161,7 @@ export default function Marketplace() {
             <CardTitle className="text-sm font-medium">Crew</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{mockCrew.filter(c => c.availability === "Available").length}</div>
+            <div className="text-2xl font-bold">{crew.filter(c => c.status === "available").length}</div>
             <p className="text-xs text-muted-foreground">Currently available</p>
           </CardContent>
         </Card>
@@ -328,18 +171,18 @@ export default function Marketplace() {
             <CardTitle className="text-sm font-medium">Your Credits</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">487,500</div>
+            <div className="text-2xl font-bold">{profile?.credits || 0}</div>
             <p className="text-xs text-muted-foreground">Available for purchases</p>
           </CardContent>
         </Card>
         
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Total Purchases</CardTitle>
+            <CardTitle className="text-sm font-medium">Parts</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">12</div>
-            <p className="text-xs text-muted-foreground">This season</p>
+            <div className="text-2xl font-bold">{parts.length}</div>
+            <p className="text-xs text-muted-foreground">Available parts</p>
           </CardContent>
         </Card>
       </div>
@@ -374,22 +217,30 @@ export default function Marketplace() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {myTeam.crew.map((member) => (
-                    <TableRow key={member.id}>
-                      <TableCell className="font-medium">{member.name}</TableCell>
-                      <TableCell>{member.role}</TableCell>
-                      <TableCell>{member.rating}</TableCell>
-                      <TableCell>{member.experience}</TableCell>
-                      <TableCell>
-                        <span className={`font-medium ${getStatusColor(member.status)}`}>
-                          {member.status}
-                        </span>
-                      </TableCell>
-                      <TableCell>
-                        <ManageCrewDialog crewData={member} />
+                  {myCrew.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                        No crew members yet. Hire some from the marketplace!
                       </TableCell>
                     </TableRow>
-                  ))}
+                  ) : (
+                    myCrew.map((member) => (
+                      <TableRow key={member.id}>
+                        <TableCell className="font-medium">{member.name}</TableCell>
+                        <TableCell>{member.role}</TableCell>
+                        <TableCell>{member.rating}</TableCell>
+                        <TableCell>{member.experience} years</TableCell>
+                        <TableCell>
+                          <span className={`font-medium ${getAvailabilityColor(member.status)}`}>
+                            {member.status}
+                          </span>
+                        </TableCell>
+                        <TableCell>
+                          <ManageCrewDialog crewData={member} />
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
                 </TableBody>
               </Table>
             </CardContent>
@@ -407,32 +258,36 @@ export default function Marketplace() {
                     <TableHead>Name</TableHead>
                     <TableHead>Class</TableHead>
                     <TableHead>Condition</TableHead>
-                    <TableHead>Performance</TableHead>
-                    <TableHead>Status</TableHead>
+                    <TableHead>Rating</TableHead>
+                    <TableHead>Speed</TableHead>
                     <TableHead>Action</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {myTeam.boats.map((boat) => (
-                    <TableRow key={boat.id}>
-                      <TableCell className="font-medium">{boat.name}</TableCell>
-                      <TableCell>{boat.class}</TableCell>
-                      <TableCell>
-                        <span className={`font-medium ${getConditionColor(boat.condition)}`}>
-                          {boat.condition}
-                        </span>
-                      </TableCell>
-                      <TableCell>{boat.performance}</TableCell>
-                      <TableCell>
-                        <span className={`font-medium ${getStatusColor(boat.status)}`}>
-                          {boat.status}
-                        </span>
-                      </TableCell>
-                      <TableCell>
-                        <ManageBoatDialog boatData={boat} />
+                  {myBoats.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                        No boats yet. Buy some from the marketplace!
                       </TableCell>
                     </TableRow>
-                  ))}
+                  ) : (
+                    myBoats.map((boat) => (
+                      <TableRow key={boat.id}>
+                        <TableCell className="font-medium">{boat.name}</TableCell>
+                        <TableCell>{boat.class}</TableCell>
+                        <TableCell>
+                          <span className={`font-medium ${getConditionColor(boat.condition)}`}>
+                            {boat.condition}
+                          </span>
+                        </TableCell>
+                        <TableCell>{boat.rating}</TableCell>
+                        <TableCell>{boat.speed}</TableCell>
+                        <TableCell>
+                          <ManageBoatDialog boatData={boat} />
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
                 </TableBody>
               </Table>
             </CardContent>
@@ -451,31 +306,35 @@ export default function Marketplace() {
                     <TableHead>Category</TableHead>
                     <TableHead>Condition</TableHead>
                     <TableHead>Performance</TableHead>
-                    <TableHead>Status</TableHead>
+                    <TableHead>Rating</TableHead>
                     <TableHead>Action</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {myTeam.parts.map((part) => (
-                    <TableRow key={part.id}>
-                      <TableCell className="font-medium">{part.name}</TableCell>
-                      <TableCell>{part.category}</TableCell>
-                      <TableCell>
-                        <span className={`font-medium ${getConditionColor(part.condition)}`}>
-                          {part.condition}
-                        </span>
-                      </TableCell>
-                      <TableCell>{part.performance}</TableCell>
-                      <TableCell>
-                        <span className={`font-medium ${getStatusColor(part.status)}`}>
-                          {part.status}
-                        </span>
-                      </TableCell>
-                      <TableCell>
-                        <ManagePartsDialog partData={part} />
+                  {myParts.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                        No parts yet. Buy some from the marketplace!
                       </TableCell>
                     </TableRow>
-                  ))}
+                  ) : (
+                    myParts.map((part) => (
+                      <TableRow key={part.id}>
+                        <TableCell className="font-medium">{part.name}</TableCell>
+                        <TableCell>{part.category}</TableCell>
+                        <TableCell>
+                          <span className={`font-medium ${getConditionColor(part.condition)}`}>
+                            {part.condition}
+                          </span>
+                        </TableCell>
+                        <TableCell>{part.performance}</TableCell>
+                        <TableCell>{part.rating}</TableCell>
+                        <TableCell>
+                          <ManagePartsDialog partData={part} />
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
                 </TableBody>
               </Table>
             </CardContent>
@@ -485,10 +344,92 @@ export default function Marketplace() {
         {/* Marketplace Tab */}
         <TabsContent value="marketplace" className="space-y-6">
 
+          {/* Boats Section */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Boats for Sale</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Name</TableHead>
+                    <TableHead>Class</TableHead>
+                    <TableHead>Price</TableHead>
+                    <TableHead>Rating</TableHead>
+                    <TableHead>Speed</TableHead>
+                    <TableHead>Handling</TableHead>
+                    <TableHead>Condition</TableHead>
+                    <TableHead>Action</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {boats.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
+                        No boats available for purchase.
+                      </TableCell>
+                    </TableRow>
+                  ) : (
+                    paginateData(boats, currentPage.boats).map((boat) => (
+                      <TableRow key={boat.id}>
+                        <TableCell className="font-medium">{boat.name}</TableCell>
+                        <TableCell>{boat.class}</TableCell>
+                        <TableCell>{boat.price?.toLocaleString()} credits</TableCell>
+                        <TableCell>{boat.rating}</TableCell>
+                        <TableCell>{boat.speed}</TableCell>
+                        <TableCell>{boat.handling}</TableCell>
+                        <TableCell>
+                          <span className={`font-medium ${getConditionColor(boat.condition)}`}>
+                            {boat.condition}
+                          </span>
+                        </TableCell>
+                        <TableCell>
+                          <Button size="sm" disabled={!profile || profile.credits < boat.price}>
+                            Buy
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
+                </TableBody>
+              </Table>
+
+              {boats.length > itemsPerPage && (
+                <Pagination>
+                  <PaginationContent>
+                    <PaginationItem>
+                      <PaginationPrevious 
+                        onClick={() => setCurrentPage(prev => ({ ...prev, boats: Math.max(1, prev.boats - 1) }))}
+                        className={currentPage.boats === 1 ? "pointer-events-none opacity-50" : ""}
+                      />
+                    </PaginationItem>
+                    {Array.from({ length: getTotalPages(boats.length) }, (_, i) => (
+                      <PaginationItem key={i + 1}>
+                        <PaginationLink
+                          onClick={() => setCurrentPage(prev => ({ ...prev, boats: i + 1 }))}
+                          isActive={currentPage.boats === i + 1}
+                        >
+                          {i + 1}
+                        </PaginationLink>
+                      </PaginationItem>
+                    ))}
+                    <PaginationItem>
+                      <PaginationNext
+                        onClick={() => setCurrentPage(prev => ({ ...prev, boats: Math.min(getTotalPages(boats.length), prev.boats + 1) }))}
+                        className={currentPage.boats === getTotalPages(boats.length) ? "pointer-events-none opacity-50" : ""}
+                      />
+                    </PaginationItem>
+                  </PaginationContent>
+                </Pagination>
+              )}
+            </CardContent>
+          </Card>
+
           {/* Crew Section */}
           <Card>
             <CardHeader>
-              <CardTitle>Crew</CardTitle>
+              <CardTitle>Available Crew</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <Table>
@@ -499,148 +440,151 @@ export default function Marketplace() {
                     <TableHead>Salary</TableHead>
                     <TableHead>Rating</TableHead>
                     <TableHead>Experience</TableHead>
-                    <TableHead>Specialty</TableHead>
                     <TableHead>Status</TableHead>
-                    <TableHead>Seller</TableHead>
                     <TableHead>Action</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {paginateData(mockCrew, currentPage.crew).map((member) => (
-                    <TableRow key={member.id}>
-                      <TableCell className="font-medium">{member.name}</TableCell>
-                      <TableCell>{member.role}</TableCell>
-                      <TableCell className="font-medium">
-                        {member.price.toLocaleString()}
+                  {crew.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
+                        No crew members available for hire.
                       </TableCell>
-                      <TableCell>
-                        {member.rating}
-                      </TableCell>
-                      <TableCell>{member.experience}</TableCell>
-                      <TableCell>{member.specialty}</TableCell>
-                      <TableCell>
-                        <span className={`font-medium ${getAvailabilityColor(member.availability)}`}>
-                          {member.availability}
-                        </span>
-                      </TableCell>
-                      <TableCell>{member.seller}</TableCell>
-                      <TableCell>
-                        {member.availability === "Available" ? (
-                          <SimpleButton size="sm">
+                    </TableRow>
+                  ) : (
+                    paginateData(crew, currentPage.crew).map((member) => (
+                      <TableRow key={member.id}>
+                        <TableCell className="font-medium">{member.name}</TableCell>
+                        <TableCell>{member.role}</TableCell>
+                        <TableCell>{member.salary?.toLocaleString()} credits</TableCell>
+                        <TableCell>{member.rating}</TableCell>
+                        <TableCell>{member.experience} years</TableCell>
+                        <TableCell>
+                          <span className={`font-medium ${getAvailabilityColor(member.status)}`}>
+                            {member.status}
+                          </span>
+                        </TableCell>
+                        <TableCell>
+                          <Button size="sm" disabled={!profile || profile.credits < member.salary}>
                             Hire
-                          </SimpleButton>
-                        ) : (
-                          <SimpleButton size="sm" disabled className="bg-secondary">
-                            Unavailable
-                          </SimpleButton>
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
                 </TableBody>
               </Table>
-            </CardContent>
-          </Card>
 
-          {/* Boats Section */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Boats</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Boat</TableHead>
-                    <TableHead>Class</TableHead>
-                    <TableHead>Price</TableHead>
-                    <TableHead>Rating</TableHead>
-                    <TableHead>Speed</TableHead>
-                    <TableHead>Handling</TableHead>
-                    <TableHead>Condition</TableHead>
-                    <TableHead>Seller</TableHead>
-                    <TableHead>Action</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {paginateData(mockBoats, currentPage.boats).map((boat) => (
-                    <TableRow key={boat.id}>
-                      <TableCell className="font-medium">{boat.name}</TableCell>
-                      <TableCell>{boat.class}</TableCell>
-                      <TableCell className="font-medium">
-                        {boat.price.toLocaleString()}
-                      </TableCell>
-                      <TableCell>
-                        {boat.rating}
-                      </TableCell>
-                      <TableCell>{boat.speed}</TableCell>
-                      <TableCell>{boat.handling}</TableCell>
-                      <TableCell>
-                        <span className={`font-medium ${getConditionColor(boat.condition)}`}>
-                          {boat.condition}
-                        </span>
-                      </TableCell>
-                      <TableCell>{boat.seller}</TableCell>
-                      <TableCell>
-                        <SimpleButton size="sm">
-                          Buy
-                        </SimpleButton>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+              {crew.length > itemsPerPage && (
+                <Pagination>
+                  <PaginationContent>
+                    <PaginationItem>
+                      <PaginationPrevious 
+                        onClick={() => setCurrentPage(prev => ({ ...prev, crew: Math.max(1, prev.crew - 1) }))}
+                        className={currentPage.crew === 1 ? "pointer-events-none opacity-50" : ""}
+                      />
+                    </PaginationItem>
+                    {Array.from({ length: getTotalPages(crew.length) }, (_, i) => (
+                      <PaginationItem key={i + 1}>
+                        <PaginationLink
+                          onClick={() => setCurrentPage(prev => ({ ...prev, crew: i + 1 }))}
+                          isActive={currentPage.crew === i + 1}
+                        >
+                          {i + 1}
+                        </PaginationLink>
+                      </PaginationItem>
+                    ))}
+                    <PaginationItem>
+                      <PaginationNext
+                        onClick={() => setCurrentPage(prev => ({ ...prev, crew: Math.min(getTotalPages(crew.length), prev.crew + 1) }))}
+                        className={currentPage.crew === getTotalPages(crew.length) ? "pointer-events-none opacity-50" : ""}
+                      />
+                    </PaginationItem>
+                  </PaginationContent>
+                </Pagination>
+              )}
             </CardContent>
           </Card>
 
           {/* Parts Section */}
           <Card>
             <CardHeader>
-              <CardTitle>Parts</CardTitle>
+              <CardTitle>Parts for Sale</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Part</TableHead>
+                    <TableHead>Name</TableHead>
                     <TableHead>Category</TableHead>
                     <TableHead>Price</TableHead>
                     <TableHead>Rating</TableHead>
                     <TableHead>Performance</TableHead>
-                    <TableHead>Weight</TableHead>
                     <TableHead>Condition</TableHead>
-                    <TableHead>Seller</TableHead>
+                    <TableHead>Compatibility</TableHead>
                     <TableHead>Action</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {paginateData(mockParts, currentPage.parts).map((part) => (
-                    <TableRow key={part.id}>
-                      <TableCell className="font-medium">{part.name}</TableCell>
-                      <TableCell>{part.category}</TableCell>
-                      <TableCell className="font-medium">
-                        {part.price.toLocaleString()}
-                      </TableCell>
-                      <TableCell>
-                        {part.rating}
-                      </TableCell>
-                      <TableCell>{part.performance}</TableCell>
-                      <TableCell>{part.weight}</TableCell>
-                      <TableCell>
-                        <span className={`font-medium ${getConditionColor(part.condition)}`}>
-                          {part.condition}
-                        </span>
-                      </TableCell>
-                      <TableCell>{part.seller}</TableCell>
-                      <TableCell>
-                        <SimpleButton size="sm">
-                          Buy
-                        </SimpleButton>
+                  {parts.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
+                        No parts available for purchase.
                       </TableCell>
                     </TableRow>
-                  ))}
+                  ) : (
+                    paginateData(parts, currentPage.parts).map((part) => (
+                      <TableRow key={part.id}>
+                        <TableCell className="font-medium">{part.name}</TableCell>
+                        <TableCell>{part.category}</TableCell>
+                        <TableCell>{part.price?.toLocaleString()} credits</TableCell>
+                        <TableCell>{part.rating}</TableCell>
+                        <TableCell>{part.performance}</TableCell>
+                        <TableCell>
+                          <span className={`font-medium ${getConditionColor(part.condition)}`}>
+                            {part.condition}
+                          </span>
+                        </TableCell>
+                        <TableCell>{part.compatible_classes?.join(', ') || 'Universal'}</TableCell>
+                        <TableCell>
+                          <Button size="sm" disabled={!profile || profile.credits < part.price}>
+                            Buy
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
                 </TableBody>
               </Table>
+
+              {parts.length > itemsPerPage && (
+                <Pagination>
+                  <PaginationContent>
+                    <PaginationItem>
+                      <PaginationPrevious 
+                        onClick={() => setCurrentPage(prev => ({ ...prev, parts: Math.max(1, prev.parts - 1) }))}
+                        className={currentPage.parts === 1 ? "pointer-events-none opacity-50" : ""}
+                      />
+                    </PaginationItem>
+                    {Array.from({ length: getTotalPages(parts.length) }, (_, i) => (
+                      <PaginationItem key={i + 1}>
+                        <PaginationLink
+                          onClick={() => setCurrentPage(prev => ({ ...prev, parts: i + 1 }))}
+                          isActive={currentPage.parts === i + 1}
+                        >
+                          {i + 1}
+                        </PaginationLink>
+                      </PaginationItem>
+                    ))}
+                    <PaginationItem>
+                      <PaginationNext
+                        onClick={() => setCurrentPage(prev => ({ ...prev, parts: Math.min(getTotalPages(parts.length), prev.parts + 1) }))}
+                        className={currentPage.parts === getTotalPages(parts.length) ? "pointer-events-none opacity-50" : ""}
+                      />
+                    </PaginationItem>
+                  </PaginationContent>
+                </Pagination>
+              )}
             </CardContent>
           </Card>
         </TabsContent>

@@ -120,7 +120,7 @@ export default function ProtestRoom() {
             <AlertTriangle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">8</div>
+            <div className="text-2xl font-bold">{protests.filter(p => p.status === 'submitted').length}</div>
             <p className="text-xs text-muted-foreground">Currently under review</p>
           </CardContent>
         </Card>
@@ -131,7 +131,12 @@ export default function ProtestRoom() {
             <MessageSquare className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">23</div>
+            <div className="text-2xl font-bold">{protests.filter(p => {
+              const createdDate = new Date(p.created_at)
+              const currentDate = new Date()
+              return createdDate.getMonth() === currentDate.getMonth() && 
+                     createdDate.getFullYear() === currentDate.getFullYear()
+            }).length}</div>
             <p className="text-xs text-muted-foreground">New protests filed</p>
           </CardContent>
         </Card>
@@ -142,30 +147,32 @@ export default function ProtestRoom() {
             <Clock className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">94%</div>
-            <p className="text-xs text-muted-foreground">Within 24 hours</p>
+            <div className="text-2xl font-bold">
+              {protests.length > 0 ? Math.round((protests.filter(p => p.status === 'resolved').length / protests.length) * 100) : 0}%
+            </div>
+            <p className="text-xs text-muted-foreground">Resolution rate</p>
           </CardContent>
         </Card>
         
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Karma</CardTitle>
+            <CardTitle className="text-sm font-medium">My Protests</CardTitle>
             <User className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">1,247</div>
-            <p className="text-xs text-muted-foreground">Community reputation</p>
+            <div className="text-2xl font-bold">{myProtests.length}</div>
+            <p className="text-xs text-muted-foreground">Filed by me</p>
           </CardContent>
         </Card>
         
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Credits</CardTitle>
+            <CardTitle className="text-sm font-medium">Total Protests</CardTitle>
             <User className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">3,847</div>
-            <p className="text-xs text-muted-foreground">Season total</p>
+            <div className="text-2xl font-bold">{protests.length}</div>
+            <p className="text-xs text-muted-foreground">All protests</p>
           </CardContent>
         </Card>
       </div>
@@ -246,32 +253,44 @@ export default function ProtestRoom() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {allProtests.map((protest) => (
-                <TableRow key={protest.id}>
-                  <TableCell className="font-medium max-w-xs">
-                    <div className="truncate">{protest.title}</div>
-                  </TableCell>
-                  <TableCell>{protest.regatta}</TableCell>
-                  <TableCell>{protest.class}</TableCell>
-                  <TableCell>
-                    <span className={`font-medium ${getStatusColor(protest.status)}`}>
-                      {protest.status}
-                    </span>
-                  </TableCell>
-                  <TableCell>{protest.incident}</TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-1">
-                      <MessageSquare className="h-4 w-4" />
-                      {protest.responses}
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <Button size="sm" variant="outline">
-                      View
-                    </Button>
+              {loading ? (
+                <TableRow>
+                  <TableCell colSpan={7} className="text-center py-8">Loading protests...</TableCell>
+                </TableRow>
+              ) : protests.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
+                    No protests filed yet.
                   </TableCell>
                 </TableRow>
-              ))}
+              ) : (
+                protests.map((protest) => (
+                  <TableRow key={protest.id}>
+                    <TableCell className="font-medium max-w-xs">
+                      <div className="truncate">{protest.incident_description}</div>
+                    </TableCell>
+                    <TableCell>--</TableCell>
+                    <TableCell>--</TableCell>
+                    <TableCell>
+                      <span className={`font-medium ${getStatusColor(protest.status)}`}>
+                        {protest.status}
+                      </span>
+                    </TableCell>
+                    <TableCell>{protest.rule_citation || '--'}</TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-1">
+                        <MessageSquare className="h-4 w-4" />
+                        0
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <Button size="sm" variant="outline">
+                        View
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
             </TableBody>
           </Table>
         </CardContent>

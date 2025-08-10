@@ -181,7 +181,7 @@ export default function Account() {
         </Card>
       </div>
 
-      {/* Season Progress */}
+      {/* Season Progress and Current Ranking */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <Card>
           <CardHeader>
@@ -190,16 +190,47 @@ export default function Account() {
           <CardContent>
             <div className="space-y-4">
               <div className="flex justify-between items-center">
-                <span className="text-sm font-medium">Current Ranking</span>
-                <span className="text-2xl font-bold">#42</span>
+                <span className="text-sm font-medium">Season Progress</span>
+                <span className="text-lg font-bold">{Math.round((profile?.total_races || 0) * 10)}% Complete</span>
               </div>
               <div className="w-full bg-muted rounded-full h-2">
-                <div className="bg-primary h-2 rounded-full w-[65%]"></div>
+                <div 
+                  className="bg-primary h-2 rounded-full transition-all duration-300" 
+                  style={{ width: `${Math.min((profile?.total_races || 0) * 10, 100)}%` }}
+                ></div>
               </div>
               <div className="flex justify-between text-xs text-muted-foreground">
                 <span>Season Start</span>
-                <span>65% Complete</span>
+                <span>{profile?.total_races || 0} races completed</span>
                 <span>Season End</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Current Ranking</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="text-center">
+                <div className="text-4xl font-bold text-primary">#{profile?.total_races ? Math.max(1, 100 - profile.total_races * 5) : 999}</div>
+                <div className="text-sm text-muted-foreground mt-1">Global Ranking</div>
+              </div>
+              <div className="space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span>Rank</span>
+                  <span className="font-medium">{profile?.rank || 'Novice'}</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span>Karma</span>
+                  <span className="font-medium">{profile?.karma || 0}</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span>Races Won</span>
+                  <span className="font-medium">{raceHistory.filter(r => r.final_position === 1).length}</span>
+                </div>
               </div>
             </div>
           </CardContent>

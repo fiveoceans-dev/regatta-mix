@@ -212,11 +212,10 @@ export default function Play() {
           <Card className="bg-background/80 backdrop-blur-md border-border/50">
             <CardHeader>
               <div className="flex items-center justify-between">
-                <CardTitle>All Regattas</CardTitle>
                 <Tabs value={activeTab} onValueChange={handleTabChange} className="w-auto">
                   <TabsList className="bg-background/50">
-                    <TabsTrigger value="all">All Regattas</TabsTrigger>
                     <TabsTrigger value="my">My Regattas</TabsTrigger>
+                    <TabsTrigger value="all">All Regattas</TabsTrigger>
                     <TabsTrigger value="top">Top Regattas</TabsTrigger>
                   </TabsList>
                 </Tabs>
@@ -230,9 +229,9 @@ export default function Play() {
                       <TableHead>Regatta</TableHead>
                       <TableHead>Class</TableHead>
                       <TableHead>Players</TableHead>
-                      <TableHead>Date</TableHead>
-                      <TableHead>Start In</TableHead>
-                      <TableHead>Location</TableHead>
+                      <TableHead><Calendar className="h-4 w-4" />Date</TableHead>
+                      <TableHead><Clock className="h-4 w-4" />Starts In</TableHead>
+                      <TableHead><MapPin className="h-4 w-4" />Location</TableHead>
                       <TableHead>Prize Pool</TableHead>
                       <TableHead>Register</TableHead>
                     </TableRow>
@@ -245,19 +244,16 @@ export default function Play() {
                         <TableCell>{regatta.players}/{regatta.maxPlayers}</TableCell>
                         <TableCell>
                           <div className="flex items-center gap-1">
-                            <Calendar className="h-4 w-4" />
                             {regatta.date}
                           </div>
                         </TableCell>
                         <TableCell>
                           <div className="flex items-center gap-1">
-                            <Clock className="h-4 w-4" />
                             {regatta.startTime}
                           </div>
                         </TableCell>
                         <TableCell>
                           <div className="flex items-center gap-1">
-                            <MapPin className="h-4 w-4" />
                             {regatta.location}
                           </div>
                         </TableCell>

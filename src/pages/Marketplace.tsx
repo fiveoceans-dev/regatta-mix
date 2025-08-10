@@ -285,7 +285,7 @@ export default function Marketplace() {
     }
   }
 
-  const paginateData = (data: any[], page: number) => {
+  const paginateData = <T,>(data: T[], page: number) => {
     const startIndex = (page - 1) * itemsPerPage
     return data.slice(startIndex, startIndex + itemsPerPage)
   }

@@ -69,10 +69,10 @@ export function PartnersSection() {
         {/* Partnership CTA */}
         <div className="text-center mt-16 bg-gradient-primary rounded-lg p-8">
           <div className="max-w-2xl mx-auto">
-            <h3 className="text-2xl font-bold text-primary mb-4">
+            <h3 className="text-2xl font-bold text-accent mb-4">
               Become a Partner
             </h3>
-            <p className="text-primary/90 mb-6">
+            <p className="text-muted-foreground mb-6">
               Join leading brands in the future of cyber sailing
             </p>
             <ContactFormDialog>

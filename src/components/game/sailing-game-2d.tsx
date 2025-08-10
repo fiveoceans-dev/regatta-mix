@@ -2,7 +2,7 @@ import { useRef, useEffect, useState, useCallback } from 'react'
 import { Canvas, useThree, useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { SvgOverlay } from './svg-overlay'
-// import { GameHUD } from './game-hud'
+import { GameHUD } from './game-hud'
 import { useGameState } from '../../hooks/use-game-state'
 import { useWebSocket } from '../../hooks/use-websocket'
 
@@ -117,11 +117,11 @@ export function SailingGame2D() {
       )}
       
       {/* Game HUD */}
-      {/* <GameHUD 
+      <GameHUD 
         gameState={gameState}
         connectionState={connectionState}
         onAction={(action) => dispatch(action)}
-      /> */}
+      />
     </div>
   )
 }

@@ -2,9 +2,7 @@ import { useRef, useEffect, useState, useCallback } from 'react'
 import { Canvas, useThree, useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { SvgOverlay } from './svg-overlay'
-import { GameHUD } from './game-hud'
 import { useGameState } from '../../hooks/use-game-state'
-import { useWebSocket } from '../../hooks/use-websocket'
 
 // Game world to screen coordinates
 export function worldToScreen(worldPos: THREE.Vector3, camera: THREE.Camera, size: { width: number, height: number }) {
@@ -73,15 +71,17 @@ export function SailingGame2D() {
     zoom: 1
   })
   
-  const { gameState, dispatch } = useGameState()
-  const { sendMessage, connectionState } = useWebSocket('ws://localhost:8080')
+  const { gameState } = useGameState()
 
   const handleCameraUpdate = useCallback((camera: THREE.Camera, size: { width: number, height: number }) => {
     // This will be called from SvgOverlay to sync coordinates
   }, [])
 
   return (
-    <div className="relative w-full h-full bg-background">
+    <div
+      className="relative w-full h-full"
+      style={{ background: 'linear-gradient(hsl(var(--water-mid)), hsl(var(--water-deep)))' }}
+    >
       {/* Three.js Canvas - invisible but handles camera/world transforms */}
       <Canvas
         ref={canvasRef}
@@ -100,17 +100,10 @@ export function SailingGame2D() {
       </Canvas>
       
       {/* SVG Overlay - all visible game objects */}
-      <SvgOverlay 
+      <SvgOverlay
         canvasRef={canvasRef}
         gameState={gameState}
         onCameraUpdate={handleCameraUpdate}
-      />
-      
-      {/* Game HUD */}
-      <GameHUD 
-        gameState={gameState}
-        connectionState={connectionState}
-        onAction={(action) => dispatch(action)}
       />
     </div>
   )

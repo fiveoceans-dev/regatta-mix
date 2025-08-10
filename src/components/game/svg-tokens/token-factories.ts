@@ -3,12 +3,19 @@ import { BoatToken, MarkToken, VectorToken, ZoneRing } from './token-types'
 // Factory functions to create parametric SVG tokens
 
 export function createBoatToken(partial: Partial<BoatToken> & { id: string, position: { x: number, y: number } }): BoatToken {
+  const defaultColor =
+    partial.team === 'red'
+      ? 'hsl(var(--boat-red))'
+      : partial.team === 'blue'
+        ? 'hsl(var(--boat-blue))'
+        : 'hsl(var(--primary))'
+
   return {
     id: partial.id,
     type: partial.type ?? 'dinghy',
     hullLength: partial.hullLength ?? 4,
     beam: partial.beam ?? 2,
-    color: partial.color ?? 'hsl(var(--primary))',
+    color: partial.color ?? defaultColor,
     pattern: partial.pattern ?? 'solid',
     headingDeg: partial.headingDeg ?? 0,
     sailAngleDeg: partial.sailAngleDeg ?? 0,

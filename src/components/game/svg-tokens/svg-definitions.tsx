@@ -6,8 +6,8 @@ export function SvgDefinitions() {
       {/* CSS Variables for dynamic theming */}
       <style>
         {`
-          .token-red { --token-color: hsl(var(--destructive)); }
-          .token-blue { --token-color: hsl(var(--primary)); }
+          .token-red { --token-color: hsl(var(--boat-red)); }
+          .token-blue { --token-color: hsl(var(--boat-blue)); }
           .token-yellow { --token-color: hsl(var(--sailing-warning)); }
           .token-green { --token-color: hsl(var(--sailing-success)); }
           .token-player { --token-color: hsl(var(--secondary)); }
@@ -21,17 +21,18 @@ export function SvgDefinitions() {
           
           .vector-line { stroke: var(--token-color); fill: none; }
           .zone-ring { fill: none; stroke: var(--token-color); }
+          .selection-ring { stroke: hsl(var(--neon-aqua)/var(--neon-alpha)); }
         `}
       </style>
 
       {/* Colorblind-safe accessibility patterns */}
       <pattern id="pattern-red-hash" patternUnits="userSpaceOnUse" width="8" height="8">
-        <rect width="8" height="8" fill="hsl(var(--destructive))" />
+        <rect width="8" height="8" fill="hsl(var(--boat-red))" />
         <path d="M0,4 L8,4 M4,0 L4,8" stroke="white" strokeWidth="1" />
       </pattern>
 
       <pattern id="pattern-blue-diagonal" patternUnits="userSpaceOnUse" width="8" height="8">
-        <rect width="8" height="8" fill="hsl(var(--primary))" />
+        <rect width="8" height="8" fill="hsl(var(--boat-blue))" />
         <path d="M0,0 L8,8 M0,8 L8,0" stroke="white" strokeWidth="1" />
       </pattern>
 

@@ -179,7 +179,7 @@ export default function Play() {
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
                 <div className="space-y-2">
-                  <div className="text-sm text-muted-foreground">Start In</div>
+                  <div className="text-sm text-muted-foreground">Starts In</div>
                   <div className="text-lg font-bold">{countdown}</div>
                 </div>
                 <div className="space-y-2">
@@ -231,9 +231,9 @@ export default function Play() {
                       <TableHead>Regatta</TableHead>
                       <TableHead>Class</TableHead>
                       <TableHead>Players</TableHead>
-                      <TableHead><Calendar className="h-4 w-4" /></TableHead>
-                      <TableHead><Clock className="h-4 w-4" /></TableHead>
-                      <TableHead><MapPin className="h-4 w-4" /></TableHead>
+                      <TableHead>Date & Time</TableHead>
+                      <TableHead>Starts In</TableHead>
+                      <TableHead>Location</TableHead>
                       <TableHead>Prize Pool</TableHead>
                       <TableHead>Register</TableHead>
                     </TableRow>

@@ -116,7 +116,6 @@ export function SvgOverlay({ canvasRef, gameState, camera, size }: SvgOverlayPro
             key={boat.id}
             boat={boat}
             screenPosition={screenPos}
-            camera={camera}
             isPlayer={boat.id === gameState.playerId}
           />
         )

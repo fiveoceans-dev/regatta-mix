@@ -26,7 +26,7 @@ export function Navbar() {
         {/* Left side - Logo and Title */}
         <div className="flex items-center gap-2">
           <Anchor className="h-6 w-6 text-primary" />
-          <Link to="/" className="font-serif-renaissance text-xl font-semibold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+          <Link to="/" className="font-serif-renaissance text-xl font-semibold text-primary">
             Cyber Sailing
           </Link>
         </div>

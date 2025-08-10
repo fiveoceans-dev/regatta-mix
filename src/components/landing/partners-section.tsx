@@ -30,18 +30,17 @@ export function PartnersSection() {
         </div>
 
         {/* First Row - Left to Right */}
-        <div className="relative overflow-hidden mb-8">
-          <div className="flex animate-scroll-x space-x-12">
+        <div className="relative overflow-hidden mb-4">
+          <div className="flex animate-scroll-x space-x-8">
             {[...partners, ...partners].map((partner, index) => (
               <div 
                 key={`row1-${index}`}
-                className="flex-shrink-0 rounded-lg p-8 hover:bg-muted/20 transition-all duration-300"
+                className="flex-shrink-0 rounded-lg p-4 hover:bg-muted/20 transition-all duration-300"
               >
-                <div className="flex flex-col items-center space-y-4 min-w-[200px]">
-                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
-                    <span className="text-2xl font-bold text-primary">{partner.logo}</span>
+                <div className="flex items-center justify-center min-w-[120px]">
+                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                    <span className="text-lg font-bold text-primary">{partner.logo}</span>
                   </div>
-                  <span className="font-semibold text-lg whitespace-nowrap">{partner.name}</span>
                 </div>
               </div>
             ))}
@@ -50,17 +49,16 @@ export function PartnersSection() {
 
         {/* Second Row - Right to Left */}
         <div className="relative overflow-hidden">
-          <div className="flex animate-scroll-x space-x-12" style={{ animationDirection: "reverse" }}>
+          <div className="flex animate-scroll-x space-x-8" style={{ animationDirection: "reverse" }}>
             {[...partners.slice().reverse(), ...partners.slice().reverse()].map((partner, index) => (
               <div 
                 key={`row2-${index}`}
-                className="flex-shrink-0 p-8 hover:bg-muted/20 transition-all duration-300"
+                className="flex-shrink-0 p-4 hover:bg-muted/20 transition-all duration-300"
               >
-                <div className="flex flex-col items-center space-y-4 min-w-[200px]">
-                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
-                    <span className="text-2xl font-bold text-primary">{partner.logo}</span>
+                <div className="flex items-center justify-center min-w-[120px]">
+                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                    <span className="text-lg font-bold text-primary">{partner.logo}</span>
                   </div>
-                  <span className="font-semibold text-lg whitespace-nowrap">{partner.name}</span>
                 </div>
               </div>
             ))}

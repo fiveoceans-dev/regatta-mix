@@ -113,7 +113,7 @@ export function HeroSection() {
       {/* Hero Content */}
       <div className="absolute inset-0 flex items-center justify-center z-10">
         <div className="text-center text-white max-w-4xl px-4">
-          <h1 className="text-5xl md:text-7xl font-serif-renaissance font-bold mb-6 animate-fade-in-up">
+          <h1 className="text-5xl md:text-7xl font-serif-renaissance font-bold mb-6 animate-fade-in-up text-primary">
             Cyber Sailing
           </h1>
           <p className="text-xl md:text-2xl mb-12 text-white/90 animate-fade-in-up font-serif-body" style={{ animationDelay: "0.2s" }}>

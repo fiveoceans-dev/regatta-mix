@@ -25,7 +25,7 @@ export function OvalButton({
         disabled={disabled}
         className={cn(
           "relative px-8 py-2 rounded-full text-sm font-medium transition-all duration-300",
-          "bg-gradient-to-r from-primary to-accent text-white hover:from-primary-glow hover:to-accent shadow-lg hover:shadow-xl",
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-lg hover:shadow-xl",
           className
         )}
       >

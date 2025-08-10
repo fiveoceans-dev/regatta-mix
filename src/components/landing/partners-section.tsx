@@ -1,4 +1,5 @@
 import { ContactFormDialog } from "@/components/ui/contact-form-dialog"
+import { SimpleButton } from "@/components/ui/simple-button"
 
 const partners = [
   { name: "SailGP", logo: "SG" },
@@ -76,9 +77,9 @@ export function PartnersSection() {
               Join leading brands in the future of cyber sailing
             </p>
             <ContactFormDialog>
-              <button className="bg-background text-foreground px-8 py-3 rounded-lg font-semibold hover:bg-background/90 transition-colors">
+              <SimpleButton>
                 Contact Us
-              </button>
+              </SimpleButton>
             </ContactFormDialog>
           </div>
         </div>

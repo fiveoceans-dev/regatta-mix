@@ -67,9 +67,7 @@ export default function ProtestRoom() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (user) {
-      fetchProtests()
-    }
+    fetchProtests()
   }, [user])
 
   const fetchProtests = async () => {
@@ -106,10 +104,16 @@ export default function ProtestRoom() {
           <h1 className="text-3xl font-bold text-foreground">Protest Room</h1>
           <p className="text-muted-foreground">Report and discuss racing incidents and rule violations</p>
         </div>
-        <Button className="gap-2">
-          <Plus className="h-4 w-4" />
-          Protest
-        </Button>
+        {user ? (
+          <Button className="gap-2">
+            <Plus className="h-4 w-4" />
+            Protest
+          </Button>
+        ) : (
+          <Button variant="outline" onClick={() => window.location.href = '/auth'}>
+            Login to Protest
+          </Button>
+        )}
       </div>
 
       {/* Stats */}
@@ -178,7 +182,7 @@ export default function ProtestRoom() {
       </div>
 
       {/* My Protests Section */}
-      {myProtests.length > 0 && (
+      {user && myProtests.length > 0 && (
         <Card>
           <CardHeader>
             <CardTitle>My Protests</CardTitle>

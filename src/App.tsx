@@ -52,9 +52,9 @@ const AppContent = () => {
             <Route path="/dashboard" element={<ProtectedRoute><DashboardHome /></ProtectedRoute>} />
             
             {/* Other pages */}
-            <Route path="/play" element={<ProtectedRoute><Play /></ProtectedRoute>} />
-            <Route path="/protestroom" element={<ProtectedRoute><ProtestRoom /></ProtectedRoute>} />
-            <Route path="/marketplace" element={<ProtectedRoute><Marketplace /></ProtectedRoute>} />
+            <Route path="/play" element={<Play />} />
+            <Route path="/protestroom" element={<ProtestRoom />} />
+            <Route path="/marketplace" element={<Marketplace />} />
             <Route path="/Account" element={<ProtectedRoute><Account /></ProtectedRoute>} />
             <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
             

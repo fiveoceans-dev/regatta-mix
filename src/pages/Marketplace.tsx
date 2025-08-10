@@ -45,10 +45,12 @@ export default function Marketplace() {
   const itemsPerPage = 10
 
   useEffect(() => {
+    fetchMarketplaceData()
     if (user) {
-      fetchMarketplaceData()
       fetchMyItems()
       fetchProfile()
+    } else {
+      setLoading(false)
     }
   }, [user])
 
@@ -187,10 +189,10 @@ export default function Marketplace() {
         </Card>
       </div>
 
-      <Tabs defaultValue="my-team" className="space-y-6">
+      <Tabs defaultValue={user ? "my-team" : "marketplace"} className="space-y-6">
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="my-team">
-            My Team
+          <TabsTrigger value="my-team" disabled={!user}>
+            My Team {!user && "(Login Required)"}
           </TabsTrigger>
           <TabsTrigger value="marketplace">
             Marketplace
@@ -385,9 +387,15 @@ export default function Marketplace() {
                           </span>
                         </TableCell>
                         <TableCell>
-                          <Button size="sm" disabled={!profile || profile.credits < boat.price}>
-                            Buy
-                          </Button>
+                          {user ? (
+                            <Button size="sm" disabled={!profile || profile.credits < boat.price}>
+                              Buy
+                            </Button>
+                          ) : (
+                            <Button size="sm" variant="outline" onClick={() => window.location.href = '/auth'}>
+                              Login to Buy
+                            </Button>
+                          )}
                         </TableCell>
                       </TableRow>
                     ))
@@ -465,9 +473,15 @@ export default function Marketplace() {
                           </span>
                         </TableCell>
                         <TableCell>
-                          <Button size="sm" disabled={!profile || profile.credits < member.salary}>
-                            Hire
-                          </Button>
+                          {user ? (
+                            <Button size="sm" disabled={!profile || profile.credits < member.salary}>
+                              Hire
+                            </Button>
+                          ) : (
+                            <Button size="sm" variant="outline" onClick={() => window.location.href = '/auth'}>
+                              Login to Hire
+                            </Button>
+                          )}
                         </TableCell>
                       </TableRow>
                     ))
@@ -547,9 +561,15 @@ export default function Marketplace() {
                         </TableCell>
                         <TableCell>{part.compatible_classes?.join(', ') || 'Universal'}</TableCell>
                         <TableCell>
-                          <Button size="sm" disabled={!profile || profile.credits < part.price}>
-                            Buy
-                          </Button>
+                          {user ? (
+                            <Button size="sm" disabled={!profile || profile.credits < part.price}>
+                              Buy
+                            </Button>
+                          ) : (
+                            <Button size="sm" variant="outline" onClick={() => window.location.href = '/auth'}>
+                              Login to Buy
+                            </Button>
+                          )}
                         </TableCell>
                       </TableRow>
                     ))

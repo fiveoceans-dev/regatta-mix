@@ -1,4 +1,4 @@
-import { createContext, useContext, useReducer, useEffect, ReactNode } from 'react'
+import { createContext, useContext, useReducer, useEffect, ReactNode, useRef } from 'react'
 import { GameState, GameAction, Boat, Mark, WindData } from '../types/game-types'
 
 // Initial game state for development/testing
@@ -14,9 +14,9 @@ const initialGameState: GameState = {
       name: 'Player',
       team: 'red',
       x: 0,
-      z: -15,
+      z: -220,
       heading: 0,
-      speed: 0,
+      speed: 8,
       position: 1
     },
     {
@@ -24,9 +24,9 @@ const initialGameState: GameState = {
       number: 2,
       name: 'Bot Alpha',
       team: 'blue',
-      x: -5,
-      z: -15,
-      heading: 0.1,
+      x: -10,
+      z: -225,
+      heading: 0,
       speed: 8.2,
       position: 2
     },
@@ -35,9 +35,9 @@ const initialGameState: GameState = {
       number: 3,
       name: 'Bot Beta',
       team: 'red',
-      x: 3,
-      z: -16,
-      heading: -0.1,
+      x: 6,
+      z: -230,
+      heading: 0,
       speed: 7.8,
       position: 3
     }
@@ -48,16 +48,16 @@ const initialGameState: GameState = {
       name: 'Start',
       type: 'start',
       x: 0,
-      z: -20,
-      radius: 2
+      z: -200,
+      radius: 3
     },
     {
       id: 'windward',
       name: '1',
       type: 'windward',
       x: 0,
-      z: 50,
-      radius: 3,
+      z: 400,
+      radius: 5,
       roundingDirection: 'port'
     },
     {
@@ -65,27 +65,27 @@ const initialGameState: GameState = {
       name: '2',
       type: 'leeward',
       x: 0,
-      z: -40,
-      radius: 3,
+      z: -400,
+      radius: 5,
       roundingDirection: 'starboard'
     }
   ],
   windField: [
     { x: 0, z: 0, direction: 0, speed: 12 },
-    { x: 10, z: 10, direction: 0.1, speed: 13 },
-    { x: -10, z: 10, direction: -0.1, speed: 11 },
-    { x: 0, z: 20, direction: 0.05, speed: 12.5 }
+    { x: 20, z: 100, direction: 0.1, speed: 13 },
+    { x: -20, z: 100, direction: -0.1, speed: 11 },
+    { x: 0, z: 250, direction: 0.05, speed: 12.5 }
   ],
   wind: { x: 0, z: 0, direction: 0, speed: 12 },
   courseBounds: [
     {
-      start: { x: -50, z: -50 },
-      end: { x: -50, z: 100 },
+      start: { x: -100, z: -500 },
+      end: { x: -100, z: 500 },
       type: 'boundary'
     },
     {
-      start: { x: 50, z: -50 },
-      end: { x: 50, z: 100 },
+      start: { x: 100, z: -500 },
+      end: { x: 100, z: 500 },
       type: 'boundary'
     }
   ]
@@ -147,21 +147,41 @@ const GameStateContext = createContext<GameStateContextType | null>(null)
 // Provider component
 export function GameStateProvider({ children }: { children: ReactNode }) {
   const [gameState, dispatch] = useReducer(gameStateReducer, initialGameState)
-  
+  const gameStateRef = useRef(gameState)
+
+  useEffect(() => {
+    gameStateRef.current = gameState
+  }, [gameState])
+
   // Simulate basic game loop for development
   useEffect(() => {
     const interval = setInterval(() => {
+      const state = gameStateRef.current
       dispatch({
         type: 'UPDATE_STATE',
         payload: {
-          tick: gameState.tick + 1,
-          lastUpdate: new Date().toLocaleTimeString()
+          tick: state.tick + 1,
+          lastUpdate: new Date().toLocaleTimeString(),
+          boats: state.boats.map((boat) => {
+            const direction = boat.heading === 0 ? 1 : -1
+            let z = boat.z + direction * boat.speed * 0.5
+            let heading = boat.heading
+            if (z > 400) {
+              z = 400
+              heading = Math.PI
+            }
+            if (z < -400) {
+              z = -400
+              heading = 0
+            }
+            return { ...boat, z, heading }
+          })
         }
       })
-    }, 1000)
-    
+    }, 100)
+
     return () => clearInterval(interval)
-  }, [gameState.tick])
+  }, [])
   
   return (
     <GameStateContext.Provider value={{ gameState, dispatch }}>

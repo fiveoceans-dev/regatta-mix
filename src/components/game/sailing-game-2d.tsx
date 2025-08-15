@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState, useCallback } from 'react'
+import React, { useRef, useEffect, useState, useCallback } from 'react'
 import { Canvas, useThree, useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { SvgOverlay } from './svg-overlay'
@@ -15,22 +15,22 @@ export function worldToScreen(worldPos: THREE.Vector3, camera: THREE.Camera, siz
   }
 }
 
-function GameCamera({ zoom, onCameraUpdate }: { zoom: number; onCameraUpdate: (camera: THREE.Camera, size: { width: number, height: number }) => void }) {
+function GameCamera({ zoom, cameraZ, onCameraUpdate }: { zoom: number; cameraZ: number; onCameraUpdate: (camera: THREE.Camera, size: { width: number, height: number }) => void }) {
   const { camera, size } = useThree()
 
   useEffect(() => {
     if (camera) {
       // Set up orthographic camera for top-down view
       const orthoCamera = camera as THREE.OrthographicCamera
-      orthoCamera.position.set(0, 50, 0)
-      orthoCamera.lookAt(0, 0, 0)
+      orthoCamera.position.set(0, 50, cameraZ)
+      orthoCamera.lookAt(0, 0, cameraZ)
       orthoCamera.zoom = zoom
       orthoCamera.updateProjectionMatrix()
 
       // Pass camera data to parent
       onCameraUpdate(camera, size)
     }
-  }, [camera, size, onCameraUpdate, zoom])
+  }, [camera, size, onCameraUpdate, zoom, cameraZ])
 
   return null
 }
@@ -67,23 +67,55 @@ function GameWorld({ gameState }: { gameState: GameState }) {
 
 export function SailingGame2D({ gameState, zoom }: { gameState: GameState; zoom: number }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const cameraPosition: [number, number, number] = [0, 50, 0]
   const [cameraData, setCameraData] = useState<{ camera: THREE.Camera, size: { width: number, height: number } } | null>(null)
+  const [cameraZ, setCameraZ] = useState(0)
+  const isDragging = useRef(false)
+  const lastY = useRef<number | null>(null)
 
   const handleCameraUpdate = useCallback((camera: THREE.Camera, size: { width: number, height: number }) => {
     setCameraData({ camera, size })
   }, [])
 
+  const playerBoat = gameState.boats.find(b => b.id === gameState.playerId)
+
+  useEffect(() => {
+    if (!isDragging.current && playerBoat) {
+      setCameraZ(playerBoat.z)
+    }
+  }, [playerBoat])
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    isDragging.current = true
+    lastY.current = e.clientY
+  }
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (isDragging.current && lastY.current !== null) {
+      const delta = (e.clientY - lastY.current) / zoom
+      setCameraZ((z) => z + delta)
+      lastY.current = e.clientY
+    }
+  }
+
+  const stopDragging = () => {
+    isDragging.current = false
+    lastY.current = null
+  }
+
   return (
     <div
       className="relative w-full h-full"
       style={{ background: 'linear-gradient(hsl(var(--water-mid)), hsl(var(--water-deep)))' }}
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={stopDragging}
+      onMouseLeave={stopDragging}
     >
       {/* Three.js Canvas - invisible but handles camera/world transforms */}
       <Canvas
         ref={canvasRef}
         camera={{
-          position: cameraPosition,
+          position: [0, 50, cameraZ],
           zoom,
           near: 0.1,
           far: 1000
@@ -92,7 +124,7 @@ export function SailingGame2D({ gameState, zoom }: { gameState: GameState; zoom:
         className="absolute inset-0"
         style={{ background: 'transparent' }}
       >
-        <GameCamera zoom={zoom} onCameraUpdate={handleCameraUpdate} />
+        <GameCamera zoom={zoom} cameraZ={cameraZ} onCameraUpdate={handleCameraUpdate} />
         <GameWorld gameState={gameState} />
       </Canvas>
 

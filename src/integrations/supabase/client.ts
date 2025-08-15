@@ -8,9 +8,23 @@ const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiO
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
 
+// Use cookies instead of localStorage so credentials persist securely across refreshes
+const cookieStorage = {
+  getItem: (key: string) => {
+    const match = document.cookie.split('; ').find(row => row.startsWith(`${key}=`));
+    return match ? decodeURIComponent(match.split('=')[1]) : null;
+  },
+  setItem: (key: string, value: string) => {
+    document.cookie = `${key}=${encodeURIComponent(value)}; path=/; secure; samesite=strict`;
+  },
+  removeItem: (key: string) => {
+    document.cookie = `${key}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+  }
+};
+
 export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
   auth: {
-    storage: localStorage,
+    storage: cookieStorage,
     persistSession: true,
     autoRefreshToken: true,
   }

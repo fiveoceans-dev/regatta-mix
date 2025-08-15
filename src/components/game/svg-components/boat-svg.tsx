@@ -21,8 +21,20 @@ export function BoatSvg({ boat, screenPosition, isPlayer }: BoatSvgProps) {
   const strokeWidth = isPlayer ? 2 : 1
 
   return (
-    <g transform={`translate(${screenPosition.x}, ${screenPosition.y})`}>
-      <g transform={`rotate(${rotation})`}>
+    <g
+      style={{
+        transform: `translate(${screenPosition.x}px, ${screenPosition.y}px)`,
+        transition: 'transform 0.2s linear'
+      }}
+    >
+      <g
+        style={{
+          transform: `rotate(${rotation}deg)`,
+          transformOrigin: 'center',
+          transformBox: 'fill-box',
+          transition: 'transform 0.2s linear'
+        }}
+      >
         {/* Simple triangular hull */}
         <polygon
           points={`0,-${size} ${size / 2},${size / 2} -${size / 2},${size / 2}`}

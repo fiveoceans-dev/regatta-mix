@@ -269,11 +269,11 @@ function GamePlayContent() {
       </div>
 
       {/* Debug toggle and panel */}
-      <div className="absolute bottom-24 right-4 pointer-events-auto">
+      <div className="absolute top-4 right-4 pointer-events-auto">
         <GameButton onClick={() => setShowDebug(!showDebug)}>Debug</GameButton>
       </div>
       {showDebug && (
-        <div className="absolute bottom-40 right-4 pointer-events-auto">
+        <div className="absolute top-20 right-4 pointer-events-auto">
           <Card className="p-4 bg-card/90 backdrop-blur-sm max-w-xs">
             <div className="space-y-2 text-xs">
               <div className="text-muted-foreground font-medium">DEBUG INFO</div>

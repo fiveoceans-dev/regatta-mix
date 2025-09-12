@@ -22,13 +22,9 @@ export function createSiteClient(url: string, anonKey: string, host?: string, op
   const resolvedHost = host ?? (typeof window !== 'undefined' ? window.location.host : '');
   const schema = schemaForHost(resolvedHost);
   const client = createClient<Database>(url, anonKey, options);
-  return {
-    ...client,
-    schema,
-    from: (table: string) => client.schema(schema).from(table),
-    rpc: (fn: string, params?: any, opts?: any) => client.schema(schema).rpc(fn, params, opts),
-    channel: (name: string, opts?: any) => client.channel(name, { ...opts, schema })
-  } as any;
+  
+  // Return base client with schema info until migrations are run
+  return Object.assign(client, { schema });
 }
 
 // Example usage:

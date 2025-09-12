@@ -229,6 +229,125 @@ END;
 $$;
 ```
 
+## Site-Specific Profile Extensions
+
+For sites that need to store additional user-specific data beyond the basic `profiles` table, create site-specific profile extension tables in the shared `public` schema:
+
+### Example: Regatta-Specific User Data
+
+```sql
+-- Create site-specific profile table (example: site_regatta_profiles)
+CREATE TABLE public.site_regatta_profiles (
+  id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  site_id UUID NOT NULL REFERENCES public.sites(id) ON DELETE CASCADE,
+  rank TEXT DEFAULT 'novice',
+  total_races INTEGER DEFAULT 0,
+  karma INTEGER DEFAULT 0,
+  credits INTEGER DEFAULT 1000,
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+  updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+  
+  -- Ensure one profile per user per site
+  UNIQUE(user_id, site_id)
+);
+
+-- Enable RLS and create policies
+ALTER TABLE public.site_regatta_profiles ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users can view their own site profiles" 
+ON public.site_regatta_profiles FOR SELECT 
+USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can create their own site profiles" 
+ON public.site_regatta_profiles FOR INSERT 
+WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can update their own site profiles" 
+ON public.site_regatta_profiles FOR UPDATE 
+USING (auth.uid() = user_id);
+
+-- Helper function to get user's site-specific profile
+CREATE OR REPLACE FUNCTION public.get_user_regatta_profile(site_schema text)
+RETURNS TABLE (
+  id uuid,
+  rank text,
+  total_races integer,
+  karma integer,
+  credits integer,
+  created_at timestamp with time zone,
+  updated_at timestamp with time zone
+) 
+LANGUAGE plpgsql SECURITY DEFINER SET search_path TO 'public'
+AS $function$
+BEGIN
+    RETURN QUERY
+    SELECT 
+      srp.id,
+      srp.rank,
+      srp.total_races,
+      srp.karma,
+      srp.credits,
+      srp.created_at,
+      srp.updated_at
+    FROM public.site_regatta_profiles srp
+    JOIN public.sites s ON s.id = srp.site_id
+    WHERE s.schema_name = site_schema 
+    AND srp.user_id = auth.uid();
+END;
+$function$;
+
+-- Update ensure_membership_for_domain to initialize site profiles
+CREATE OR REPLACE FUNCTION public.ensure_membership_for_domain()
+RETURNS void 
+LANGUAGE plpgsql 
+SECURITY DEFINER 
+SET search_path TO 'public'
+AS $function$
+DECLARE
+    current_host text;
+    site_record record;
+BEGIN
+    current_host := current_setting('request.headers', true)::json->>'host';
+    SELECT * INTO site_record FROM public.sites WHERE domain = current_host AND active = true;
+    
+    IF site_record.id IS NOT NULL AND auth.uid() IS NOT NULL THEN
+        -- Create site membership
+        INSERT INTO public.site_members (site_id, user_id, role)
+        VALUES (site_record.id, auth.uid(), 'member')
+        ON CONFLICT (site_id, user_id) DO NOTHING;
+        
+        -- Create site-specific profile (example for regatta sites)
+        IF site_record.schema_name = 'site_regatta' THEN
+            INSERT INTO public.site_regatta_profiles (user_id, site_id)
+            VALUES (auth.uid(), site_record.id)
+            ON CONFLICT (user_id, site_id) DO NOTHING;
+        END IF;
+        
+        -- Add similar blocks for other site types:
+        -- IF site_record.schema_name = 'site_marketplace' THEN
+        --     INSERT INTO public.site_marketplace_profiles (user_id, site_id)
+        --     VALUES (auth.uid(), site_record.id)
+        --     ON CONFLICT (user_id, site_id) DO NOTHING;
+        -- END IF;
+    END IF;
+END;
+$function$;
+```
+
+### Pattern for New Sites
+
+When adding a new site that needs site-specific user data:
+
+1. **Create site-specific profile table**: `public.site_{name}_profiles`
+2. **Include required fields**: `user_id`, `site_id`, and any site-specific data
+3. **Add unique constraint**: `UNIQUE(user_id, site_id)` 
+4. **Enable RLS**: With policies for user access control
+5. **Create helper functions**: For getting/initializing site profiles
+6. **Update `ensure_membership_for_domain`**: To auto-create profiles for new users
+
+This pattern keeps shared authentication in `public.profiles` while allowing each site to have its own user-specific data structure.
+
 ## Authentication Integration
 
 ### User Registration Flow

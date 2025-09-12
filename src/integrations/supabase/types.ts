@@ -91,6 +91,50 @@ export type Database = {
           },
         ]
       }
+      site_regatta_profiles: {
+        Row: {
+          created_at: string
+          credits: number | null
+          id: string
+          karma: number | null
+          rank: string | null
+          site_id: string
+          total_races: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          credits?: number | null
+          id?: string
+          karma?: number | null
+          rank?: string | null
+          site_id: string
+          total_races?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          credits?: number | null
+          id?: string
+          karma?: number | null
+          rank?: string | null
+          site_id?: string
+          total_races?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "site_regatta_profiles_site_id_fkey"
+            columns: ["site_id"]
+            isOneToOne: false
+            referencedRelation: "sites"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sites: {
         Row: {
           active: boolean | null
@@ -129,6 +173,22 @@ export type Database = {
       ensure_membership_for_domain: {
         Args: Record<PropertyKey, never>
         Returns: undefined
+      }
+      get_user_regatta_profile: {
+        Args: { site_schema: string }
+        Returns: {
+          created_at: string
+          credits: number
+          id: string
+          karma: number
+          rank: string
+          total_races: number
+          updated_at: string
+        }[]
+      }
+      initialize_regatta_profile_for_site: {
+        Args: { target_site_id: string }
+        Returns: string
       }
       user_in_site: {
         Args: { site_schema: string }

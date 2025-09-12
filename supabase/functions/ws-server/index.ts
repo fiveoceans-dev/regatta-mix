@@ -1,5 +1,5 @@
 import { serve } from "https://deno.land/std@0.203.0/http/server.ts";
-import { InputMsgSchema, BoatState } from "../../../shared/types.ts";
+import { InputMsgSchema, BoatState } from "../_shared/types.ts";
 
 serve((req) => {
   if (req.headers.get("upgrade") !== "websocket") {

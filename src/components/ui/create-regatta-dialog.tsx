@@ -54,7 +54,7 @@ export function CreateRegattaDialog({ children, onSuccess }: CreateRegattaDialog
     setLoading(true)
     try {
       const { error } = await supabase
-        .from('regattas')
+        .site.regattas()
         .insert({
           name: formData.name,
           description: formData.description,
@@ -86,7 +86,7 @@ export function CreateRegattaDialog({ children, onSuccess }: CreateRegattaDialog
       if (profileData) {
         const { error: updateError } = await supabase
           .from('profiles')
-          .update({ 
+          .update({
             credits: Math.max(0, profileData.credits - 100)
           })
           .eq('id', user.id)

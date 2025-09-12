@@ -21,31 +21,33 @@ export function schemaForHost(host: string): SiteSchema {
   throw new Error(`Unknown host: ${host}`);
 }
 
-export function createSiteClient(url: string, anonKey: string, host?: string, options?: SupabaseClientOptions<any>): SupabaseClient<Database> & { schema: SiteSchema } {
+export function createSiteClient(url: string, anonKey: string, host?: string, options?: SupabaseClientOptions<any>) {
   const resolvedHost = host ?? (typeof window !== 'undefined' ? window.location.host : '');
   const schema = schemaForHost(resolvedHost);
   
-  // Create client with schema-specific configuration
-  const client = createClient<Database>(url, anonKey, {
-    ...options,
-    db: {
-      schema: schema,
-      ...options?.db
-    }
-  });
+  // Create standard client
+  const client = createClient<Database>(url, anonKey, options);
   
-  // Override the from method to use the correct schema
-  const originalFrom = client.from.bind(client);
-  client.from = (table: string) => {
-    return originalFrom(`${schema}.${table}`);
+  // Create schema-aware wrapper
+  const siteClient = {
+    ...client,
+    schema,
+    // Override from method to use schema-prefixed table names
+    from: (table: string) => {
+      return client.from(`${schema}.${table}` as any);
+    },
+    // Keep original client methods for public schema access
+    publicFrom: (table: keyof Database['public']['Tables']) => {
+      return client.from(table);
+    }
   };
   
-  return Object.assign(client, { schema });
+  return siteClient;
 }
 
 // Example usage:
 // const supabase = createSiteClient(SUPABASE_URL, SUPABASE_KEY);
-// const { data } = await supabase.from('projects').select('*');
+// const { data } = await supabase.from('regattas').select('*'); // automatically uses site_regatta.regattas
 // supabase.channel('updates')
-//   .on('postgres_changes', { event: '*', schema: supabase.schema, table: 'projects' }, payload => console.log(payload))
+//   .on('postgres_changes', { event: '*', schema: supabase.schema, table: 'regattas' }, payload => console.log(payload))
 //   .subscribe();

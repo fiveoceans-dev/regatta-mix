@@ -65,7 +65,7 @@ export function LeaderboardRegattas() {
   const fetchTopRegattas = async () => {
     try {
       const { data: regattas, error } = await supabase
-        .from('regattas')
+        .site.regattas()
         .select('id, name, class, current_players, max_players')
         .in('status', ['upcoming', 'registration_open'])
         .order('current_players', { ascending: false })
@@ -109,7 +109,7 @@ export function LeaderboardRegattas() {
 
     try {
       const { error } = await supabase
-        .from('regatta_registrations')
+        .site.regatta_registrations()
         .insert({
           regatta_id: regattaId,
           user_id: user.id,

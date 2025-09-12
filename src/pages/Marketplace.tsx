@@ -57,7 +57,7 @@ export default function Marketplace() {
   const fetchProfile = async () => {
     try {
       const { data, error } = await supabase
-        .from('profiles')
+        .publicFrom('profiles')
         .select('credits')
         .eq('id', user?.id)
         .single()

@@ -66,7 +66,7 @@ export default function Account() {
   const fetchProfile = async () => {
     try {
       const { data, error } = await supabase
-        .from('profiles')
+        .publicFrom('profiles')
         .select('*')
         .eq('id', user?.id)
         .single()

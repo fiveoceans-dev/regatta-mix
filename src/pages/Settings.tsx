@@ -27,7 +27,7 @@ export default function Settings() {
   const fetchProfile = async () => {
     try {
       const { data, error } = await supabase
-        .from('profiles')
+        .publicFrom('profiles')
         .select('*')
         .eq('id', user?.id)
         .single()
@@ -60,7 +60,7 @@ export default function Settings() {
     setLoading(true)
     try {
       const { error } = await supabase
-        .from('profiles')
+        .publicFrom('profiles')
         .update({
           nickname: profile.nickname,
           country: profile.country,

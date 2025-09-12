@@ -174,6 +174,10 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
+      get_current_site_id: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
       get_user_regatta_profile: {
         Args: { site_schema: string }
         Returns: {
@@ -189,6 +193,14 @@ export type Database = {
       initialize_regatta_profile_for_site: {
         Args: { target_site_id: string }
         Returns: string
+      }
+      migrate_existing_users_to_regatta_profiles: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
+      update_user_credits: {
+        Args: { credit_change: number }
+        Returns: undefined
       }
       user_in_site: {
         Args: { site_schema: string }

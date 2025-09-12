@@ -38,17 +38,22 @@ export function LeaderboardRegattas() {
 
   const fetchLeaderboard = async () => {
     try {
-      const { data: profiles, error } = await supabase
-        .from('profiles')
-        .select('nickname, credits, updated_at')
+      // Get regatta profiles with credits from site-specific table
+      const { data: regattaProfiles, error } = await supabase
+        .publicFrom('site_regatta_profiles')
+        .select(`
+          credits,
+          updated_at,
+          profiles!inner(nickname)
+        `)
         .order('credits', { ascending: false })
         .limit(8)
 
       if (error) throw error
 
-      const formattedData: LeaderboardPlayer[] = (profiles || []).map((profile: any, index) => ({
+      const formattedData: LeaderboardPlayer[] = (regattaProfiles || []).map((profile: any, index) => ({
         rank: index + 1,
-        nickname: profile?.nickname || 'Unknown',
+        nickname: profile?.profiles?.nickname || 'Unknown',
         credits: profile?.credits || 0,
         lastPlayed: formatTimeAgo(profile?.updated_at || new Date().toISOString()),
         trend: Math.random() > 0.5 ? (Math.random() > 0.5 ? "up" : "down") : "same"

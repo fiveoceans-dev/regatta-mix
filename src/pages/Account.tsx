@@ -13,6 +13,7 @@ import {
 import { Trophy, Clock, MapPin, Play as PlayIcon, Target, Award, DollarSign } from "lucide-react"
 import { BuyCreditsDialog } from "@/components/ui/buy-credits-dialog"
 import { useAuth } from "@/hooks/useAuth"
+import { useRegattaProfile } from "@/hooks/useRegattaProfile"
 import { supabase } from "@/integrations/supabase/client"
 
 const mockHistory = [
@@ -50,6 +51,7 @@ const mockHistory = [
 
 export default function Account() {
   const { user } = useAuth()
+  const { profile: regattaProfile } = useRegattaProfile()
   const [buyCreditsOpen, setBuyCreditsOpen] = useState(false)
   const [profile, setProfile] = useState<any>(null)
   const [raceHistory, setRaceHistory] = useState<any[]>([])
@@ -67,7 +69,7 @@ export default function Account() {
     try {
       const { data, error } = await supabase
         .publicFrom('profiles')
-        .select('*')
+        .select('nickname, email, bio, avatar_url')
         .eq('id', user?.id)
         .single()
 
@@ -132,8 +134,8 @@ export default function Account() {
             <Target className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{profile?.rank || 'Novice'}</div>
-            <p className="text-xs text-muted-foreground">{profile?.karma >= 1000 ? 'Elite' : 'Rising'} sailor</p>
+            <div className="text-2xl font-bold">{regattaProfile?.rank || 'Novice'}</div>
+            <p className="text-xs text-muted-foreground">{(regattaProfile?.karma || 0) >= 1000 ? 'Elite' : 'Rising'} sailor</p>
           </CardContent>
         </Card>
         
@@ -143,7 +145,7 @@ export default function Account() {
             <Trophy className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{profile?.total_races || 0}</div>
+            <div className="text-2xl font-bold">{regattaProfile?.total_races || 0}</div>
             <p className="text-xs text-muted-foreground">Total races completed</p>
           </CardContent>
         </Card>
@@ -154,7 +156,7 @@ export default function Account() {
             <Award className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{profile?.karma || 0}</div>
+            <div className="text-2xl font-bold">{regattaProfile?.karma || 0}</div>
             <p className="text-xs text-muted-foreground">Community reputation</p>
           </CardContent>
         </Card>
@@ -165,7 +167,7 @@ export default function Account() {
             <Trophy className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{profile?.credits || 0}</div>
+            <div className="text-2xl font-bold">{regattaProfile?.credits || 0}</div>
             <p className="text-xs text-muted-foreground">Available credits</p>
             <Button 
               size="sm" 
@@ -189,17 +191,17 @@ export default function Account() {
             <div className="space-y-4">
               <div className="flex justify-between items-center">
                 <span className="text-sm font-medium">Season Progress</span>
-                <span className="text-lg font-bold">{Math.round((profile?.total_races || 0) * 10)}% Complete</span>
+                <span className="text-lg font-bold">{Math.round((regattaProfile?.total_races || 0) * 10)}% Complete</span>
               </div>
               <div className="w-full bg-muted rounded-full h-2">
                 <div 
                   className="bg-primary h-2 rounded-full transition-all duration-300" 
-                  style={{ width: `${Math.min((profile?.total_races || 0) * 10, 100)}%` }}
+                  style={{ width: `${Math.min((regattaProfile?.total_races || 0) * 10, 100)}%` }}
                 ></div>
               </div>
               <div className="flex justify-between text-xs text-muted-foreground">
                 <span>Season Start</span>
-                <span>{profile?.total_races || 0} races completed</span>
+                <span>{regattaProfile?.total_races || 0} races completed</span>
                 <span>Season End</span>
               </div>
             </div>

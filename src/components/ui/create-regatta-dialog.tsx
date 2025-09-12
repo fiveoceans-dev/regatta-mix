@@ -12,6 +12,7 @@ import { CalendarIcon, Plus, DollarSign } from "lucide-react"
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
 import { useAuth } from "@/hooks/useAuth"
+import { useRegattaProfile } from "@/hooks/useRegattaProfile"
 import { supabase } from "@/integrations/supabase/client"
 import { toast } from "sonner"
 
@@ -22,6 +23,7 @@ interface CreateRegattaDialogProps {
 
 export function CreateRegattaDialog({ children, onSuccess }: CreateRegattaDialogProps) {
   const { user } = useAuth()
+  const { profile: regattaProfile, updateCredits } = useRegattaProfile()
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const [startDate, setStartDate] = useState<Date>()
@@ -51,6 +53,12 @@ export function CreateRegattaDialog({ children, onSuccess }: CreateRegattaDialog
     e.preventDefault()
     if (!user) return
 
+    // Check if user has enough credits
+    if (!regattaProfile || regattaProfile.credits < 100) {
+      toast.error("You need at least 100 credits to create a regatta.")
+      return
+    }
+
     setLoading(true)
     try {
       const { error } = await supabase
@@ -77,15 +85,7 @@ export function CreateRegattaDialog({ children, onSuccess }: CreateRegattaDialog
       if (error) throw error
 
       // Deduct 100 credits from user profile
-      // Note: Credits functionality removed - implement in site-specific schema
-      // const { data: profileData } = await supabase
-      //   .from('profiles')
-      //   .select('credits')
-      //   .eq('id', user.id)
-      //   .single()
-
-      // Skip credits deduction for now since it's moved to site-specific tables
-      console.log("Regatta created - credits system needs site-specific implementation")
+      await updateCredits(-100)
 
       toast.success("Regatta created successfully! 100 credits deducted.")
       setOpen(false)
@@ -134,6 +134,11 @@ export function CreateRegattaDialog({ children, onSuccess }: CreateRegattaDialog
           <DialogDescription className="flex items-center gap-2">
             <DollarSign className="h-4 w-4" />
             Cost: 100 credits to create a regatta
+            {regattaProfile && (
+              <span className="text-muted-foreground">
+                (You have {regattaProfile.credits} credits)
+              </span>
+            )}
           </DialogDescription>
         </DialogHeader>
         
@@ -384,7 +389,7 @@ export function CreateRegattaDialog({ children, onSuccess }: CreateRegattaDialog
             <Button type="button" variant="outline" onClick={() => setOpen(false)}>
               Cancel
             </Button>
-            <Button type="submit" disabled={loading} className="flex-1">
+            <Button type="submit" disabled={loading || !regattaProfile || regattaProfile.credits < 100} className="flex-1">
               {loading ? "Creating..." : "Create Regatta (100 credits)"}
             </Button>
           </div>

@@ -26,8 +26,7 @@ export default function Settings() {
 
   const fetchProfile = async () => {
     try {
-      const { data, error } = await supabase
-        .publicFrom('profiles')
+    const { data: profile } = await supabase.from('profiles')
         .select('*')
         .eq('id', user?.id)
         .single()
@@ -41,14 +40,13 @@ export default function Settings() {
 
   const fetchSettings = async () => {
     try {
-      const { data, error } = await supabase
-        .from('user_settings')
+    const { data: settings, error: settingsError } = await supabase.site.from('user_settings')
         .select('*')
         .eq('user_id', user?.id)
         .single()
 
-      if (error) throw error
-      setSettings(data)
+      if (settingsError) throw settingsError
+      setSettings(settings)
     } catch (error) {
       console.error('Error fetching settings:', error)
     }
@@ -59,8 +57,7 @@ export default function Settings() {
 
     setLoading(true)
     try {
-      const { error } = await supabase
-        .publicFrom('profiles')
+    const { error } = await supabase.from('profiles')
         .update({
           nickname: profile.nickname,
           country: profile.country,
@@ -83,8 +80,7 @@ export default function Settings() {
 
     setLoading(true)
     try {
-      const { error } = await supabase
-        .from('user_settings')
+    const { error } = await supabase.site.from('user_settings')
         .update(settings)
         .eq('user_id', user.id)
 

@@ -153,7 +153,7 @@ export default function Play() {
   const fetchRegattas = async () => {
     setLoading(true)
     try {
-      let query = supabase
+      let query = supabase.site
         .from('regattas')
         .select(`
           *,
@@ -180,7 +180,7 @@ export default function Play() {
 
   const fetchQuickMatch = async () => {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await supabase.site
         .from('regattas')
         .select('*')
         .like('name', 'Quick Match%')
@@ -238,7 +238,7 @@ export default function Play() {
         }
       }
 
-      const { error } = await supabase
+      const { error } = await supabase.site
         .from('regatta_registrations')
         .insert({
           regatta_id: regattaId,

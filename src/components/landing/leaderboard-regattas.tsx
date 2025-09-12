@@ -46,13 +46,13 @@ export function LeaderboardRegattas() {
 
       if (error) throw error
 
-      const formattedData: LeaderboardPlayer[] = profiles?.map((profile, index) => ({
+      const formattedData: LeaderboardPlayer[] = (profiles || []).map((profile: any, index) => ({
         rank: index + 1,
-        nickname: profile.nickname,
-        credits: profile.credits || 0,
-        lastPlayed: formatTimeAgo(profile.updated_at),
-        trend: Math.random() > 0.5 ? (Math.random() > 0.5 ? "up" : "down") : "same" // Random trend for now
-      })) || []
+        nickname: profile?.nickname || 'Unknown',
+        credits: profile?.credits || 0,
+        lastPlayed: formatTimeAgo(profile?.updated_at || new Date().toISOString()),
+        trend: Math.random() > 0.5 ? (Math.random() > 0.5 ? "up" : "down") : "same"
+      }))
 
       setLeaderboardData(formattedData)
     } catch (error) {
@@ -65,7 +65,7 @@ export function LeaderboardRegattas() {
   const fetchTopRegattas = async () => {
     try {
       const { data: regattas, error } = await supabase
-        .site.regattas()
+        .site.from('regattas')
         .select('id, name, class, current_players, max_players')
         .in('status', ['upcoming', 'registration_open'])
         .order('current_players', { ascending: false })
@@ -73,13 +73,13 @@ export function LeaderboardRegattas() {
 
       if (error) throw error
 
-      const formattedData: TopRegatta[] = regattas?.map((regatta) => ({
-        id: regatta.id,
-        name: regatta.name,
-        players: regatta.current_players || 0,
-        maxPlayers: regatta.max_players,
-        class: regatta.class.toUpperCase()
-      })) || []
+      const formattedData: TopRegatta[] = (regattas || []).map((regatta: any) => ({
+        id: regatta?.id || '',
+        name: regatta?.name || 'Unknown Regatta',
+        players: regatta?.current_players || 0,
+        maxPlayers: regatta?.max_players || 0,
+        class: (regatta?.class || 'unknown').toUpperCase()
+      }))
 
       setRegattaData(formattedData)
     } catch (error) {
@@ -109,7 +109,7 @@ export function LeaderboardRegattas() {
 
     try {
       const { error } = await supabase
-        .site.regatta_registrations()
+        .site.from('regatta_registrations')
         .insert({
           regatta_id: regattaId,
           user_id: user.id,

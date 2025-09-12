@@ -72,7 +72,7 @@ export default function ProtestRoom() {
 
   const fetchProtests = async () => {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await supabase.site
         .from('protests')
         .select('*')
         .order('created_at', { ascending: false })

@@ -49,8 +49,12 @@ export const supabase = {
   // Standard client methods for public schema
   from: (table: keyof Database['public']['Tables']) => baseClient.from(table),
   
+  // Keep publicFrom for backward compatibility
+  publicFrom: (table: keyof Database['public']['Tables']) => baseClient.from(table),
+  
   // Schema-specific methods (use raw SQL for schema-prefixed queries)
   site: {
+    from: (table: string) => baseClient.from(`${getCurrentSchema()}.${table}` as any),
     regattas: () => baseClient.from(`${getCurrentSchema()}.regattas` as any),
     regatta_registrations: () => baseClient.from(`${getCurrentSchema()}.regatta_registrations` as any),
     achievements: () => baseClient.from(`${getCurrentSchema()}.achievements` as any),

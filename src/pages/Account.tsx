@@ -80,8 +80,7 @@ export default function Account() {
 
   const fetchRaceHistory = async () => {
     try {
-      const { data, error } = await supabase
-        .from('regatta_registrations')
+    const { data: registrations, error: regError } = await supabase.site.from('regatta_registrations')
         .select(`
           *,
           regattas (name, location, start_date)
@@ -90,8 +89,8 @@ export default function Account() {
         .order('created_at', { ascending: false })
         .limit(10)
 
-      if (error) throw error
-      setRaceHistory(data || [])
+      if (regError) throw regError
+      setRaceHistory(registrations || [])
     } catch (error) {
       console.error('Error fetching race history:', error)
     }
@@ -99,15 +98,14 @@ export default function Account() {
 
   const fetchAchievements = async () => {
     try {
-      const { data, error } = await supabase
-        .from('achievements')
+    const { data: achievements, error: achieveError } = await supabase.site.from('achievements')
         .select('*')
         .eq('user_id', user?.id)
         .order('earned_at', { ascending: false })
         .limit(3)
 
-      if (error) throw error
-      setAchievements(data || [])
+      if (achieveError) throw achieveError
+      setAchievements(achievements || [])
     } catch (error) {
       console.error('Error fetching achievements:', error)
     }

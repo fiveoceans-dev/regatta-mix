@@ -4,6 +4,48 @@
 
 This documentation covers the **shared public schema** used for user authentication, profiles, and site management. All tables are in the public schema and accessible across different sites through a centralized authentication system.
 
+## Site Naming Conventions
+
+When creating new sites, follow these naming patterns to ensure consistency and maintainability:
+
+### Schema Names
+- **Format**: `site_[sitename]` (e.g., `site_regatta`, `site_analytics`, `site_marketplace`)
+- **Rules**: 
+  - Use lowercase with underscores for multi-word names
+  - Keep names short but descriptive
+  - No hyphens or special characters
+
+### Site-Specific Profile Tables
+- **Format**: `site_[sitename]_profiles` (e.g., `site_regatta_profiles`, `site_analytics_profiles`)
+- **Required Fields**:
+  - `id` (UUID, primary key)
+  - `user_id` (UUID, foreign key to `auth.users(id)`)
+  - `site_id` (UUID, foreign key to `public.sites(id)`)
+  - `created_at` (timestamp)
+  - `updated_at` (timestamp)
+- **Required Constraints**:
+  - `UNIQUE(user_id, site_id)` - One profile per user per site
+  - Foreign key constraints with `ON DELETE CASCADE`
+
+### Table Naming in Site Schemas
+- Use plural nouns (e.g., `regattas`, `races`, `transactions`)
+- Use snake_case for multi-word names
+- Prefix with purpose when needed (e.g., `regatta_registrations`, `race_results`)
+
+### Function Naming
+- **Format**: `[action]_[entity]_for_[context]` (e.g., `get_user_regatta_profile`, `update_user_credits`)
+- **Prefixes**: `get`, `create`, `update`, `delete`, `ensure`, `migrate`
+- Include site context when site-specific
+
+### Domain Registration
+Registered sites in the system:
+- `regatta-rift.lovable.app` → `site_regatta`
+- `web3analytics.lovable.app` → `site_web3analytics` 
+- `openair.lovable.app` → `site_openair`
+- `allyoucompany.com` → `site_allyou`
+- `buena` → `site_buena`
+- `morph.` → `site_morph`
+
 ## Public Schema Tables
 
 ### 1. `profiles` Table
@@ -84,8 +126,8 @@ CREATE TABLE public.sites (
 ```sql
 CREATE TABLE public.site_members (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
-  user_id UUID NOT NULL REFERENCES auth.users(id),
-  site_id UUID REFERENCES public.sites(id),
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  site_id UUID NOT NULL REFERENCES public.sites(id) ON DELETE CASCADE,
   role TEXT DEFAULT 'member',
   active BOOLEAN DEFAULT true,
   joined_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
@@ -172,7 +214,7 @@ $$;
 
 ### 3. `ensure_membership_for_domain()`
 
-**Purpose**: Automatically create site membership when user visits a domain
+**Purpose**: Automatically create site membership and initialize site-specific profiles when user visits a domain
 
 **Implementation**:
 ```sql
@@ -194,15 +236,122 @@ BEGIN
     
     -- If site exists and user is authenticated, ensure membership
     IF site_record.id IS NOT NULL AND auth.uid() IS NOT NULL THEN
+        -- Create site membership
         INSERT INTO public.site_members (site_id, user_id, role)
         VALUES (site_record.id, auth.uid(), 'member')
         ON CONFLICT (site_id, user_id) DO NOTHING;
+        
+        -- Create regatta profile for regatta sites
+        IF site_record.schema_name = 'site_regatta' THEN
+            INSERT INTO public.site_regatta_profiles (user_id, site_id)
+            VALUES (auth.uid(), site_record.id)
+            ON CONFLICT (user_id, site_id) DO NOTHING;
+        END IF;
     END IF;
 END;
 $$;
 ```
 
-### 4. `handle_new_user()`
+### 4. `get_current_site_id()`
+
+**Purpose**: Get the current site ID based on request headers
+
+**Returns**: UUID of the current site
+
+**Implementation**:
+```sql
+CREATE OR REPLACE FUNCTION public.get_current_site_id()
+RETURNS uuid
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = 'public'
+AS $$
+DECLARE
+    current_host text;
+    site_id uuid;
+BEGIN
+    -- Get current host from request headers
+    current_host := current_setting('request.headers', true)::json->>'host';
+    
+    -- Find the site for this domain
+    SELECT id INTO site_id FROM public.sites WHERE domain = current_host AND active = true;
+    
+    -- Default to regatta site if not found
+    IF site_id IS NULL THEN
+        SELECT id INTO site_id FROM public.sites WHERE schema_name = 'site_regatta';
+    END IF;
+    
+    RETURN site_id;
+END;
+$$;
+```
+
+### 5. `update_user_credits(credit_change integer)`
+
+**Purpose**: Update user's credits in their site-specific profile
+
+**Parameters**: 
+- `credit_change`: Amount to add (positive) or subtract (negative)
+
+**Implementation**:
+```sql
+CREATE OR REPLACE FUNCTION public.update_user_credits(credit_change integer)
+RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = 'public'
+AS $$
+DECLARE
+    current_site_id uuid;
+BEGIN
+    current_site_id := public.get_current_site_id();
+    
+    UPDATE public.site_regatta_profiles 
+    SET credits = GREATEST(0, credits + credit_change),
+        updated_at = now()
+    WHERE user_id = auth.uid() 
+    AND site_id = current_site_id;
+END;
+$$;
+```
+
+### 6. `migrate_existing_users_to_regatta_profiles()`
+
+**Purpose**: Migrate existing users to site-specific profiles (used during schema updates)
+
+**Implementation**:
+```sql
+CREATE OR REPLACE FUNCTION public.migrate_existing_users_to_regatta_profiles()
+RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = 'public'
+AS $$
+DECLARE
+    regatta_site_id uuid;
+BEGIN
+    -- Get the regatta site ID
+    SELECT id INTO regatta_site_id FROM public.sites WHERE schema_name = 'site_regatta';
+    
+    -- Create regatta profiles for all existing users who don't have one
+    INSERT INTO public.site_regatta_profiles (user_id, site_id, rank, total_races, karma, credits)
+    SELECT 
+        p.id,
+        regatta_site_id,
+        'novice',
+        0,
+        0,
+        1000
+    FROM public.profiles p
+    WHERE NOT EXISTS (
+        SELECT 1 FROM public.site_regatta_profiles srp 
+        WHERE srp.user_id = p.id AND srp.site_id = regatta_site_id
+    );
+END;
+$$;
+```
+
+### 7. `handle_new_user()`
 
 **Purpose**: Initialize new user in the system
 
@@ -297,6 +446,25 @@ BEGIN
 END;
 $function$;
 
+-- Helper function to initialize site profile for a user
+CREATE OR REPLACE FUNCTION public.initialize_regatta_profile_for_site(target_site_id uuid)
+RETURNS uuid
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = 'public'
+AS $$
+DECLARE
+    profile_id uuid;
+BEGIN
+    INSERT INTO public.site_regatta_profiles (user_id, site_id)
+    VALUES (auth.uid(), target_site_id)
+    ON CONFLICT (user_id, site_id) DO NOTHING
+    RETURNING id INTO profile_id;
+    
+    RETURN profile_id;
+END;
+$$;
+
 -- Update ensure_membership_for_domain to initialize site profiles
 CREATE OR REPLACE FUNCTION public.ensure_membership_for_domain()
 RETURNS void 
@@ -317,7 +485,7 @@ BEGIN
         VALUES (site_record.id, auth.uid(), 'member')
         ON CONFLICT (site_id, user_id) DO NOTHING;
         
-        -- Create site-specific profile (example for regatta sites)
+        -- Create regatta profile for regatta sites
         IF site_record.schema_name = 'site_regatta' THEN
             INSERT INTO public.site_regatta_profiles (user_id, site_id)
             VALUES (auth.uid(), site_record.id)
@@ -339,14 +507,92 @@ $function$;
 
 When adding a new site that needs site-specific user data:
 
-1. **Create site-specific profile table**: `public.site_{name}_profiles`
-2. **Include required fields**: `user_id`, `site_id`, and any site-specific data
-3. **Add unique constraint**: `UNIQUE(user_id, site_id)` 
-4. **Enable RLS**: With policies for user access control
-5. **Create helper functions**: For getting/initializing site profiles
-6. **Update `ensure_membership_for_domain`**: To auto-create profiles for new users
+1. **Register the site in `public.sites`**:
+```sql
+INSERT INTO public.sites (name, domain, schema_name) VALUES
+('Your Site Name', 'yoursite.com', 'site_yoursite');
+```
 
-This pattern keeps shared authentication in `public.profiles` while allowing each site to have its own user-specific data structure.
+2. **Create site-specific profile table**: `public.site_{name}_profiles`
+```sql
+CREATE TABLE public.site_yoursite_profiles (
+  id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  site_id UUID NOT NULL REFERENCES public.sites(id) ON DELETE CASCADE,
+  -- Add your site-specific fields here
+  credits INTEGER DEFAULT 1000,
+  level INTEGER DEFAULT 1,
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+  updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+  
+  UNIQUE(user_id, site_id)
+);
+```
+
+3. **Enable RLS with proper policies**:
+```sql
+ALTER TABLE public.site_yoursite_profiles ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users can view their own site profiles" 
+ON public.site_yoursite_profiles FOR SELECT 
+USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can create their own site profiles" 
+ON public.site_yoursite_profiles FOR INSERT 
+WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can update their own site profiles" 
+ON public.site_yoursite_profiles FOR UPDATE 
+USING (auth.uid() = user_id);
+```
+
+4. **Create helper functions**: For getting/updating site-specific data
+```sql
+CREATE OR REPLACE FUNCTION public.get_user_yoursite_profile(site_schema text)
+RETURNS TABLE (
+  id uuid,
+  credits integer,
+  level integer,
+  created_at timestamp with time zone,
+  updated_at timestamp with time zone
+) 
+LANGUAGE plpgsql SECURITY DEFINER SET search_path TO 'public'
+AS $$
+BEGIN
+    RETURN QUERY
+    SELECT 
+      syp.id,
+      syp.credits,
+      syp.level,
+      syp.created_at,
+      syp.updated_at
+    FROM public.site_yoursite_profiles syp
+    JOIN public.sites s ON s.id = syp.site_id
+    WHERE s.schema_name = site_schema 
+    AND syp.user_id = auth.uid();
+END;
+$$;
+```
+
+5. **Update `ensure_membership_for_domain`**: To auto-create profiles for new users
+```sql
+-- Add this block to the existing function
+IF site_record.schema_name = 'site_yoursite' THEN
+    INSERT INTO public.site_yoursite_profiles (user_id, site_id)
+    VALUES (auth.uid(), site_record.id)
+    ON CONFLICT (user_id, site_id) DO NOTHING;
+END IF;
+```
+
+6. **Add timestamp triggers** (optional):
+```sql
+CREATE TRIGGER update_site_yoursite_profiles_updated_at
+BEFORE UPDATE ON public.site_yoursite_profiles
+FOR EACH ROW
+EXECUTE FUNCTION public.update_updated_at_column();
+```
+
+This pattern keeps shared authentication in `public.profiles` while allowing each site to have its own user-specific data structure with proper foreign key constraints and data integrity.
 
 ## Authentication Integration
 
@@ -381,17 +627,18 @@ const supabase = createClient(
 
 ```typescript
 import { supabase } from '@/integrations/supabase/client';
+import { useRegattaProfile } from '@/hooks/useRegattaProfile';
 
 // Get user profile (general info only)
 const { data: profile } = await supabase
-  .from('profiles')
-  .select('*')
+  .publicFrom('profiles')
+  .select('nickname, email, bio, avatar_url')
   .eq('id', user.id)
   .single();
 
 // Update user profile (general info only)
 const { error } = await supabase
-  .from('profiles')
+  .publicFrom('profiles')
   .update({ 
     nickname: 'New Name',
     bio: 'Updated bio',
@@ -399,16 +646,24 @@ const { error } = await supabase
   })
   .eq('id', user.id);
 
+// Get site-specific profile data using custom hook
+const { profile: regattaProfile, updateCredits } = useRegattaProfile();
+
+// Update user credits using helper function
+await updateCredits(-100); // Deduct 100 credits
+
+// Get site-specific data using RPC functions
+const { data: regattaProfile } = await supabase.rpc('get_user_regatta_profile', {
+  site_schema: 'site_regatta'
+});
+
 // Check site membership
 const { data: membership } = await supabase
-  .from('site_members')
+  .publicFrom('site_members')
   .select('role')
   .eq('user_id', user.id)
   .eq('site_id', siteId)
   .single();
-
-// Note: Site-specific data like credits, game stats, etc. 
-// should be stored in dedicated site tables
 ```
 
 ### Authentication Helpers
@@ -512,7 +767,46 @@ SELECT * FROM sites WHERE active = true;
 
 -- Check user profile
 SELECT * FROM profiles WHERE id = auth.uid();
+
+-- Check site-specific regatta profile
+SELECT * FROM site_regatta_profiles WHERE user_id = auth.uid();
+
+-- View all registered sites and their schemas
+SELECT name, domain, schema_name, active FROM sites ORDER BY name;
+
+-- Check foreign key constraints
+SELECT 
+    tc.table_name, 
+    tc.constraint_name, 
+    ccu.table_name AS foreign_table_name,
+    ccu.column_name AS foreign_column_name 
+FROM information_schema.table_constraints AS tc 
+JOIN information_schema.constraint_column_usage AS ccu
+    ON ccu.constraint_name = tc.constraint_name
+    AND ccu.table_schema = tc.table_schema
+WHERE tc.constraint_type = 'FOREIGN KEY'
+    AND tc.table_schema = 'public'
+    AND tc.table_name IN ('site_members', 'site_regatta_profiles');
 ```
+
+## Recent Changes (Latest PR)
+
+### Database Improvements
+- **Added Foreign Key Constraints**: All site-related tables now have proper foreign key constraints with `ON DELETE CASCADE`
+- **Site Registration**: Pre-populated `public.sites` table with known domains
+- **Data Migration**: Created migration function to move existing users to site-specific profiles
+- **Helper Functions**: Added `get_current_site_id()`, `update_user_credits()`, and `migrate_existing_users_to_regatta_profiles()`
+
+### Client Integration Updates  
+- **New Hook**: `useRegattaProfile()` for managing site-specific profile data
+- **Updated Components**: Account page, leaderboard, and create regatta dialog now use site-specific profiles
+- **Credits System**: Fully functional credits system with proper validation and updates
+
+### Architecture Refinements
+- **Consistent Naming**: All functions and tables follow the documented naming conventions
+- **Data Integrity**: Foreign key constraints ensure referential integrity
+- **Site Isolation**: Proper data separation between different sites
+- **Migration Support**: Functions to migrate existing data to new schema structure
 
 ## Maintenance
 

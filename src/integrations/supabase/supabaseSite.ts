@@ -1,15 +1,18 @@
 import { createClient, type SupabaseClient, type SupabaseClientOptions } from '@supabase/supabase-js';
 import type { Database } from './types';
 
-export type SiteSchema = 'site_cyber' | 'site1' | 'site2';
+export type SiteSchema = 'site_regatta' | 'site_web3analytics' | 'site_openair' | 'site_allyou' | 'site_buena' | 'site_morph';
 
 const HOST_MAP: Record<string, SiteSchema> = {
-  'cyber.sailing': 'site_cyber',
-  'site1.example': 'site1',
-  'site2.example': 'site2'
+  'regatta-rift.lovable.app': 'site_regatta',
+  'web3analytics.lovable.app': 'site_web3analytics',
+  'openair.lovable.app': 'site_openair',
+  'allyoucompany.com': 'site_allyou',
+  'buena': 'site_buena',
+  'morph.': 'site_morph'
 };
 
-const DEFAULT_SCHEMA: SiteSchema = 'site_cyber';
+const DEFAULT_SCHEMA: SiteSchema = 'site_regatta';
 
 export function schemaForHost(host: string): SiteSchema {
   const schema = HOST_MAP[host];

@@ -680,6 +680,71 @@ export type Database = {
           },
         ]
       }
+      site_members: {
+        Row: {
+          active: boolean | null
+          id: string
+          joined_at: string | null
+          role: string | null
+          site_id: string | null
+          user_id: string
+        }
+        Insert: {
+          active?: boolean | null
+          id?: string
+          joined_at?: string | null
+          role?: string | null
+          site_id?: string | null
+          user_id: string
+        }
+        Update: {
+          active?: boolean | null
+          id?: string
+          joined_at?: string | null
+          role?: string | null
+          site_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "site_members_site_id_fkey"
+            columns: ["site_id"]
+            isOneToOne: false
+            referencedRelation: "sites"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sites: {
+        Row: {
+          active: boolean | null
+          created_at: string | null
+          domain: string
+          id: string
+          name: string
+          schema_name: string
+          updated_at: string | null
+        }
+        Insert: {
+          active?: boolean | null
+          created_at?: string | null
+          domain: string
+          id?: string
+          name: string
+          schema_name: string
+          updated_at?: string | null
+        }
+        Update: {
+          active?: boolean | null
+          created_at?: string | null
+          domain?: string
+          id?: string
+          name?: string
+          schema_name?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       transactions: {
         Row: {
           buyer_id: string | null
@@ -795,6 +860,18 @@ export type Database = {
       create_quick_match: {
         Args: Record<PropertyKey, never>
         Returns: undefined
+      }
+      ensure_membership_for_domain: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
+      user_in_site: {
+        Args: { site_schema: string }
+        Returns: boolean
+      }
+      user_role_in_site: {
+        Args: { site_schema: string }
+        Returns: string
       }
     }
     Enums: {

@@ -6,15 +6,15 @@ import {
   BoatStateSchema,
   SnapshotSchema,
   WindSchema
-} from '../shared/types.js';
+} from '../supabase/functions/_shared/types.js';
 
 const PORT = Number(process.env.PORT) || 8080;
 const TICK_RATE = 20; // 20 Hz
 const SNAPSHOT_RATE = 10; // 10 Hz
 
-/** @type {Map<string, import('../shared/types.js').BoatState>} */
+/** @type {Map<string, import('../supabase/functions/_shared/types.js').BoatState>} */
 const boats = new Map();
-/** @type {import('../shared/types.js').Wind} */
+/** @type {import('../supabase/functions/_shared/types.js').Wind} */
 let wind = { dirDeg: 0, speed: 5 };
 let tick = 0;
 let lastSnapshot = { tick: 0, wind, boats: [], events: [] };
@@ -35,7 +35,7 @@ wss.on('connection', (ws) => {
       case 'JOIN': {
         const name = typeof msg.name === 'string' ? msg.name : 'anon';
         boatId = randomUUID();
-        const boat = /** @type {import('../shared/types.js').BoatState} */ ({
+        const boat = /** @type {import('../supabase/functions/_shared/types.js').BoatState} */ ({
           id: boatId,
           name,
           color: 'red',

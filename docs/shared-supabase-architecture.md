@@ -1,8 +1,21 @@
-# Shared Supabase Architecture Documentation
+# Shared Supabase Multi-Site Architecture
 
 ## Overview
 
-This documentation covers the **shared public schema** used for user authentication, profiles, and site management. All tables are in the public schema and accessible across different sites through a centralized authentication system.
+This documentation covers the complete **multi-site authentication and authorization system** built on Supabase. The architecture supports multiple independent sites sharing a single Supabase instance while maintaining data isolation and site-specific features.
+
+### Key Features
+- **Single Authentication System**: Users authenticate once and can access multiple sites
+- **Data Isolation**: Each site's data is isolated through RLS policies and schema separation
+- **Automatic Site Membership**: Users are automatically enrolled when visiting new sites
+- **Site-Specific Profiles**: Extended user data stored per site while maintaining shared identity
+- **Domain-Based Routing**: Site identification through domain mapping
+
+### Architecture Principles
+- All authentication data remains in the shared `public` schema
+- Site-specific business data can use separate schemas or prefixed tables
+- RLS policies enforce data isolation at the database level
+- Functions handle cross-site logic and membership management
 
 ## Site Naming Conventions
 
@@ -45,6 +58,82 @@ Registered sites in the system:
 - `allyoucompany.com` → `site_allyou`
 - `buena` → `site_buena`
 - `morph.` → `site_morph`
+
+## Multi-Domain Authentication Setup
+
+### 1. Supabase Dashboard Configuration
+
+#### Authentication URLs
+In Supabase dashboard → **Authentication** → **URL Configuration**:
+
+1. **Site URL**: Add each domain that will use authentication
+   ```
+   https://regatta-rift.lovable.app
+   https://web3analytics.lovable.app
+   https://openair.lovable.app
+   https://allyoucompany.com
+   ```
+
+2. **Redirect URLs**: Include all callback URLs for each domain
+   ```
+   https://regatta-rift.lovable.app/auth/callback
+   https://web3analytics.lovable.app/auth/callback
+   https://openair.lovable.app/auth/callback
+   https://allyoucompany.com/auth/callback
+   ```
+
+#### OAuth Provider Configuration
+For each OAuth provider (Google, GitHub, etc.), register callback URLs:
+
+**Example for Google OAuth**:
+- Authorized redirect URIs in Google Console:
+  ```
+  https://amhlmmzmbjcxzpynnirx.supabase.co/auth/v1/callback
+  https://regatta-rift.lovable.app/auth/v1/callback
+  https://web3analytics.lovable.app/auth/v1/callback
+  ```
+
+**Example for GitHub OAuth**:
+- Authorization callback URLs in GitHub App:
+  ```
+  https://amhlmmzmbjcxzpynnirx.supabase.co/auth/v1/callback
+  https://regatta-rift.lovable.app/auth/v1/callback
+  https://web3analytics.lovable.app/auth/v1/callback
+  ```
+
+### 2. Session Management
+
+#### Cross-Domain Considerations
+- **Session Isolation**: Sessions are isolated per origin (domain)
+- **SSO Experience**: Users sign in separately on each domain but use same credentials
+- **Cookie Scope**: Auth cookies are domain-specific for security
+- **Shared Identity**: `auth.users` table is global across all sites
+
+#### Client Implementation
+```typescript
+// src/integrations/supabase/supabaseSite.ts
+import { createSiteClient } from '@/integrations/supabase/supabaseSite';
+
+const supabase = createSiteClient(
+  SUPABASE_URL, 
+  SUPABASE_ANON_KEY,
+  window.location.host // Automatically determines site schema
+);
+```
+
+### 3. Email Templates and Branding
+
+#### Single Template Challenge
+Supabase uses one set of email templates for all sites. For site-specific branding:
+
+1. **Custom Landing Page**: Direct magic links to a branded page
+2. **URL Parameters**: Include site identifier in confirmation URLs
+3. **Dynamic Styling**: Style confirmation pages based on `host` header
+
+Example confirmation URL structure:
+```
+https://[site-domain]/auth/confirm?token=...&site=[site_id]
+```
 
 ## Public Schema Tables
 
@@ -498,6 +587,237 @@ BEGIN
         --     VALUES (auth.uid(), site_record.id)
         --     ON CONFLICT (user_id, site_id) DO NOTHING;
         -- END IF;
+    END IF;
+END;
+$function$;
+```
+
+## Client Integration
+
+### 1. Site-Aware Supabase Client
+
+The `createSiteClient` function automatically handles site-specific database operations:
+
+```typescript
+// src/integrations/supabase/supabaseSite.ts
+import { createSiteClient } from '@/integrations/supabase/supabaseSite';
+
+// Initialize client with automatic schema detection
+const supabase = createSiteClient(
+  process.env.SUPABASE_URL!, 
+  process.env.SUPABASE_ANON_KEY!
+);
+
+// Automatically queries site_regatta.regattas on regatta domain
+const { data: regattas } = await supabase.from('regattas').select('*');
+
+// Access public schema tables explicitly when needed
+const { data: profiles } = await supabase.publicFrom('profiles').select('*');
+```
+
+### 2. Site-Specific Profile Hook
+
+Use the `useRegattaProfile` hook for accessing site-specific user data:
+
+```typescript
+// src/hooks/useRegattaProfile.tsx
+import { useRegattaProfile } from '@/hooks/useRegattaProfile';
+
+function UserDashboard() {
+  const { profile, loading, error, updateCredits } = useRegattaProfile();
+  
+  if (loading) return <div>Loading profile...</div>;
+  if (error) return <div>Error: {error.message}</div>;
+  
+  return (
+    <div>
+      <h1>Welcome, {profile?.rank} sailor!</h1>
+      <p>Credits: {profile?.credits}</p>
+      <p>Total Races: {profile?.total_races}</p>
+      <button onClick={() => updateCredits(100)}>
+        Add 100 Credits
+      </button>
+    </div>
+  );
+}
+```
+
+### 3. Authentication Integration
+
+Ensure users are properly enrolled when they visit a site:
+
+```typescript
+// Call this after successful authentication
+import { supabase } from '@/integrations/supabase/client';
+
+const ensureUserMembership = async () => {
+  const { error } = await supabase.rpc('ensure_membership_for_domain');
+  if (error) console.error('Failed to ensure membership:', error);
+};
+```
+
+## Testing Multi-Site Setup
+
+### SQL Testing Scripts
+
+**Test Site Membership**:
+```sql
+-- Test user membership in different sites
+SELECT public.user_in_site('site_regatta'); -- Should return true for regatta users
+SELECT public.user_in_site('site_analytics'); -- Should return false for regatta-only users
+```
+
+**Test Role Assignment**:
+```sql
+-- Check user roles across sites
+SELECT public.user_role_in_site('site_regatta'); -- Returns 'member', 'admin', or 'none'
+```
+
+**Test Data Isolation**:
+```sql
+-- Verify RLS policies prevent cross-site data access
+SET search_path = site_regatta;
+SELECT * FROM regattas; -- Should only show regatta site data
+
+SET search_path = site_analytics; 
+SELECT * FROM dashboards; -- Should only show analytics site data
+```
+
+### Client Testing
+
+**Test Site-Specific Queries**:
+```typescript
+// Test automatic schema routing
+const regattaClient = createSiteClient(url, key, 'regatta-rift.lovable.app');
+const analyticsClient = createSiteClient(url, key, 'web3analytics.lovable.app');
+
+// These should access different data sets
+const regattaData = await regattaClient.from('regattas').select('*');
+const analyticsData = await analyticsClient.from('dashboards').select('*');
+```
+
+**Test Profile System**:
+```typescript
+// Verify site-specific profiles are created and isolated
+const { data: regattaProfile } = await supabase.rpc('get_user_regatta_profile', { 
+  site_schema: 'site_regatta' 
+});
+
+const { data: analyticsProfile } = await supabase.rpc('get_user_analytics_profile', { 
+  site_schema: 'site_analytics' 
+});
+```
+
+## Implementation Checklist
+
+### New Site Setup
+1. **Register Domain**: Add entry to `public.sites` table
+2. **Update Host Map**: Add domain mapping in `supabaseSite.ts`
+3. **Create Site Schema**: If using separate schemas for business data
+4. **Site Profile Table**: Create `site_[name]_profiles` table if needed
+5. **Update Functions**: Modify `ensure_membership_for_domain` for new site type
+6. **Authentication URLs**: Add domain to Supabase dashboard
+7. **OAuth Callbacks**: Register callback URLs with providers
+8. **Test Integration**: Verify authentication and data isolation
+
+### Site Profile Table Template
+```sql
+-- Template for creating new site profile tables
+CREATE TABLE public.site_[SITENAME]_profiles (
+  id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  site_id UUID NOT NULL REFERENCES public.sites(id) ON DELETE CASCADE,
+  
+  -- Site-specific fields here
+  [custom_field1] TEXT,
+  [custom_field2] INTEGER DEFAULT 0,
+  
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+  updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+  
+  UNIQUE(user_id, site_id)
+);
+
+-- Enable RLS
+ALTER TABLE public.site_[SITENAME]_profiles ENABLE ROW LEVEL SECURITY;
+
+-- Standard RLS policies
+CREATE POLICY "Users can view their own site profiles" 
+ON public.site_[SITENAME]_profiles FOR SELECT 
+USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can create their own site profiles" 
+ON public.site_[SITENAME]_profiles FOR INSERT 
+WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can update their own site profiles" 
+ON public.site_[SITENAME]_profiles FOR UPDATE 
+USING (auth.uid() = user_id);
+```
+
+## Security Considerations
+
+### Data Isolation
+- **RLS Enforcement**: All site-specific tables must have RLS enabled
+- **Function Security**: Use `SECURITY DEFINER` for admin functions
+- **Schema Separation**: Consider separate schemas for sensitive business logic
+- **Cross-Site Prevention**: Verify policies prevent unauthorized data access
+
+### Authentication Security  
+- **Domain Validation**: Ensure only registered domains can access the system
+- **Session Management**: Implement proper session timeout and rotation
+- **OAuth Security**: Validate all OAuth provider configurations
+- **CSRF Protection**: Implement CSRF tokens for state-changing operations
+
+## Troubleshooting
+
+### Common Issues
+
+1. **User Not Found in Site**: 
+   - Check if `ensure_membership_for_domain()` was called
+   - Verify site is registered in `public.sites`
+   - Confirm domain mapping in `HOST_MAP`
+
+2. **Data Access Denied**:
+   - Verify RLS policies are correctly configured  
+   - Check user authentication status
+   - Confirm site membership exists
+
+3. **OAuth Callback Errors**:
+   - Verify callback URLs in provider settings
+   - Check Supabase URL configuration
+   - Confirm domain is added to allowed URLs
+
+4. **Cross-Site Data Leakage**:
+   - Review RLS policies on all tables
+   - Test with different user accounts
+   - Verify schema-specific queries work correctly
+
+### Debug Commands
+
+```sql
+-- Check current user and site context
+SELECT auth.uid(), current_setting('request.headers', true)::json->>'host';
+
+-- Verify site memberships
+SELECT sm.*, s.name, s.domain 
+FROM site_members sm 
+JOIN sites s ON s.id = sm.site_id 
+WHERE sm.user_id = auth.uid();
+
+-- Test RLS policies
+EXPLAIN (ANALYZE, BUFFERS) SELECT * FROM site_regatta_profiles;
+```
+
+## Recent Changes
+
+### December 2024 Updates
+- Enhanced multi-domain authentication documentation
+- Added comprehensive testing procedures  
+- Improved client integration examples
+- Standardized naming conventions for all components
+- Added troubleshooting section and debug commands
+- Consolidated documentation from separate auth and testing files
     END IF;
 END;
 $function$;

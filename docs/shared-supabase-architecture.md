@@ -17,10 +17,6 @@ CREATE TABLE public.profiles (
   nickname CHARACTER VARYING NOT NULL,
   email CHARACTER VARYING NOT NULL,
   email_verified BOOLEAN DEFAULT false,
-  rank user_rank DEFAULT 'novice'::user_rank,
-  total_races INTEGER DEFAULT 0,
-  karma INTEGER DEFAULT 100,
-  credits INTEGER DEFAULT 1000,
   is_active BOOLEAN DEFAULT true,
   bio TEXT,
   country CHARACTER VARYING,
@@ -33,19 +29,17 @@ CREATE TABLE public.profiles (
 
 **Field Details**:
 - `id`: References `auth.users.id` - Primary identifier
-- `nickname`: Display name shown across applications
+- `nickname`: Display name shown across applications  
 - `email`: User's email address (synced from auth)
 - `email_verified`: Email verification status
-- `rank`: User skill level (novice, amateur, pro, expert)
-- `total_races`: Total number of races completed
-- `karma`: Community reputation score (0-1000)
-- `credits`: Virtual currency balance
 - `is_active`: Account status flag
 - `bio`: User biography/description
 - `country`: User's country code or name
 - `timezone`: User's timezone preference
 - `avatar_url`: Profile picture URL
 - `created_at/updated_at`: Audit timestamps
+
+**Note**: Site-specific data such as user skills, game statistics, virtual currency, etc. should be stored in site-specific tables or schemas, not in the shared profiles table.
 
 **RLS Policies**:
 - **SELECT**: All authenticated users can view all profiles
@@ -269,17 +263,21 @@ const supabase = createClient(
 ```typescript
 import { supabase } from '@/integrations/supabase/client';
 
-// Get user profile
+// Get user profile (general info only)
 const { data: profile } = await supabase
   .from('profiles')
   .select('*')
   .eq('id', user.id)
   .single();
 
-// Update user profile
+// Update user profile (general info only)
 const { error } = await supabase
   .from('profiles')
-  .update({ nickname: 'New Name' })
+  .update({ 
+    nickname: 'New Name',
+    bio: 'Updated bio',
+    country: 'US'
+  })
   .eq('id', user.id);
 
 // Check site membership
@@ -289,6 +287,9 @@ const { data: membership } = await supabase
   .eq('user_id', user.id)
   .eq('site_id', siteId)
   .single();
+
+// Note: Site-specific data like credits, game stats, etc. 
+// should be stored in dedicated site tables
 ```
 
 ### Authentication Helpers

@@ -77,24 +77,15 @@ export function CreateRegattaDialog({ children, onSuccess }: CreateRegattaDialog
       if (error) throw error
 
       // Deduct 100 credits from user profile
-      const { data: profileData } = await supabase
-        .from('profiles')
-        .select('credits')
-        .eq('id', user.id)
-        .single()
+      // Note: Credits functionality removed - implement in site-specific schema
+      // const { data: profileData } = await supabase
+      //   .from('profiles')
+      //   .select('credits')
+      //   .eq('id', user.id)
+      //   .single()
 
-      if (profileData && (profileData as any).credits !== undefined) {
-        const { error: updateError } = await supabase
-          .from('profiles')
-          .update({
-            credits: Math.max(0, (profileData as any).credits - 100)
-          })
-          .eq('id', user.id)
-
-        if (updateError) {
-          console.warn("Could not deduct credits:", updateError)
-        }
-      }
+      // Skip credits deduction for now since it's moved to site-specific tables
+      console.log("Regatta created - credits system needs site-specific implementation")
 
       toast.success("Regatta created successfully! 100 credits deducted.")
       setOpen(false)

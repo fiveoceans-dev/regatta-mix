@@ -40,13 +40,15 @@ export default function Settings() {
 
   const fetchSettings = async () => {
     try {
-    const { data: settings, error: settingsError } = await supabase.site.from('user_settings')
-        .select('*')
-        .eq('user_id', user?.id)
-        .single()
+      // Note: Settings should be implemented in site-specific schema
+      // const { data: settings, error: settingsError } = await supabase.site.from('user_settings')
+      //   .select('*')
+      //   .eq('user_id', user?.id)
+      //   .single()
 
-      if (settingsError) throw settingsError
-      setSettings(settings)
+      // Skip settings fetch for now since it's moved to site-specific tables
+      console.log("Settings fetch - needs site-specific implementation")
+      // setSettings(settings)
     } catch (error) {
       console.error('Error fetching settings:', error)
     }

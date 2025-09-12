@@ -20,16 +20,12 @@ export type Database = {
           bio: string | null
           country: string | null
           created_at: string | null
-          credits: number | null
           email: string
           email_verified: boolean | null
           id: string
           is_active: boolean | null
-          karma: number | null
           nickname: string
-          rank: Database["public"]["Enums"]["user_rank"] | null
           timezone: string | null
-          total_races: number | null
           updated_at: string | null
         }
         Insert: {
@@ -37,16 +33,12 @@ export type Database = {
           bio?: string | null
           country?: string | null
           created_at?: string | null
-          credits?: number | null
           email: string
           email_verified?: boolean | null
           id: string
           is_active?: boolean | null
-          karma?: number | null
           nickname: string
-          rank?: Database["public"]["Enums"]["user_rank"] | null
           timezone?: string | null
-          total_races?: number | null
           updated_at?: string | null
         }
         Update: {
@@ -54,16 +46,12 @@ export type Database = {
           bio?: string | null
           country?: string | null
           created_at?: string | null
-          credits?: number | null
           email?: string
           email_verified?: boolean | null
           id?: string
           is_active?: boolean | null
-          karma?: number | null
           nickname?: string
-          rank?: Database["public"]["Enums"]["user_rank"] | null
           timezone?: string | null
-          total_races?: number | null
           updated_at?: string | null
         }
         Relationships: []

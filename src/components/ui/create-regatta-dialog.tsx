@@ -83,11 +83,11 @@ export function CreateRegattaDialog({ children, onSuccess }: CreateRegattaDialog
         .eq('id', user.id)
         .single()
 
-      if (profileData && profileData.credits !== undefined) {
+      if (profileData && (profileData as any).credits !== undefined) {
         const { error: updateError } = await supabase
           .from('profiles')
           .update({
-            credits: Math.max(0, profileData.credits - 100)
+            credits: Math.max(0, (profileData as any).credits - 100)
           })
           .eq('id', user.id)
 

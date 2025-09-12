@@ -2,13 +2,13 @@
 
 ## Overview
 
-This documentation covers the **shared public schema** used across all sites in the multi-site Supabase architecture. The public schema contains global tables for authentication, user profiles, and site management that are accessible to all websites.
+This documentation covers the **shared public schema** used for user authentication, profiles, and site management. All tables are in the public schema and accessible across different sites through a centralized authentication system.
 
 ## Public Schema Tables
 
 ### 1. `profiles` Table
 
-**Purpose**: Central user profile storage shared across all sites
+**Purpose**: Central user profile storage
 
 **Schema Definition**:
 ```sql
@@ -33,13 +33,13 @@ CREATE TABLE public.profiles (
 
 **Field Details**:
 - `id`: References `auth.users.id` - Primary identifier
-- `nickname`: Display name shown across all sites
+- `nickname`: Display name shown across applications
 - `email`: User's email address (synced from auth)
 - `email_verified`: Email verification status
 - `rank`: User skill level (novice, amateur, pro, expert)
-- `total_races`: Aggregate race count across all sites
+- `total_races`: Total number of races completed
 - `karma`: Community reputation score (0-1000)
-- `credits`: Virtual currency balance usable across sites
+- `credits`: Virtual currency balance
 - `is_active`: Account status flag
 - `bio`: User biography/description
 - `country`: User's country code or name
@@ -55,7 +55,7 @@ CREATE TABLE public.profiles (
 
 ### 2. `sites` Table
 
-**Purpose**: Registry of all websites in the multi-site system
+**Purpose**: Registry of websites using this authentication system
 
 **Schema Definition**:
 ```sql
@@ -72,9 +72,9 @@ CREATE TABLE public.sites (
 
 **Field Details**:
 - `id`: Unique site identifier
-- `name`: Human-readable site name (e.g., \"Regatta Rift\")
-- `domain`: Full domain name (e.g., \"regatta-rift.lovable.app\")
-- `schema_name`: Database schema prefix (e.g., \"site_regatta\")
+- `name`: Human-readable site name (e.g., "Regatta Rift")
+- `domain`: Full domain name (e.g., "regatta-rift.lovable.app")
+- `schema_name`: Database schema identifier (for multi-tenant setups)
 - `active`: Whether the site is currently operational
 - `created_at/updated_at`: Audit timestamps
 
@@ -84,7 +84,7 @@ CREATE TABLE public.sites (
 
 ### 3. `site_members` Table
 
-**Purpose**: Manages user access and roles for each site
+**Purpose**: Manages user access for different sites
 
 **Schema Definition**:
 ```sql
@@ -103,7 +103,7 @@ CREATE TABLE public.site_members (
 - `id`: Unique membership record identifier
 - `user_id`: References the authenticated user
 - `site_id`: References the site from `public.sites`
-- `role`: User's role on this site ('member', 'admin', 'moderator')
+- `role`: User's role ('member', 'admin', 'moderator')
 - `active`: Whether this membership is currently active
 - `joined_at`: When the user first joined this site
 
@@ -112,13 +112,34 @@ CREATE TABLE public.site_members (
 - **INSERT**: Users can create their own memberships
 - **UPDATE/DELETE**: Not allowed via API
 
-## Shared Database Functions
+## Database Functions
 
 ### 1. `user_in_site(site_schema text)`
 
 **Purpose**: Check if authenticated user has access to a specific site
 
 **Returns**: Boolean indicating site membership
+
+**Implementation**:
+```sql
+CREATE OR REPLACE FUNCTION public.user_in_site(site_schema text)
+RETURNS boolean
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path TO 'public'
+AS $$
+BEGIN
+    RETURN EXISTS (
+        SELECT 1 FROM public.site_members sm
+        JOIN public.sites s ON s.id = sm.site_id
+        WHERE s.schema_name = site_schema 
+        AND sm.user_id = auth.uid()
+        AND sm.active = true
+        AND s.active = true
+    );
+END;
+$$;
+```
 
 **Usage**:
 ```sql
@@ -131,26 +152,88 @@ SELECT user_in_site('site_regatta'); -- Returns true/false
 
 **Returns**: Text role ('member', 'admin', 'moderator', 'none')
 
-**Usage**:
+**Implementation**:
 ```sql
-SELECT user_role_in_site('site_regatta'); -- Returns user's role
+CREATE OR REPLACE FUNCTION public.user_role_in_site(site_schema text)
+RETURNS text
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path TO 'public'
+AS $$
+DECLARE
+    user_role text;
+BEGIN
+    SELECT sm.role INTO user_role
+    FROM public.site_members sm
+    JOIN public.sites s ON s.id = sm.site_id
+    WHERE s.schema_name = site_schema 
+    AND sm.user_id = auth.uid()
+    AND sm.active = true
+    AND s.active = true;
+    
+    RETURN COALESCE(user_role, 'none');
+END;
+$$;
 ```
 
 ### 3. `ensure_membership_for_domain()`
 
 **Purpose**: Automatically create site membership when user visits a domain
 
-**Usage**: Called automatically by authentication hooks
+**Implementation**:
+```sql
+CREATE OR REPLACE FUNCTION public.ensure_membership_for_domain()
+RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path TO 'public'
+AS $$
+DECLARE
+    current_host text;
+    site_record record;
+BEGIN
+    -- Get current host from request headers
+    current_host := current_setting('request.headers', true)::json->>'host';
+    
+    -- Find the site for this domain
+    SELECT * INTO site_record FROM public.sites WHERE domain = current_host AND active = true;
+    
+    -- If site exists and user is authenticated, ensure membership
+    IF site_record.id IS NOT NULL AND auth.uid() IS NOT NULL THEN
+        INSERT INTO public.site_members (site_id, user_id, role)
+        VALUES (site_record.id, auth.uid(), 'member')
+        ON CONFLICT (site_id, user_id) DO NOTHING;
+    END IF;
+END;
+$$;
+```
 
 ### 4. `handle_new_user()`
 
-**Purpose**: Initialize new user across the system
+**Purpose**: Initialize new user in the system
 
-**Actions**:
-- Creates profile in `public.profiles`
-- Creates default site membership
-- Initializes site-specific user settings
-- Awards welcome achievements
+**Implementation**:
+```sql
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path TO 'public'
+AS $$
+BEGIN
+    -- Insert into profiles
+    INSERT INTO public.profiles (id, nickname, email, email_verified)
+    VALUES (
+        NEW.id,
+        COALESCE(NEW.raw_user_meta_data ->> 'nickname', 'Player' || substr(NEW.id::text, 1, 8)),
+        NEW.email,
+        NEW.email_confirmed_at IS NOT NULL
+    );
+    
+    RETURN NEW;
+END;
+$$;
+```
 
 ## Authentication Integration
 
@@ -159,123 +242,141 @@ SELECT user_role_in_site('site_regatta'); -- Returns user's role
 1. User signs up via Supabase Auth
 2. `handle_new_user()` trigger fires
 3. Profile created in `public.profiles`
-4. Default site membership created
-5. Site-specific initialization occurs
+4. Site membership can be created on first visit or manually
 
-### Domain-Based Access
+### Authentication Setup
 
-Users automatically gain access to sites based on domain:
-- Authentication is global (shared `auth.users`)
-- Site membership is created on first visit
-- RLS policies enforce data isolation per site
+```typescript
+// Configure Supabase Auth
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  'YOUR_SUPABASE_URL', 
+  'YOUR_SUPABASE_ANON_KEY',
+  {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+    }
+  }
+);
+```
 
 ## Client Integration
 
-### Standard Public Schema Access
+### Basic Usage
 
 ```typescript
 import { supabase } from '@/integrations/supabase/client';
 
-// Access shared tables
-const { data: profiles } = await supabase.from('profiles').select('*');
-const { data: sites } = await supabase.from('sites').select('*');
-const { data: memberships } = await supabase.from('site_members').select('*');
+// Get user profile
+const { data: profile } = await supabase
+  .from('profiles')
+  .select('*')
+  .eq('id', user.id)
+  .single();
+
+// Update user profile
+const { error } = await supabase
+  .from('profiles')
+  .update({ nickname: 'New Name' })
+  .eq('id', user.id);
+
+// Check site membership
+const { data: membership } = await supabase
+  .from('site_members')
+  .select('role')
+  .eq('user_id', user.id)
+  .eq('site_id', siteId)
+  .single();
 ```
 
-### Site-Specific Schema Access
+### Authentication Helpers
 
 ```typescript
-// Access site-specific tables (automatically routed by domain)
-const { data: regattas } = await supabase.site.regattas().select('*');
-const { data: boats } = await supabase.site.boats().select('*');
+// Check if user is authenticated
+const { data: { user } } = await supabase.auth.getUser();
+
+// Sign up new user
+const { data, error } = await supabase.auth.signUp({
+  email: 'user@example.com',
+  password: 'password',
+  options: {
+    emailRedirectTo: `${window.location.origin}/`
+  }
+});
+
+// Sign in user
+const { data, error } = await supabase.auth.signInWithPassword({
+  email: 'user@example.com',
+  password: 'password'
+});
+
+// Sign out user
+const { error } = await supabase.auth.signOut();
 ```
 
-## Adding New Sites
-
-### Step-by-Step Integration
-
-1. **Register the site**:
-```sql
-INSERT INTO public.sites (name, domain, schema_name) 
-VALUES ('New Site', 'newsite.com', 'site_newsite');
-```
-
-2. **Create schema and tables**:
-```sql
-CREATE SCHEMA site_newsite;
--- Create site-specific tables in this schema
-```
-
-3. **Update client configuration**:
-```typescript
-// In supabase/client.ts
-function getCurrentSchema(): string {
-  const host = window.location.host;
-  if (host === 'newsite.com') return 'site_newsite';
-  // ... existing mappings
-  return 'site_regatta'; // default
-}
-```
-
-4. **Configure authentication**:
-- Add domain to Supabase Auth allowed URLs
-- Add OAuth redirect URLs for the domain
-
-### Required Site-Specific Tables
-
-Every new site should implement these core tables:
-- `user_settings` - User preferences for this site
-- Other tables specific to the site's functionality
-
-## Security Best Practices
+## Security Configuration
 
 ### Row Level Security (RLS)
 
-All public tables have RLS enabled with appropriate policies:
+All tables have RLS enabled with appropriate policies:
 
 ```sql
--- Example policy structure
-CREATE POLICY \"policy_name\" ON public.table_name
-  FOR operation TO authenticated
-  USING (condition) 
-  WITH CHECK (condition);
+-- Example: Users can only update their own profile
+CREATE POLICY "Users can update own profile" 
+ON public.profiles
+FOR UPDATE 
+TO authenticated
+USING (auth.uid() = id);
 ```
-
-### Data Isolation
-
-- Users can only access their own data
-- Site membership is verified for all operations
-- Helper functions use `SECURITY DEFINER` for safe elevated access
 
 ### Authentication Requirements
 
 - All operations require authenticated users
 - Anonymous access limited to viewing active sites only
-- Site-specific data requires valid site membership
+- Use helper functions for complex permission checks
 
-## Maintenance Guidelines
+## Integration Checklist
 
-### Regular Tasks
+### For New Applications
 
-1. **Monitor site membership integrity**
-2. **Clean up inactive memberships**
-3. **Audit RLS policy effectiveness**
-4. **Performance monitoring across schemas**
+1. **Set up authentication**:
+   - Configure Supabase Auth with your domain
+   - Add OAuth providers if needed
+   - Set up email templates
 
-### Backup Considerations
+2. **Register your site**:
+```sql
+INSERT INTO public.sites (name, domain, schema_name) 
+VALUES ('Your App', 'yourapp.com', 'site_yourapp');
+```
 
-- Public schema affects all sites - handle migrations carefully
-- Test all sites after public schema changes
-- Consider downtime coordination across sites
+3. **Configure client**:
+   - Import Supabase client
+   - Set up authentication state management
+   - Handle user profile creation/updates
+
+4. **Test integration**:
+   - User registration/login
+   - Profile management
+   - Site membership verification
+
+### Required Environment Variables
+
+```env
+VITE_SUPABASE_URL=your_supabase_project_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
 
 ## Troubleshooting
 
 ### Common Issues
 
-1. **User can't access site**: Check `site_members` table
+1. **User can't access site**: Check `site_members` table for membership
 2. **Authentication problems**: Verify domain in Auth settings
-3. **RLS blocking data**: Review policy conditions
-4. **Schema routing errors**: Check domain mapping in client
+3. **RLS blocking data**: Review policy conditions and user authentication
+4. **Profile creation fails**: Check `handle_new_user()` trigger
 
 ### Debug Queries
 
@@ -292,3 +393,18 @@ SELECT * FROM sites WHERE active = true;
 -- Check user profile
 SELECT * FROM profiles WHERE id = auth.uid();
 ```
+
+## Maintenance
+
+### Regular Tasks
+
+1. Monitor authentication metrics
+2. Clean up inactive user accounts
+3. Audit RLS policy effectiveness
+4. Update authentication providers as needed
+
+### Backup Strategy
+
+- Regular backups of public schema
+- Test restoration procedures
+- Monitor authentication logs for security issues

@@ -26,13 +26,13 @@ export default function Settings() {
 
   const fetchProfile = async () => {
     try {
-    const { data: profile } = await supabase.from('profiles')
+      const { data: profile, error } = await supabase.from('profiles')
         .select('*')
         .eq('id', user?.id)
         .single()
 
       if (error) throw error
-      setProfile(data)
+      setProfile(profile)
     } catch (error) {
       console.error('Error fetching profile:', error)
     }

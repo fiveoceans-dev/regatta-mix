@@ -24,9 +24,22 @@ export function schemaForHost(host: string): SiteSchema {
 export function createSiteClient(url: string, anonKey: string, host?: string, options?: SupabaseClientOptions<any>): SupabaseClient<Database> & { schema: SiteSchema } {
   const resolvedHost = host ?? (typeof window !== 'undefined' ? window.location.host : '');
   const schema = schemaForHost(resolvedHost);
-  const client = createClient<Database>(url, anonKey, options);
   
-  // Return base client with schema info until migrations are run
+  // Create client with schema-specific configuration
+  const client = createClient<Database>(url, anonKey, {
+    ...options,
+    db: {
+      schema: schema,
+      ...options?.db
+    }
+  });
+  
+  // Override the from method to use the correct schema
+  const originalFrom = client.from.bind(client);
+  client.from = (table: string) => {
+    return originalFrom(`${schema}.${table}`);
+  };
+  
   return Object.assign(client, { schema });
 }
 

@@ -82,7 +82,7 @@ export default function Settings() {
 
     setLoading(true)
     try {
-    const { error } = await supabase.site.from('user_settings')
+    const { error } = await supabase.from('user_settings')
         .update(settings)
         .eq('user_id', user.id)
 

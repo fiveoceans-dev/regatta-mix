@@ -68,7 +68,7 @@ export default function Account() {
   const fetchProfile = async () => {
     try {
       const { data, error } = await supabase
-        .publicFrom('profiles')
+        .from('profiles')
         .select('nickname, email, bio, avatar_url')
         .eq('id', user?.id)
         .single()
@@ -82,7 +82,7 @@ export default function Account() {
 
   const fetchRaceHistory = async () => {
     try {
-    const { data: registrations, error: regError } = await supabase.site.from('regatta_registrations')
+    const { data: registrations, error: regError } = await supabase.from('regatta_registrations')
         .select(`
           *,
           regattas (name, location, start_date)
@@ -100,7 +100,7 @@ export default function Account() {
 
   const fetchAchievements = async () => {
     try {
-    const { data: achievements, error: achieveError } = await supabase.site.from('achievements')
+    const { data: achievements, error: achieveError } = await supabase.from('achievements')
         .select('*')
         .eq('user_id', user?.id)
         .order('earned_at', { ascending: false })

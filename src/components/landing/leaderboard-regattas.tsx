@@ -38,9 +38,9 @@ export function LeaderboardRegattas() {
 
   const fetchLeaderboard = async () => {
     try {
-      // Get regatta profiles with credits from site-specific table
+      // Get regatta profiles with credits
       const { data: regattaProfiles, error } = await supabase
-        .publicFrom('site_regatta_profiles')
+        .from('site_regatta_profiles')
         .select(`
           credits,
           updated_at,
@@ -70,7 +70,7 @@ export function LeaderboardRegattas() {
   const fetchTopRegattas = async () => {
     try {
       const { data: regattas, error } = await supabase
-        .site.from('regattas')
+        .from('regattas')
         .select('id, name, class, current_players, max_players')
         .in('status', ['upcoming', 'registration_open'])
         .order('current_players', { ascending: false })
@@ -114,7 +114,7 @@ export function LeaderboardRegattas() {
 
     try {
       const { error } = await supabase
-        .site.from('regatta_registrations')
+        .from('regatta_registrations')
         .insert({
           regatta_id: regattaId,
           user_id: user.id,

@@ -71,9 +71,9 @@ export default function Marketplace() {
   const fetchMarketplaceData = async () => {
     try {
       const [boatsRes, crewRes, partsRes] = await Promise.all([
-        supabase.site.from('boats').select('*').is('owner_id', null).order('created_at', { ascending: false }),
-        supabase.site.from('crew').select('*').eq('status', 'available').order('created_at', { ascending: false }),
-        supabase.site.from('parts').select('*').is('owner_id', null).order('created_at', { ascending: false })
+        supabase.from('boats').select('*').is('owner_id', null).order('created_at', { ascending: false }),
+        supabase.from('crew').select('*').eq('status', 'available').order('created_at', { ascending: false }),
+        supabase.from('parts').select('*').is('owner_id', null).order('created_at', { ascending: false })
       ])
 
       setBoats(boatsRes.data || [])
@@ -89,9 +89,9 @@ export default function Marketplace() {
   const fetchMyItems = async () => {
     try {
       const [boatsRes, crewRes, partsRes] = await Promise.all([
-        supabase.site.from('boats').select('*').eq('owner_id', user?.id),
-        supabase.site.from('crew').select('*').eq('owner_id', user?.id),
-        supabase.site.from('parts').select('*').eq('owner_id', user?.id)
+        supabase.from('boats').select('*').eq('owner_id', user?.id),
+        supabase.from('crew').select('*').eq('owner_id', user?.id),
+        supabase.from('parts').select('*').eq('owner_id', user?.id)
       ])
 
       setMyBoats(boatsRes.data || [])

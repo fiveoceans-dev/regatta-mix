@@ -62,7 +62,7 @@ export function CreateRegattaDialog({ children, onSuccess }: CreateRegattaDialog
     setLoading(true)
     try {
       const { error } = await supabase
-        .site.from('regattas')
+        .from('regattas')
         .insert({
           name: formData.name,
           description: formData.description,

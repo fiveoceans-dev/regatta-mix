@@ -72,7 +72,7 @@ export function PartnersSection() {
               Become a Partner
             </h3>
             <p className="text-muted-foreground mb-6">
-              Join leading brands in the future of cyber sailing
+              Join leading brands in the future of SailingNet
             </p>
             <ContactFormDialog>
               <SimpleButton>

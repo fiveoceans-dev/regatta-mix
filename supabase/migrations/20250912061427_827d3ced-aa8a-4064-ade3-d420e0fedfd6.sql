@@ -19,7 +19,7 @@ FOREIGN KEY (site_id) REFERENCES public.sites(id) ON DELETE CASCADE;
 
 -- Insert default sites for known domains
 INSERT INTO public.sites (name, domain, schema_name) VALUES
-  ('Regatta Rift', 'regatta-rift.lovable.app', 'site_regatta'),
+  ('SailingNet', 'regatta-rift.lovable.app', 'site_regatta'),
   ('Web3 Analytics', 'web3analytics.lovable.app', 'site_web3analytics'),
   ('OpenAir', 'openair.lovable.app', 'site_openair'),
   ('AllYou Company', 'allyoucompany.com', 'site_allyou'),

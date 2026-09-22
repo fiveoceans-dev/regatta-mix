@@ -32,7 +32,7 @@ const recentPosts = [
   {
     id: 1,
     platform: "Instagram",
-    user: "SailGameOfficial",
+    user: "SailingNetOfficial",
     content: "🏆 Congratulations to @windmaster for winning the Mediterranean Championship! What an incredible final race! #SailingGame #Esports",
     image: "https://images.unsplash.com/photo-1566053530509-1b4b1cc6c09d?w=300&h=200&fit=crop",
     likes: 1247,
@@ -42,7 +42,7 @@ const recentPosts = [
   {
     id: 2,
     platform: "Instagram",
-    user: "SailGameOfficial",
+    user: "SailingNetOfficial",
     content: "New sailing yacht designs are now available! Check out the latest J70 models with enhanced performance.",
     image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=300&h=200&fit=crop",
     likes: 856,
@@ -52,7 +52,7 @@ const recentPosts = [
   {
     id: 3,
     platform: "Instagram",
-    user: "SailGameOfficial",
+    user: "SailingNetOfficial",
     content: "Beautiful sunset racing session! The Mediterranean looks stunning today. Who's joining us? ⛵",
     image: "https://images.unsplash.com/photo-1570197788417-0e82375c9371?w=300&h=200&fit=crop",
     likes: 634,
@@ -62,7 +62,7 @@ const recentPosts = [
   {
     id: 4,
     platform: "YouTube",
-    user: "SailGameOfficial",
+    user: "SailingNetOfficial",
     content: "🎥 NEW VIDEO: Top 10 Sailing Tactics That Will Make You Unbeatable! Watch our pro players share their secrets.",
     image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=300&h=200&fit=crop",
     likes: 892,
@@ -72,7 +72,7 @@ const recentPosts = [
   {
     id: 5,
     platform: "YouTube",
-    user: "SailGameOfficial",
+    user: "SailingNetOfficial",
     content: "Live Stream: America's Cup Qualifier finals! Join us for the most exciting racing action of the season.",
     image: "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=300&h=200&fit=crop",
     likes: 1543,
@@ -82,7 +82,7 @@ const recentPosts = [
   {
     id: 6,
     platform: "YouTube",
-    user: "SailGameOfficial",
+    user: "SailingNetOfficial",
     content: "Tutorial: Mastering wind patterns and racing lines. Essential skills for competitive sailing!",
     image: "https://images.unsplash.com/photo-1590859808308-3d2d9d53d021?w=300&h=200&fit=crop",
     likes: 721,
@@ -92,7 +92,7 @@ const recentPosts = [
   {
     id: 7,
     platform: "Twitter",
-    user: "SailGameOfficial",
+    user: "SailingNetOfficial",
     content: "⚡ Server maintenance complete! New weather system is now live with enhanced wind patterns and tidal effects. Jump in and feel the difference!",
     likes: 543,
     comments: 67,
@@ -101,7 +101,7 @@ const recentPosts = [
   {
     id: 8,
     platform: "Twitter",
-    user: "SailGameOfficial",
+    user: "SailingNetOfficial",
     content: "Big announcement coming this Friday! Stay tuned for something that will change the game forever 🚀",
     likes: 892,
     comments: 134,
@@ -110,7 +110,7 @@ const recentPosts = [
   {
     id: 9,
     platform: "Twitter",
-    user: "SailGameOfficial",
+    user: "SailingNetOfficial",
     content: "Player spotlight: @SpeedDemon just broke the Pacific Championship record! Incredible performance! 🏆",
     likes: 467,
     comments: 53,

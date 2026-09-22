@@ -37,7 +37,7 @@ export function AuthDialog({ children, onSuccess }: AuthDialogProps) {
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="text-center font-serif-renaissance text-xl">
-            Join Cyber Sailing
+            Join SailingNet
           </DialogTitle>
         </DialogHeader>
         

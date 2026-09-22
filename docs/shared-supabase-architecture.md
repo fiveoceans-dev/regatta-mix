@@ -197,7 +197,7 @@ CREATE TABLE public.sites (
 
 **Field Details**:
 - `id`: Unique site identifier
-- `name`: Human-readable site name (e.g., "Regatta Rift")
+- `name`: Human-readable site name (e.g., "SailingNet")
 - `domain`: Full domain name (e.g., "regatta-rift.lovable.app")
 - `schema_name`: Database schema identifier (for multi-tenant setups)
 - `active`: Whether the site is currently operational

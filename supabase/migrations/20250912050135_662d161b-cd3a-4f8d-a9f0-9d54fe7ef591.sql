@@ -3,7 +3,7 @@ CREATE SCHEMA IF NOT EXISTS site_regatta;
 
 -- Update sites table with all the new sites
 INSERT INTO public.sites (domain, schema_name, name, active) VALUES
-  ('cyber.sailing', 'site_regatta', 'Regatta Rift', true),
+  ('cyber.sailing', 'site_regatta', 'SailingNet', true),
   ('web3analytics.app', 'site_web3analytics', 'Web3 Analytics', true),
   ('openair.ventures', 'site_openair', 'OpenAir Ventures', true),
   ('allyou.tools', 'site_allyou', 'AllYou Tools', true),

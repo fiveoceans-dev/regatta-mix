@@ -1,4 +1,4 @@
-# Regatta Rift
+# SailingNet
 
 
      \
@@ -31,7 +31,7 @@ npm run build
 
 ## Supabase Setup
 
-Regatta Rift uses a multi-site Supabase project with a shared auth schema and
+SailingNet uses a multi-site Supabase project with a shared auth schema and
 one schema per site. The current site is `site_cyber`; future sites are referred
 to as `site1`, `site2`, and so on. Authentication is global across all sites,
 but membership is per site—users must register separately for each domain to

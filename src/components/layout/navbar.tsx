@@ -31,9 +31,9 @@ export function Navbar() {
       <div className="container flex h-14 items-center justify-between px-4">
         {/* Left side - Logo and Title */}
         <div className="flex items-center gap-2">
-          <img src="/logo.svg" alt="Cyber Sailing" className="h-8 w-8" />
-          <Link to="/" className="font-serif-renaissance text-xl font-semibold text-primary">
-            Cyber Sailing
+          <img src="/logo.svg" alt="SailingNet" className="h-8 w-8" />
+          <Link to="/" className="font-sans text-xl font-bold uppercase tracking-[0.12em] text-primary">
+            SailingNet
           </Link>
         </div>
 

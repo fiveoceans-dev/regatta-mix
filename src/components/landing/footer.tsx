@@ -48,10 +48,10 @@ const resourceLinks = {
 }
 
 const company = {
-  name: "Cyber Sailing",
-  description: "The world's premier cyber sailing simulation platform, bringing the thrill of competitive sailing to players worldwide.",
+  name: "SailingNet",
+  description: "The world's premier virtual sailing platform, bringing the thrill of competitive sailing to players worldwide.",
   contact: {
-    email: "contact@cybersailing.com",
+    email: "contact@sailingnet.com",
     phone: "+1 (555) 123-4567",
     address: "123 Marina Bay, San Francisco, CA 94105"
   }

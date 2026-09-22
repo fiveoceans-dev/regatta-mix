@@ -2,7 +2,7 @@
 DELETE FROM public.sites;
 
 INSERT INTO public.sites (domain, schema_name, name, active) VALUES
-  ('regatta-rift.lovable.app', 'site_regatta', 'Regatta Rift', true),
+  ('regatta-rift.lovable.app', 'site_regatta', 'SailingNet', true),
   ('web3analytics.lovable.app', 'site_web3analytics', 'Web3 Analytics', true),
   ('openair.lovable.app', 'site_openair', 'OpenAir Ventures', true),
   ('allyoucompany.com', 'site_allyou', 'AllYou Tools', true),

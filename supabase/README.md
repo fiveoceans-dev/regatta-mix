@@ -1,6 +1,6 @@
 # Supabase
 
-This directory holds the multi-site Supabase project used by Regatta Rift.
+This directory holds the multi-site Supabase project used by SailingNet.
 It assumes a shared auth schema and one schema per site. Users authenticate
 once but gain access to a site only after registering for that domain, which
 creates a membership row in the shared `site_members` table.

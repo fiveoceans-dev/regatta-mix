@@ -1,148 +1,78 @@
-import { useState, useEffect } from "react"
-import { useNavigate } from "react-router-dom"
-import { Button } from "@/components/ui/button"
-import { OvalButton } from "@/components/ui/oval-button"
-import { AuthDialog } from "@/components/ui/auth-dialog"
-import { ChevronLeft, ChevronRight, Play } from "lucide-react"
-import { Skeleton } from "@/components/ui/skeleton"
+import { ArrowDown, ArrowRight } from "lucide-react"
+import { Link } from "react-router-dom"
 
-const heroImages = [
+const sailingFormats = [
   {
-    id: 1,
-    url: "https://placehold.co/1920x800/blue/white?text=Hero",
-    alt: "Sailing catamarans racing at sunset"
+    eyebrow: "ONE-ON-ONE / TACTICAL",
+    title: "Match Racing",
+    description: "Read the wind. Control the start. Outmaneuver your rival.",
+    theme: "from-[#f3a46b] via-[#efc899] to-[#729bb5]",
+    sea: "bg-[#264f68]",
+    glow: "bg-[#fff0c7]/70",
   },
   {
-    id: 2,
-    url: "https://placehold.co/1920x800/blue/white?text=Hero",
-    alt: "SailGP racing boats"
+    eyebrow: "MULTIPLAYER / HIGH INTENSITY",
+    title: "Fleet Regatta",
+    description: "A crowded start line, shifting lanes, and one clear winner.",
+    theme: "from-[#4ca9dc] via-[#82c9e7] to-[#d5edf2]",
+    sea: "bg-[#087da5]",
+    glow: "bg-[#fff7cc]/90",
   },
   {
-    id: 3,
-    url: "https://placehold.co/1920x800/blue/white?text=Hero",
-    alt: "Yacht racing in open ocean"
-  }
+    eyebrow: "ENDURANCE / OPEN OCEAN",
+    title: "Offshore Sailing",
+    description: "Navigate changing weather and race beyond the horizon.",
+    theme: "from-[#071426] via-[#0c2943] to-[#17516b]",
+    sea: "bg-[#061825]",
+    glow: "bg-[#b9d8ea]/20",
+  },
 ]
 
 export function HeroSection() {
-  const navigate = useNavigate()
-  const [currentSlide, setCurrentSlide] = useState(0)
-  const [imagesLoaded, setImagesLoaded] = useState(false)
-  const [isLoggedIn, setIsLoggedIn] = useState(false) // TODO: Replace with actual auth state
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % heroImages.length)
-    }, 5000)
-    return () => clearInterval(timer)
-  }, [])
-
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % heroImages.length)
-  }
-
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + heroImages.length) % heroImages.length)
-  }
-  
-  const handlePlayClick = () => {
-    if (isLoggedIn) {
-      navigate('/play')
-    }
-    // If not logged in, the AuthDialog will handle login/register
-  }
-
-  const handleLoginSuccess = () => {
-    setIsLoggedIn(true)
-    navigate('/play')
-  }
   return (
-    <section className="relative h-screen w-full overflow-hidden bg-gradient-hero">
-      {/* Hero Carousel */}
-      <div className="absolute inset-0">
-        {!imagesLoaded && (
-          <Skeleton className="w-full h-full" />
-        )}
-        {heroImages.map((image, index) => (
-          <div
-            key={image.id}
-            className={`absolute inset-0 transition-opacity duration-1000 ${
-              index === currentSlide ? "opacity-100" : "opacity-0"
-            }`}
-          >
-            <img
-              src={image.url}
-              alt={image.alt}
-              className="w-full h-full object-cover"
-              onLoad={() => setImagesLoaded(true)}
-            />
-            <div className="absolute inset-0 bg-black/40"></div>
-          </div>
-        ))}
-      </div>
+    <main className="bg-slate-950 text-white">
+      {sailingFormats.map((format, index) => (
+        <section
+          id={`sailing-format-${index + 1}`}
+          key={format.title}
+          className={`relative flex min-h-[calc(100svh-3.5rem)] snap-start items-end overflow-hidden bg-gradient-to-b ${format.theme}`}
+        >
+          <div className={`absolute -right-24 top-[16%] h-72 w-72 rounded-full blur-sm md:h-96 md:w-96 ${format.glow}`} />
+          <div className={`absolute inset-x-0 bottom-0 h-[38%] ${format.sea}`} />
+          <div className="absolute inset-x-0 bottom-[37%] h-px bg-white/45" />
 
-      {/* Navigation arrows */}
-      <Button
-        variant="ghost"
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-50 text-white hover:bg-white/20 w-20 h-24"
-        onClick={prevSlide}
-      >
-        <ChevronLeft className="h-12 w-12" />
-      </Button>
-      <Button
-        variant="ghost"
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-50 text-white hover:bg-white/20 w-20 h-24"
-        onClick={nextSlide}
-      >
-        <ChevronRight className="h-12 w-12" />
-      </Button>
-
-      {/* Slide indicators */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex space-x-2 z-10">
-        {heroImages.map((_, index) => (
-          <button
-            key={index}
-            className={`w-3 h-3 rounded-full transition-all ${
-              index === currentSlide ? "bg-primary scale-125" : "bg-white/50"
-            }`}
-            onClick={() => setCurrentSlide(index)}
-          />
-        ))}
-      </div>
-
-      {/* Hero Content */}
-      <div className="absolute inset-0 flex items-center justify-center z-10">
-        <div className="text-center text-white max-w-4xl px-4">
-          <h1 className="text-5xl md:text-7xl font-serif-renaissance font-bold mb-6 animate-fade-in-up text-primary">
-            Cyber Sailing
-          </h1>
-          <p className="text-xl md:text-2xl mb-12 text-white/90 animate-fade-in-up font-serif-body" style={{ animationDelay: "0.2s" }}>
-            Master the art of virtual sailing racing
-          </p>
-          
-          <div className="flex justify-center items-center">
-            {isLoggedIn ? (
-              <OvalButton 
-                onClick={handlePlayClick}
-                className="animate-fade-in-up"
+          <div className="relative z-10 w-full px-6 pb-16 sm:px-10 md:px-16 md:pb-20 lg:px-24">
+            <div className="max-w-3xl">
+              <p className="mb-3 text-xs font-semibold tracking-[0.28em] text-white/80 md:text-sm">
+                {format.eyebrow}
+              </p>
+              <h1 className="font-sans text-5xl font-semibold uppercase leading-[0.9] tracking-[-0.04em] text-white sm:text-6xl md:text-8xl lg:text-9xl">
+                {format.title}
+              </h1>
+              <p className="mt-6 max-w-xl font-sans text-base text-white/85 md:text-lg">
+                {format.description}
+              </p>
+              <Link
+                to="/play"
+                className="group mt-8 inline-flex min-w-52 items-center justify-between border border-white px-6 py-4 font-sans text-xs font-bold uppercase tracking-[0.18em] transition-colors duration-300 hover:bg-white hover:text-slate-950"
               >
-                <Play className="mr-2 h-5 w-5" />
-                Play Now
-              </OvalButton>
-            ) : (
-              <AuthDialog onSuccess={handleLoginSuccess}>
-                <OvalButton 
-                  className="animate-fade-in-up"
-                >
-                  <Play className="mr-2 h-5 w-5" />
-                  Start Racing
-                </OvalButton>
-              </AuthDialog>
-            )}
+                Explore racing
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Link>
+            </div>
           </div>
-        </div>
-      </div>
 
-    </section>
+          {index === 0 && (
+            <a
+              href="#sailing-format-2"
+              aria-label="Scroll to Fleet Regatta"
+              className="absolute bottom-5 right-6 z-20 animate-bounce text-white/80 md:right-12"
+            >
+              <ArrowDown className="h-6 w-6" />
+            </a>
+          )}
+        </section>
+      ))}
+    </main>
   )
 }
